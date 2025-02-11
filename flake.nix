@@ -24,7 +24,7 @@
           modules = [
             ./common.nix
             # ./git.nix
-            # ./report.nix
+            ./report.nix
             # ./zsh.nix
           ];
         };
