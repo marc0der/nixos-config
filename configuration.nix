@@ -89,6 +89,7 @@
     neovim
     networkmanagerapplet
     pinentry-gnome3
+    power-profiles-daemon
     protonvpn-cli
     protonvpn-gui
     rclone
@@ -123,6 +124,9 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+
+  # Power profiles daemon
+  services.power-profiles-daemon.enable = true;
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
