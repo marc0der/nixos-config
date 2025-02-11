@@ -23,7 +23,7 @@
           inherit pkgs;
           modules = [
             ./common.nix
-            # ./git.nix
+            ./git.nix
             ./report.nix
             # ./zsh.nix
           ];
