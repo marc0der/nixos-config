@@ -77,6 +77,7 @@
     brave
     brightnessctl
     cage
+    fragments
     git
     intel-media-driver
     kitty
