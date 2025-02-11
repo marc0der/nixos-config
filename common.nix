@@ -33,8 +33,8 @@
   ];
 
   home.file = {
-    # ".gnupg/gpg-agent.conf".source = gnupg/gpg-agent.conf;
-    # ".gnupg/gpg.conf".source = gnupg/gpg.conf;
+    ".gnupg/gpg-agent.conf".source = gnupg/gpg-agent.conf;
+    ".gnupg/gpg.conf".source = gnupg/gpg.conf;
 
     # hyprland
     # ".config/hypr/hyprland.conf".source = hypr/hyprland.conf;
