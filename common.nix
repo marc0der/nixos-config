@@ -59,8 +59,8 @@
     # "bin/next-wallpaper.sh".source = bin/next-wallpaper.sh;
     # "bin/previous-wallpaper.sh".source = bin/previous-wallpaper.sh;
 
-    # ".local/share/applications/discord.desktop".source = desktop/discord.desktop;
-    # ".local/share/applications/todoist.desktop".source = desktop/todoist.desktop;
+    ".local/share/applications/discord.desktop".source = desktop/discord.desktop;
+    ".local/share/applications/todoist.desktop".source = desktop/todoist.desktop;
   };
 
   fonts.fontconfig.enable = true;
