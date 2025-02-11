@@ -142,7 +142,7 @@
       default_session = {
         # Run regreet inside Cage (a minimal Wayland compositor)
         command = "${pkgs.cage}/bin/cage -d -- ${pkgs.greetd.regreet}/bin/regreet";
-	user = "greeter";
+        user = "greeter";
       };
     };
   };
