@@ -4,29 +4,23 @@
   home.username = "marco";
   home.homeDirectory = "/home/marco";
   home.stateVersion = "24.11";
-
-  nixpkgs.config.allowUnfree = true;
-
   home.packages = with pkgs; [
-    # packages
+    ansible
     autojump
     bat
-    borgbackup
+    doctl
     fzf
     gh
     htop
     httpie
     nodePackages.jsonlint
     lazygit
-    mpv
     ncdu
-    nmap
+    neofetch
     nixfmt-rfc-style
-    pinentry
-    rclone
     ripgrep
+    rustup
     speedtest-rs
-    vscode
     yamllint
     zsh-powerlevel10k
 
@@ -65,8 +59,8 @@
     # "bin/next-wallpaper.sh".source = bin/next-wallpaper.sh;
     # "bin/previous-wallpaper.sh".source = bin/previous-wallpaper.sh;
 
-  #   ".local/share/applications/discord.desktop".source = desktop/discord.desktop;
-  #   ".local/share/applications/todoist.desktop".source = desktop/todoist.desktop;
+    # ".local/share/applications/discord.desktop".source = desktop/discord.desktop;
+    # ".local/share/applications/todoist.desktop".source = desktop/todoist.desktop;
   };
 
   fonts.fontconfig.enable = true;
