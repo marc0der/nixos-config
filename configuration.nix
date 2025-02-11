@@ -88,6 +88,8 @@
     neovim
     networkmanagerapplet
     pinentry
+    protonvpn-cli
+    protonvpn-gui
     rclone
     waybar
     wofi
