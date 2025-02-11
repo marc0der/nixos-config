@@ -40,7 +40,7 @@
     # ".config/hypr/hyprland.conf".source = hypr/hyprland.conf;
 
     # kitty
-    # ".config/kitty/kitty.conf".source = kitty/kitty.conf;
+    ".config/kitty/kitty.conf".source = kitty/kitty.conf;
 
     # dunst
     # ".config/dunst/dunstrc".source = dunst/dunstrc;
