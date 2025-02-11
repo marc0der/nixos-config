@@ -14,7 +14,7 @@
     ";
     shellAliases = {
       #nix
-      nix-home = "home-manager --flake $HOME/dotfiles";
+      nix-home = "home-manager --flake $HOME/nixos/";
       nix-gc = "nix-collect-garbage";
 
       # general
