@@ -24,6 +24,12 @@
     yamllint
     zsh-powerlevel10k
 
+    # themes
+    materia-theme
+    papirus-icon-theme
+    libsForQt5.qt5ct
+    qt6ct
+
     # fonts
     font-awesome
     noto-fonts
@@ -31,6 +37,25 @@
     jetbrains-mono
     (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" "Noto" ]; })
   ];
+
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Materia-Dark";
+      package = pkgs.materia-theme;
+    };
+    iconTheme = {
+      name = "Papirus-Dark";
+      package = pkgs.papirus-icon-theme;
+    };
+  };
+
+  # qt = {
+  #   enable = true;
+  #   platformTheme = "qtct";
+  #   style.name = "kvantum";
+  #   style.package = pkgs.kvantum;
+  # };
 
   home.file = {
     ".gnupg/gpg-agent.conf".source = gnupg/gpg-agent.conf;
@@ -68,6 +93,7 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD = "true";
+    GTK_THEME = "Materia-Dark";
   };
 
   home.sessionPath = ["$HOME/bin"];
