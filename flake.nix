@@ -18,17 +18,16 @@
           modules = [ ./configuration.nix ];
         };
       };
-      homeConfigurations = {
-        marco = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [
-            ./common.nix
-            # ./git.nix
-            # ./report.nix
-            # ./xenomorph.nix
-            # ./zsh.nix
-          ];
-        };
-      };
+      # homeConfigurations = {
+      #   marco = home-manager.lib.homeManagerConfiguration {
+      #     inherit pkgs;
+      #     modules = [
+      #       ./common.nix
+      #       ./git.nix
+      #       ./report.nix
+      #       ./zsh.nix
+      #     ];
+      #   };
+      # };
   };
 }

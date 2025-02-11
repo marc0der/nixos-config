@@ -12,14 +12,16 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  boot.kernelParams = [ "i915.force_probe=7d45" ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/f0dff27c-f6b4-42aa-9109-b5a9e2e3f391";
-      fsType = "ext4";
+    { device = "/dev/disk/by-uuid/b69c9bfd-2bd4-488d-84af-f19c6c0157ae";
+      fsType = "btrfs";
+      options = [ "subvol=@" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/9541-1A08";
+    { device = "/dev/disk/by-uuid/20DE-5824";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
@@ -31,12 +33,9 @@
 
   boot.initrd.luks.devices."nvme0n1p4_crypt".device = "/dev/disk/by-uuid/2fed677d-3b3a-4c73-87f5-10c3b004c1cf";
 
-  fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/9510894d-b3a3-429f-a667-684f80dc3e1e";
-      fsType = "btrfs";
-    };
-
-  swapDevices = [ ];
+  swapDevices =
+    [ { device = "/dev/disk/by-uuid/456cab68-56b2-4fb4-816c-2c8056eb106f"; }
+    ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -47,4 +46,12 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      vpl-gpu-rt
+    ];
+  };
 }
+

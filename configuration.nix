@@ -6,7 +6,7 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
     ];
 
@@ -42,21 +42,76 @@
     LC_TIME = "en_GB.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "gb";
     variant = "";
   };
 
+  # special flags
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+
   # Configure console keymap
   console.keyMap = "uk";
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.marco = {
+    isNormalUser = true;
+    description = "Marco Vermeulen";
+    extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
+    packages = with pkgs; [];
+  };
+
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+    ardour
+    borgbackup
+    brave
+    brightnessctl
+    cage
+    git
+    intel-media-driver
+    kitty
+    libnotify
+    mpv
+    nautilus
+    nmap
+    nnn
+    neovim
+    networkmanagerapplet
+    pinentry
+    rclone
+    waybar
+    wofi
+  ];
+
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  programs.mtr.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
+
+  programs.zsh.enable = true;
+
+  # Install firefox.
+  programs.firefox.enable = true;
+
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true;
+  };
+
+  security.pam.services.hyprlock = {};
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -77,43 +132,40 @@
     #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.marco = {
-    isNormalUser = true;
-    description = "Marco Vermeulen";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [];
-  };
-
-  # Install firefox.
-  programs.firefox.enable = true;
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    brave
-    git
-    neovim
-  ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-
-  # List services that you want to enable:
-
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+
+  # Configure regreet login manager
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        # Run regreet inside Cage (a minimal Wayland compositor)
+        command = "${pkgs.cage}/bin/cage -d -- ${pkgs.greetd.regreet}/bin/regreet";
+	user = "greeter";
+      };
+    };
+  };
+
+  # Ensure regreet has a predefined session list
+  programs.regreet = {
+    enable = true;
+    settings = {
+      session-list = {
+        "Hyprland" = {
+          command = "${pkgs.hyprland}/bin/Hyprland";
+        };
+      };
+      default-session = "Hyprland";
+      background = "/etc/regreet/wall1.png";
+      background-fit = "cover";
+    };
+  };
+
+  # Fix PAM authentication (important for logging in)
+  security.pam.services.greetd = {};
+
+  services.flatpak.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
