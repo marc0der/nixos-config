@@ -2,13 +2,20 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, lib, pkgs, ... }:
-
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-    ];
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+let
+  tokyo-night-sddm = pkgs.libsForQt5.callPackage ./sddm.nix { };
+in
+{
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -40,12 +47,6 @@
     LC_PAPER = "en_GB.UTF-8";
     LC_TELEPHONE = "en_GB.UTF-8";
     LC_TIME = "en_GB.UTF-8";
-  };
-
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "gb";
-    variant = "";
   };
 
   # special flags
@@ -123,7 +124,22 @@
 
   programs.hyprlock.enable = true;
 
-  security.pam.services.hyprlock = {};
+  security.pam.services.hyprlock = { };
+
+  # xserver for SDDM
+  services.xserver = {
+    enable = true;
+    xkb = {
+      layout = "gb";
+      variant = "";
+    };
+  };
+
+  # SDDM
+  services.displayManager.sddm = {
+    enable = true;
+    theme = "tokyo-night-sddm";
+  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -150,33 +166,6 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # Configure regreet login manager
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        # Run regreet inside Cage (a minimal Wayland compositor)
-        command = "${pkgs.cage}/bin/cage -d -- ${pkgs.greetd.regreet}/bin/regreet";
-        user = "greeter";
-      };
-    };
-  };
-
-  # Ensure regreet has a predefined session list
-  programs.regreet = {
-    enable = true;
-    settings = {
-      session-list = {
-        "Hyprland" = {
-          command = "${pkgs.hyprland}/bin/Hyprland";
-        };
-      };
-      default-session = "Hyprland";
-      background = "/etc/regreet/wall1.png";
-      background-fit = "cover";
-    };
-  };
-
   # 1password
   programs._1password.enable = true;
   programs._1password-gui = {
@@ -185,9 +174,6 @@
     # require enabling PolKit integration on some desktop environments (e.g. Plasma).
     polkitPolicyOwners = [ "yourUsernameHere" ];
   };
-
-  # Fix PAM authentication (important for logging in)
-  security.pam.services.greetd = {};
 
   services.flatpak.enable = true;
 
