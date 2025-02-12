@@ -79,6 +79,7 @@
     cage
     fragments
     git
+    hyprlock
     intel-media-driver
     kitty
     libnotify
@@ -119,6 +120,8 @@
     enable = true;
     withUWSM = true;
   };
+
+  programs.hyprlock.enable = true;
 
   security.pam.services.hyprlock = {};
 
