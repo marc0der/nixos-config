@@ -22,7 +22,7 @@
         marco = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
-            ./common.nix
+            ./home.nix
             ./git.nix
             ./report.nix
             ./zsh.nix
