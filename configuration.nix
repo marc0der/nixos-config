@@ -62,9 +62,12 @@ in
   users.users.marco = {
     isNormalUser = true;
     description = "Marco Vermeulen";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     shell = pkgs.zsh;
-    packages = with pkgs; [];
+    packages = with pkgs; [ ];
   };
 
   # Allow unfree packages
@@ -95,14 +98,17 @@ in
     protonvpn-cli
     protonvpn-gui
     rclone
+    tokyo-night-sddm
     waybar
     wofi
   ];
 
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-    "1password-gui"
-    "1password"
-  ];
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      "1password-gui"
+      "1password"
+    ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

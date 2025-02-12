@@ -35,7 +35,12 @@
     noto-fonts
     noto-fonts-emoji
     jetbrains-mono
-    (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" "Noto" ]; })
+    (pkgs.nerdfonts.override {
+      fonts = [
+        "JetBrainsMono"
+        "Noto"
+      ];
+    })
   ];
 
   gtk = {
@@ -96,7 +101,7 @@
     GTK_THEME = "Materia-Dark";
   };
 
-  home.sessionPath = ["$HOME/bin"];
+  home.sessionPath = [ "$HOME/bin" ];
 
   home.changes-report.enable = true;
 
