@@ -81,6 +81,8 @@ in
     brave
     brightnessctl
     cage
+    eog
+    evince
     fragments
     git
     hyprlock
