@@ -100,6 +100,7 @@ in
     protonvpn-cli
     protonvpn-gui
     rclone
+    swaynotificationcenter
     tokyo-night-sddm
     waybar
     wofi
