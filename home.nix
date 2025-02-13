@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 {
+  nixpkgs.config.allowUnfree = true;
+
   home.username = "marco";
   home.homeDirectory = "/home/marco";
   home.stateVersion = "24.11";
@@ -18,6 +20,7 @@
     ncdu
     neofetch
     nixfmt-rfc-style
+    plexamp
     ripgrep
     rustup
     speedtest-rs
