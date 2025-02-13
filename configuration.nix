@@ -88,6 +88,7 @@ in
     git
     hyprlock
     intel-media-driver
+    killall
     kitty
     libnotify
     mpv
