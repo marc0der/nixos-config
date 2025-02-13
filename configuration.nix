@@ -87,6 +87,7 @@ in
     fragments
     git
     hyprlock
+    hyprpaper
     intel-media-driver
     killall
     kitty
