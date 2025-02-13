@@ -21,6 +21,7 @@
     neofetch
     nixfmt-rfc-style
     plexamp
+    pywal
     ripgrep
     rustup
     speedtest-rs

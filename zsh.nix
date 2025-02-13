@@ -11,6 +11,7 @@
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       source ${pkgs.autojump}/share/autojump/autojump.zsh
       [ -f ${config.home.homeDirectory}/.sdkman/bin/sdkman-init.sh ] && source ${config.home.homeDirectory}/.sdkman/bin/sdkman-init.sh
+      (cat ~/.cache/wal/sequences &)
     ";
     shellAliases = {
       #nix
