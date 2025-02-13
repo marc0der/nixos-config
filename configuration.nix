@@ -77,6 +77,7 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     ardour
+    blueman
     borgbackup
     brave
     brightnessctl
