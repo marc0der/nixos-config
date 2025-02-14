@@ -57,15 +57,13 @@
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
   };
-
-  # qt = {
-  #   enable = true;
-  #   platformTheme = "qtct";
-  #   style.name = "kvantum";
-  #   style.package = pkgs.kvantum;
-  # };
-
   home.file = {
     ".gnupg/gpg-agent.conf".source = gnupg/gpg-agent.conf;
     ".gnupg/gpg.conf".source = gnupg/gpg.conf;
