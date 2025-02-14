@@ -10,7 +10,9 @@
     ansible
     autojump
     bat
+    bibata-cursors
     doctl
+    font-manager
     fzf
     gh
     htop
@@ -32,6 +34,7 @@
     materia-theme
     papirus-icon-theme
     libsForQt5.qt5ct
+    libsForQt5.qtstyleplugin-kvantum
     qt6ct
 
     # fonts
@@ -50,28 +53,28 @@
   gtk = {
     enable = true;
     theme = {
-      name = "Materia-Dark";
+      name = "Materia-dark";
       package = pkgs.materia-theme;
     };
+
     iconTheme = {
       name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
-    gtk3.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
-    };
-    gtk4.extraConfig = {
-      gtk-application-prefer-dark-theme = 1;
+
+    font = {
+      name = "Noto Sans";
+      size = 11;
     };
   };
+
   home.file = {
+    ".config/qt5ct/qt5ct.conf".source = qt/qt5ct.conf;
+    ".config/qt6ct/qt6ct.conf".source = qt/qt6ct.conf;
+
     ".gnupg/gpg-agent.conf".source = gnupg/gpg-agent.conf;
     ".gnupg/gpg.conf".source = gnupg/gpg.conf;
 
-    # hyprland
-    # ".config/hypr/hyprland.conf".source = hypr/hyprland.conf;
-
-    # kitty
     ".config/kitty/kitty.conf".source = kitty/kitty.conf;
 
     # dunst
@@ -84,13 +87,6 @@
     # kanshi
     # ".config/systemd/user/kanshi.service".source = systemd/kanshi.service;
 
-    # foot
-    # ".config/foot/foot.ini".source = foot/foot.ini;
-
-    # bin scripts
-    # "bin/next-wallpaper.sh".source = bin/next-wallpaper.sh;
-    # "bin/previous-wallpaper.sh".source = bin/previous-wallpaper.sh;
-
     ".local/share/applications/discord.desktop".source = desktop/discord.desktop;
     ".local/share/applications/todoist.desktop".source = desktop/todoist.desktop;
   };
@@ -100,7 +96,11 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD = "true";
-    GTK_THEME = "Materia-Dark";
+    GTK_THEME = "Materia-dark";
+    XCURSOR_THEME = "Bibata-Modern-Ice";
+    XCURSOR_SIZE = "24";
+    QT_QPA_PLATFORM = "wayland;xcb";
+    QT_QPA_PLATFORMTHEME = "qt6ct";
   };
 
   home.sessionPath = [ "$HOME/bin" ];
