@@ -65,6 +65,7 @@ in
     extraGroups = [
       "networkmanager"
       "wheel"
+      "docker"
     ];
     shell = pkgs.zsh;
     packages = with pkgs; [ ];
@@ -184,6 +185,14 @@ in
   };
 
   services.flatpak.enable = true;
+
+  virtualisation.docker = {
+    enable = true;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
