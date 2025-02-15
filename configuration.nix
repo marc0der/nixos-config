@@ -86,7 +86,9 @@ in
     eog
     evince
     fragments
+    gedit
     git
+    gnome-calculator
     hyprlock
     hyprpaper
     intel-media-driver
