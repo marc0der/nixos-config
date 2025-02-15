@@ -19,6 +19,7 @@
     httpie
     nodePackages.jsonlint
     lazygit
+    mpv
     ncdu
     neofetch
     nixfmt-rfc-style
