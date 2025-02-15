@@ -177,6 +177,8 @@ in
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
+  services.gvfs.enable = true;
+
   # 1password
   programs._1password.enable = true;
   programs._1password-gui = {
