@@ -11,6 +11,7 @@
     autojump
     bat
     bibata-cursors
+    discord
     doctl
     font-manager
     fzf
@@ -88,7 +89,6 @@
     # kanshi
     # ".config/systemd/user/kanshi.service".source = systemd/kanshi.service;
 
-    ".local/share/applications/discord.desktop".source = desktop/discord.desktop;
     ".local/share/applications/todoist.desktop".source = desktop/todoist.desktop;
   };
 
