@@ -96,12 +96,12 @@
 
   home.sessionVariables = {
     EDITOR = "nvim";
-    POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD = "true";
     GTK_THEME = "Materia-dark";
-    XCURSOR_THEME = "Bibata-Modern-Ice";
-    XCURSOR_SIZE = "24";
+    POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD = "true";
     QT_QPA_PLATFORM = "wayland;xcb";
     QT_QPA_PLATFORMTHEME = "qt6ct";
+    XCURSOR_SIZE = "24";
+    XCURSOR_THEME = "Bibata-Modern-Ice";
   };
 
   home.sessionPath = [ "$HOME/bin" ];
@@ -109,4 +109,5 @@
   home.changes-report.enable = true;
 
   programs.home-manager.enable = true;
+
 }
