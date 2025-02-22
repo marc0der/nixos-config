@@ -24,6 +24,7 @@
     ncdu
     neofetch
     nixfmt-rfc-style
+    obsidian
     plexamp
     pywal
     ripgrep
