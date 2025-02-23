@@ -18,6 +18,7 @@
     gh
     htop
     httpie
+    jq
     nodePackages.jsonlint
     lazygit
     mpv
@@ -30,6 +31,7 @@
     ripgrep
     rustup
     speedtest-rs
+    wlogout
     yamllint
     zsh-powerlevel10k
 
