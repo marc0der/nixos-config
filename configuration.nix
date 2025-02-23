@@ -109,6 +109,7 @@ in
     rclone
     swaynotificationcenter
     tokyo-night-sddm
+    tree
     unzip
     waybar
     wofi
