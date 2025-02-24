@@ -11,16 +11,19 @@
     autojump
     bat
     bibata-cursors
+    cliphist
     discord
     doctl
     font-manager
     fzf
     gh
+    grim
     htop
     httpie
     jq
     nodePackages.jsonlint
     lazygit
+    meld
     mpv
     ncdu
     neofetch
@@ -29,8 +32,13 @@
     plexamp
     pywal
     ripgrep
+    rofi
     rustup
+    slurp
     speedtest-rs
+    swaynotificationcenter
+    waybar
+    wl-clipboard
     wlogout
     yamllint
     zsh-powerlevel10k
@@ -46,6 +54,9 @@
     font-awesome
     noto-fonts
     noto-fonts-emoji
+    fira-code
+    fira-code-symbols
+    fira-sans
     jetbrains-mono
     (pkgs.nerdfonts.override {
       fonts = [
