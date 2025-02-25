@@ -77,43 +77,20 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    ardour
-    blueman
-    borgbackup
-    brave
-    brightnessctl
     cage
-    eog
-    evince
     fragments
-    gedit
     git
-    gnome-calculator
-    hyprlock
-    hyprpaper
     intel-media-driver
     killall
-    kitty
     libnotify
-    mpv
-    nautilus
     nmap
     nnn
     neovim
-    networkmanagerapplet
     nvd
-    pavucontrol
-    pinentry-gnome3
     power-profiles-daemon
-    protonvpn-cli
-    protonvpn-gui
-    rclone
-    swaynotificationcenter
     tokyo-night-sddm
     tree
     unzip
-    waybar
-    wofi
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

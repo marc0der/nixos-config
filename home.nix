@@ -8,29 +8,47 @@
   home.stateVersion = "24.11";
   home.packages = with pkgs; [
     ansible
+    ardour
     autojump
     bat
     bibata-cursors
+    blueman
+    borgbackup
+    brightnessctl
     cliphist
     discord
     doctl
+    eog
+    evince
     font-manager
     fzf
+    gedit
     gh
+    gnome-calculator
     grim
     htop
     httpie
+    hyprlock
+    hyprpaper
     jq
-    nodePackages.jsonlint
+    kitty
     lazygit
     meld
     mpv
+    nautilus
     ncdu
     neofetch
+    networkmanagerapplet
     nixfmt-rfc-style
+    nodePackages.jsonlint
     obsidian
+    pavucontrol
+    pinentry-gnome3
     plexamp
+    protonvpn-cli
+    protonvpn-gui
     pywal
+    rclone
     ripgrep
     rofi
     rustup
