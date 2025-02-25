@@ -101,6 +101,7 @@ in
     nnn
     neovim
     networkmanagerapplet
+    nvd
     pavucontrol
     pinentry-gnome3
     power-profiles-daemon
@@ -226,6 +227,11 @@ in
       setSocketVariable = true;
     };
   };
+
+  system.activationScripts.changes-report.text = ''
+    export PATH=${pkgs.nix}/bin:$PATH
+    ${pkgs.nvd}/bin/nvd diff /run/current-system /nix/var/nix/profiles/system
+  '';
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
