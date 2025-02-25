@@ -30,6 +30,7 @@
     httpie
     hyprlock
     hyprpaper
+    jetbrains.idea-ultimate
     jq
     kitty
     lazygit
@@ -55,6 +56,7 @@
     slurp
     speedtest-rs
     swaynotificationcenter
+    vscode
     waybar
     wl-clipboard
     wlogout
