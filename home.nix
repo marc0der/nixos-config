@@ -25,12 +25,12 @@
     gedit
     gh
     gnome-calculator
-    grim
     htop
     httpie
     hyprlock
     hyprpaper
     hyprpolkitagent
+    hyprshot
     jetbrains.idea-ultimate
     jq
     kitty
@@ -54,7 +54,6 @@
     ripgrep
     rofi
     rustup
-    slurp
     speedtest-rs
     swaynotificationcenter
     vscode
