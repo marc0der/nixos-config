@@ -30,6 +30,7 @@
     httpie
     hyprlock
     hyprpaper
+    hyprpolkitagent
     jetbrains.idea-ultimate
     jq
     kitty
@@ -109,6 +110,22 @@
     font = {
       name = "Noto Sans";
       size = 11;
+    };
+  };
+
+  systemd.user.services.hyprpolkit = {
+    Unit = {
+      Description = "Hyprland polkit agent";
+      After = [ "graphical-session.target" ];
+    };
+
+    Service = {
+      ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
+      Restart = "always";
+    };
+
+    Install = {
+      WantedBy = [ "default.target" ];
     };
   };
 
