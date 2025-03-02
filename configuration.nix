@@ -77,9 +77,11 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    bzip2
     cage
     fragments
     git
+    gzip
     intel-media-driver
     killall
     libnotify
@@ -91,6 +93,7 @@ in
     tokyo-night-sddm
     tree
     unzip
+    zip
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
