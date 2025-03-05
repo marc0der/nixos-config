@@ -43,6 +43,7 @@
     neofetch
     networkmanagerapplet
     nixfmt-rfc-style
+    nodejs
     nodePackages.jsonlint
     obsidian
     pavucontrol
