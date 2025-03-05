@@ -20,6 +20,7 @@
     doctl
     eog
     evince
+    file-roller
     font-manager
     fzf
     gedit
