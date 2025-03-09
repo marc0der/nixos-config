@@ -182,11 +182,11 @@ in
 
   services.gvfs.enable = true;
 
-  systemd.services.battery-charge-limit = {
+  systemd.services.battery-charge-threshold = {
     wantedBy = [ "multi-user.target" ];
     after = [ "multi-user.target" ];
     startLimitBurst = 0;
-    description = "Sets a battery charge limit";
+    description = "Sets a battery charge end threshold";
     serviceConfig = {
       Type = "oneshot";
       Restart = "on-failure";
