@@ -182,6 +182,18 @@ in
 
   services.gvfs.enable = true;
 
+  systemd.services.battery-charge-limit = {
+    wantedBy = [ "multi-user.target" ];
+    after = [ "multi-user.target" ];
+    startLimitBurst = 0;
+    description = "Sets a battery charge limit";
+    serviceConfig = {
+      Type = "oneshot";
+      Restart = "on-failure";
+      ExecStart = ''${pkgs.bash}/bin/bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold' '';
+    };
+  };
+
   # 1password
   programs._1password.enable = true;
   programs._1password-gui = {
