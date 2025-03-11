@@ -6,7 +6,7 @@
 }:
 
 {
-  networking.hostName = "neomorph";
+  networking.hostName = "xenomorph";
 
   programs.hyprland = {
     enable = true;
