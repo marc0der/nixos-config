@@ -13,16 +13,9 @@ let
   tokyo-night-sddm = pkgs.libsForQt5.callPackage ./sddm.nix { };
 in
 {
-  imports = [
-    ./hardware-configuration.nix
-  ];
-
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.hostName = "xenomorph"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -90,7 +83,6 @@ in
     neovim
     nvd
     power-profiles-daemon
-    tokyo-night-sddm
     tree
     unzip
     zip
@@ -132,7 +124,7 @@ in
   # SDDM
   services.displayManager.sddm = {
     enable = true;
-    theme = "tokyo-night-sddm";
+    theme = "maui";
   };
 
   # Enable CUPS to print documents.
