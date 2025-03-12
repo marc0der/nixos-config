@@ -73,6 +73,7 @@ in
     bzip2
     cage
     fragments
+    gcc
     git
     gzip
     intel-media-driver
