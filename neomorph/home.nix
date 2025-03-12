@@ -59,6 +59,9 @@
 
     # kanshi
     ".config/systemd/user/kanshi.service".source = systemd/kanshi.service;
+
+    # slack
+    ".local/share/applications/slack.desktop".source = desktop/slack.desktop;
   };
 
   home.sessionVariables = {
