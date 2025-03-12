@@ -23,25 +23,36 @@
         xenomorph = lib.nixosSystem {
           inherit system;
           modules = [
-	    ./configuration.nix
-	    ./xenomorph/configuration.nix
-	    ./xenomorph/hardware-configuration.nix
-	  ];
+	          ./configuration.nix
+	          ./xenomorph/configuration.nix
+	          ./xenomorph/hardware-configuration.nix
+	        ];
         };
         neomorph = lib.nixosSystem {
           inherit system;
           modules = [
-	    ./configuration.nix
-	    ./neomorph/configuration.nix
-	    ./neomorph/hardware-configuration.nix
-	  ];
+	          ./configuration.nix
+	          ./neomorph/configuration.nix
+	          ./neomorph/hardware-configuration.nix
+	        ];
         };
       };
       homeConfigurations = {
-        marco = home-manager.lib.homeManagerConfiguration {
+        "marco@neomorph" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           modules = [
             ./home.nix
+            ./neomorph/home.nix
+            ./git.nix
+            ./report.nix
+            ./zsh.nix
+          ];
+        };
+        "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = [
+            ./home.nix
+            ./xenomorph/home.nix
             ./git.nix
             ./report.nix
             ./zsh.nix

@@ -12,5 +12,7 @@
     enable = true;
     wrapperFeatures.gtk = true;
   };
+
+  programs.xwayland.enable = true;
 }
 

@@ -2,11 +2,19 @@
 
 {
   home.packages = with pkgs; [
+    ansible
+    ardour
     brave
-    dunst
-    foot
+    discord
+    doctl
+    hyprlock
+    hyprpaper
+    hyprpolkitagent
+    hyprshot
     kanshi
+    kitty
     rofi
+    swaynotificationcenter
     waybar
     wl-clipboard
 
@@ -29,12 +37,12 @@
   gtk = {
     enable = true;
     theme = {
-      name = "Materia-Light";
+      name = "Materia-Dark";
       package = pkgs.materia-theme;
     };
 
     iconTheme = {
-      name = "Papirus-Light";
+      name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
 
@@ -44,23 +52,11 @@
     };
   };
 
-  home.file = {
-    ".local/share/applications/slack.desktop".source = desktop/slack.desktop;
-  };
-
   home.sessionVariables = {
-    GTK_THEME = "Materia-Light";
+    GTK_THEME = "Materia-Dark";
     QT_QPA_PLATFORM = "wayland;xcb";
     QT_QPA_PLATFORMTHEME = "qt6ct";
     XCURSOR_SIZE = "24";
     XCURSOR_THEME = "Bibata-Modern-Ice";
   };
-
-  xdg.portal = {
-    enable = true;
-    config.common.default = "*";
-    xdgOpenUsePortal = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  };
-
 }
