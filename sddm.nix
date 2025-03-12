@@ -9,14 +9,14 @@
   fetchFromGitHub,
 }:
 stdenvNoCC.mkDerivation rec {
-  pname = "simple-sddm-2";
+  pname = "simple-sddm";
   version = "1..0";
   dontBuild = true;
   src = fetchFromGitHub {
     owner = "JaKooLit";
-    repo = "simple-sddm-2";
-    rev = "84ae7ad47eab5daa9d904b2e33669788d891bd3d";
-    sha256 = "sha256-BkqtSh944QIVyYvXCCU8Pucs/2RpWXlwNFSC9zVlRoc=";
+    repo = "simple-sddm";
+    rev = "afd038e57f8c678a14adf3fd9407a44dde5a660b";
+    sha256 = "sha256-N04pHKLge228dQDFD1jAAymUf8BUg1N+CX9+91DMHvY=";
   };
   nativeBuildInputs = [
     wrapQtAppsHook
@@ -25,15 +25,13 @@ stdenvNoCC.mkDerivation rec {
   propagatedUserEnvPkgs = [
     qtbase
     qtsvg
-    qtdeclarative
-    qt5compat
     qtgraphicaleffects
     qtquickcontrols2
   ];
 
   installPhase = ''
     mkdir -p $out/share/sddm/themes
-    cp -aR $src $out/share/sddm/themes/simple-sddm-2
+    cp -aR $src $out/share/sddm/themes/simple-sddm
   '';
 
 }
