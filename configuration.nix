@@ -10,7 +10,7 @@
 }:
 
 let
-  tokyo-night-sddm = pkgs.libsForQt5.callPackage ./sddm.nix { };
+  simple-sddm-2 = pkgs.libsForQt6.callPackage ./sddm.nix { };
 in
 {
   # Bootloader.
@@ -83,6 +83,7 @@ in
     neovim
     nvd
     power-profiles-daemon
+    simple-sddm-2
     tree
     unzip
     zip
@@ -115,7 +116,7 @@ in
   # SDDM
   services.displayManager.sddm = {
     enable = true;
-    theme = "maui";
+    theme = "simple-sddm-2";
   };
 
   # Enable CUPS to print documents.

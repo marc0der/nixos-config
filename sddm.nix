@@ -9,14 +9,14 @@
   fetchFromGitHub,
 }:
 stdenvNoCC.mkDerivation rec {
-  pname = "tokyo-night-sddm";
+  pname = "simple-sddm-2";
   version = "1..0";
   dontBuild = true;
   src = fetchFromGitHub {
-    owner = "marc0der";
-    repo = "tokyo-night-sddm";
-    rev = "11644059b1ff3b0e1562246835f8f1a385f6cf0a";
-    sha256 = "sha256-KG1dZ9tHE+dOwtczRW+zpZE3NLDPaMhtSg5RJ1GGKMs=";
+    owner = "JaKooLit";
+    repo = "simple-sddm-2";
+    rev = "84ae7ad47eab5daa9d904b2e33669788d891bd3d";
+    sha256 = "sha256-BkqtSh944QIVyYvXCCU8Pucs/2RpWXlwNFSC9zVlRoc=";
   };
   nativeBuildInputs = [
     wrapQtAppsHook
@@ -25,13 +25,15 @@ stdenvNoCC.mkDerivation rec {
   propagatedUserEnvPkgs = [
     qtbase
     qtsvg
+    qtdeclarative
+    qt5compat
     qtgraphicaleffects
     qtquickcontrols2
   ];
 
   installPhase = ''
     mkdir -p $out/share/sddm/themes
-    cp -aR $src $out/share/sddm/themes/tokyo-night-sddm
+    cp -aR $src $out/share/sddm/themes/simple-sddm-2
   '';
 
 }
