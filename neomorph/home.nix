@@ -46,6 +46,7 @@
 
   home.file = {
     ".local/share/applications/slack.desktop".source = desktop/slack.desktop;
+    ".local/share/applications/zoom.desktop".source = desktop/zoom.desktop;
   };
 
   home.sessionVariables = {
