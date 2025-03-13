@@ -2,7 +2,7 @@
 Name=Zoom
 Comment=Zoom Video Conference
 GenericName=Zoom Client for Linux
-Exec=/usr/bin/env brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --app https://app.zoom.us/wc/home %U
+Exec=/usr/bin/env brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --app=https://app.zoom.us/wc/home
 Icon=us.zoom.Zoom
 Terminal=false
 Type=Application
