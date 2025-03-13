@@ -12,6 +12,9 @@
     swaylock-effects
     waybar
     wl-clipboard
+    xdg-desktop-portal
+    xdg-desktop-portal-wlr
+    xdg-desktop-portal-gtk
 
     # themes
     materia-theme
@@ -64,7 +67,10 @@
     enable = true;
     config.common.default = "*";
     xdgOpenUsePortal = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-wlr
+    ];
   };
 
 }
