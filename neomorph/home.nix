@@ -6,7 +6,10 @@
     dunst
     foot
     kanshi
+    playerctl
     rofi
+    sway-contrib.grimshot
+    swaylock-effects
     waybar
     wl-clipboard
 
