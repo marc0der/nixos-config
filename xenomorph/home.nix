@@ -14,6 +14,7 @@
     kanshi
     kitty
     rofi
+    rustup
     swaynotificationcenter
     waybar
     wl-clipboard
