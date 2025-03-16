@@ -53,6 +53,10 @@
     };
   };
 
+  home.file = {
+    ".local/share/applications/moises.desktop".source = desktop/moises.desktop;
+  };
+
   home.sessionVariables = {
     GTK_THEME = "Materia-Dark";
     QT_QPA_PLATFORM = "wayland;xcb";
