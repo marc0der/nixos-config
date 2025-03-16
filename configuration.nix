@@ -22,7 +22,16 @@ in
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    settings = {
+      connectivity = {
+        uri = "http://nmcheck.gnome.org/check_network_status.txt";
+        interval = 300;
+        enabled = true;
+      };
+    };
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/London";
