@@ -16,6 +16,7 @@ in
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest; # Install latest stable kernel
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
