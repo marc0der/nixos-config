@@ -93,10 +93,12 @@ in
     nnn
     neovim
     nvd
+    pciutils
     power-profiles-daemon
     simple-sddm
     tree
     unzip
+    usbutils
     zip
   ];
 
