@@ -23,18 +23,18 @@
         xenomorph = lib.nixosSystem {
           inherit system;
           modules = [
-	          ./configuration.nix
-	          ./xenomorph/configuration.nix
-	          ./xenomorph/hardware-configuration.nix
-	        ];
+            ./configuration.nix
+            ./xenomorph/configuration.nix
+            ./xenomorph/hardware-configuration.nix
+          ];
         };
         neomorph = lib.nixosSystem {
           inherit system;
           modules = [
-	          ./configuration.nix
-	          ./neomorph/configuration.nix
-	          ./neomorph/hardware-configuration.nix
-	        ];
+            ./configuration.nix
+            ./neomorph/configuration.nix
+            ./neomorph/hardware-configuration.nix
+          ];
         };
       };
       homeConfigurations = {
