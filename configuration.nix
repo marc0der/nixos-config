@@ -108,6 +108,9 @@ in {
   # Install firefox.
   programs.firefox.enable = true;
 
+  # security
+  security.pam.services.sddm.enableGnomeKeyring = true;
+
   # xserver for SDDM
   services.xserver = {
     enable = true;
