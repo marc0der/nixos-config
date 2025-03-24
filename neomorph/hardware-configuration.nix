@@ -25,6 +25,9 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
   boot.kernelParams = [ "i915.force_probe=7d45" ];
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 0;
+  };
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/b3c35abf-6585-4c53-bdee-5a7af994aa9f";
