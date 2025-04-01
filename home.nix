@@ -45,6 +45,7 @@
     rclone
     ripgrep
     speedtest-rs
+    uv
     vscode
     wlogout
     yamllint
