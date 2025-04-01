@@ -125,6 +125,16 @@ in {
   # Power profiles daemon
   services.power-profiles-daemon.enable = true;
 
+  # Logind prevent system suspend when docked
+
+  services.logind = {
+    lidSwitch = "suspend";
+    lidSwitchDocked = "ignore";
+    extraConfig = ''
+      IdleAction=ignore
+    '';
+  };
+
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
