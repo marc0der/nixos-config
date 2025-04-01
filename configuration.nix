@@ -2,21 +2,15 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 
-let
-  simple-sddm = pkgs.libsForQt5.callPackage ./sddm.nix { };
-in
-{
+let simple-sddm = pkgs.libsForQt5.callPackage ./sddm.nix { };
+in {
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest; # Install latest stable kernel
+  boot.kernelPackages =
+    pkgs.linuxPackages_latest; # Install latest stable kernel
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -53,10 +47,7 @@ in
   };
 
   # special flags
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Configure console keymap
   console.keyMap = "uk";
@@ -65,11 +56,7 @@ in
   users.users.marco = {
     isNormalUser = true;
     description = "Marco Vermeulen";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "docker"
-    ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     shell = pkgs.zsh;
     packages = with pkgs; [ ];
   };
@@ -154,23 +141,10 @@ in
       "bluez5.enable-sbc-xq" = true;
       "bluez5.enable-msbc" = true;
       "bluez5.enable-hw-volume" = true;
-      "bluez5.roles" = [
-        "hsp_hs"
-        "hsp_ag"
-        "hfp_hf"
-        "hfp_ag"
-        "a2dp_sink"
-        "a2dp_source"
-      ];
-      "bluez5.codecs" = [
-        "bc"
-        "sbc_xq"
-        "aac"
-        "ldac"
-        "aptx"
-        "aptx_hd"
-        "aptx_ll"
-      ];
+      "bluez5.roles" =
+        [ "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" "a2dp_sink" "a2dp_source" ];
+      "bluez5.codecs" =
+        [ "bc" "sbc_xq" "aac" "ldac" "aptx" "aptx_hd" "aptx_ll" ];
     };
   };
 
@@ -187,7 +161,8 @@ in
     serviceConfig = {
       Type = "oneshot";
       Restart = "on-failure";
-      ExecStart = ''${pkgs.bash}/bin/bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold' '';
+      ExecStart =
+        "${pkgs.bash}/bin/bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold' ";
     };
   };
 
