@@ -21,6 +21,7 @@
     fzf
     gedit
     gh
+    ghostty
     gnome-calculator
     htop
     httpie
