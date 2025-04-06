@@ -7,11 +7,10 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      home-manager,
-      ...
+    inputs@{ self
+    , nixpkgs
+    , home-manager
+    , ...
     }:
     let
       lib = nixpkgs.lib;
