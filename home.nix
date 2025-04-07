@@ -60,12 +60,7 @@
     fira-code-symbols
     fira-sans
     jetbrains-mono
-    (pkgs.nerdfonts.override {
-      fonts = [
-        "JetBrainsMono"
-        "Noto"
-      ];
-    })
+    (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" "Noto" ]; })
   ];
 
   home.file = {
@@ -73,7 +68,10 @@
     ".gnupg/gpg.conf".source = gnupg/gpg.conf;
     ".config/qt5ct/qt5ct.conf".source = qt/qt5ct.conf;
     ".config/qt6ct/qt6ct.conf".source = qt/qt6ct.conf;
-    ".local/share/applications/todoist.desktop".source = desktop/todoist.desktop;
+    ".local/share/applications/todoist.desktop".source =
+      desktop/todoist.desktop;
+    ".local/share/applications/chatgpt.desktop".source =
+      desktop/chatgpt.desktop;
   };
 
   fonts.fontconfig.enable = true;

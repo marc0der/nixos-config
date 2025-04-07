@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=ChatGPT
+Comment=ChatGPT
+Exec=brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app="https://chatgpt.com/" %U
+Icon=ChatGPT
+Terminal=false
+Type=Application
+Encoding=UTF-8
+Categories=Application;
+StartupWMClass=chatgpt
+Name[en_GB]=ChatGPT
