@@ -13,6 +13,7 @@
     blueman
     borgbackup
     brightnessctl
+    chafa
     cliphist
     eog
     evince
