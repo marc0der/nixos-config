@@ -7,6 +7,7 @@
     brave
     discord
     doctl
+    ffmpeg
     hyprlock
     hyprpaper
     hyprpolkitagent
