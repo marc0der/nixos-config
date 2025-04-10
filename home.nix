@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, unstable, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
@@ -52,6 +52,10 @@
     wlogout
     yamllint
     zsh-powerlevel10k
+
+    # Unstable packages
+    unstable.code-cursor
+    unstable.claude-code
 
     # fonts
     font-awesome
