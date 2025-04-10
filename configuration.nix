@@ -2,11 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config
-, lib
-, pkgs
-, ...
-}:
+{ config, lib, pkgs, ... }:
 
 let simple-sddm = pkgs.libsForQt5.callPackage ./sddm.nix { };
 in {
@@ -165,7 +161,6 @@ in {
     };
   };
 
-  # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
   services.gvfs.enable = true;
