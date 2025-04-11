@@ -12,7 +12,7 @@
       lib = nixpkgs.lib;
       system = "x86_64-linux";
       nixpkgsConfig = { 
-        config = import ./nixpkgs-config.nix { inherit lib; };
+        config = import ./unfree-nixpkgs.nix { inherit lib; };
       };
       pkgs = import nixpkgs { 
         inherit system; 
