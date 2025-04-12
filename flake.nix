@@ -29,6 +29,7 @@
           inherit system;
           modules = [
             ./configuration.nix
+            ./hardware-configuration.nix
             ./xenomorph/configuration.nix
             ./xenomorph/hardware-configuration.nix
           ];
@@ -37,6 +38,7 @@
           inherit system;
           modules = [
             ./configuration.nix
+            ./hardware-configuration.nix
             ./neomorph/configuration.nix
             ./neomorph/hardware-configuration.nix
           ];
