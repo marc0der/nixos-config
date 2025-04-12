@@ -15,4 +15,3 @@
 
   programs.xwayland.enable = true;
 }
-

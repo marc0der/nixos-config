@@ -1,4 +1,10 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
   fileSystems."/" = {
@@ -10,7 +16,10 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/FD87-9FD2";
     fsType = "vfat";
-    options = [ "fmask=0077" "dmask=0077" ];
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
   };
 
   fileSystems."/home" = {
@@ -21,6 +30,5 @@
   boot.initrd.luks.devices."luks-25dcf7b3-7d8c-490c-9f63-c06803d54906".device =
     "/dev/disk/by-uuid/25dcf7b3-7d8c-490c-9f63-c06803d54906";
 
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/a2fde2e6-e74b-4edb-8b76-8ae9fa58d114"; }];
+  swapDevices = [ { device = "/dev/disk/by-uuid/a2fde2e6-e74b-4edb-8b76-8ae9fa58d114"; } ];
 }

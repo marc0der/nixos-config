@@ -7,23 +7,31 @@
     home-manager.url = "github:nix-community/home-manager/release-24.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      nixpkgs-unstable,
+      home-manager,
+      ...
+    }:
     let
       lib = nixpkgs.lib;
       system = "x86_64-linux";
-      nixpkgsConfig = { 
+      nixpkgsConfig = {
         config = import ./unfree-nixpkgs.nix { inherit lib; };
       };
-      pkgs = import nixpkgs { 
-        inherit system; 
+      pkgs = import nixpkgs {
+        inherit system;
         config = nixpkgsConfig.config;
       };
-      unstable = import nixpkgs-unstable { 
-        inherit system; 
+      unstable = import nixpkgs-unstable {
+        inherit system;
         config = nixpkgsConfig.config;
       };
 
-    in {
+    in
+    {
       nixosConfigurations = {
         xenomorph = lib.nixosSystem {
           inherit system;
@@ -48,8 +56,13 @@
         "marco@neomorph" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = { inherit unstable; };
-          modules =
-            [ ./home.nix ./neomorph/home.nix ./git.nix ./report.nix ./zsh.nix ];
+          modules = [
+            ./home.nix
+            ./neomorph/home.nix
+            ./git.nix
+            ./report.nix
+            ./zsh.nix
+          ];
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
