@@ -8,7 +8,8 @@
 - Home manager upgrade happens with update after channel updates
 
 ## Reporting Changes
-- Check what will change: `nvd diff /run/current-system result` (after building)
+- Changes reported automatically during activation
+- Manual check: `nvd diff /run/current-system /nix/var/nix/profiles/system`
 
 ## Code Style Guidelines
 - Use 2-space indentation in all Nix files

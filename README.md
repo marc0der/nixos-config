@@ -29,10 +29,16 @@ Home manager upgrades happen automatically after channel updates.
 
 ## Reporting Changes
 
-To check what will change in the system (after building):
+The system is configured to automatically show changes between system generations during activation.
+
+For manual comparison of system generations:
 
 ```bash
-nvd diff /run/current-system result
+# Compare current system with the system profile
+nvd diff /run/current-system /nix/var/nix/profiles/system
+
+# Compare any two system generations
+nvd diff /nix/var/nix/profiles/system-XXX-link /nix/var/nix/profiles/system-YYY-link
 ```
 
 ## Repository Structure
