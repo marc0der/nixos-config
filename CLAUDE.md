@@ -2,9 +2,10 @@
 
 ## Build Commands
 - System rebuild: `sudo nixos-rebuild switch --flake .`
+- Channel updates: `sudo nix flake update --flake .`
+- System upgrade:  `sudo nixos-rebuild --upgrade switch --flake .` after channel updates
 - Home manager update: `home-manager switch --flake .`
-- System upgrade: `sudo nix flake update --flake .` then `sudo nixos-rebuild --upgrade switch --flake .`
-- Home manager upgrade: `nix flake update --flake .` then `home-manager switch --upgrade --flake .`
+- Home manager upgrade happens with update after channel updates
 
 ## Reporting Changes
 - Check what will change: `nvd diff /run/current-system result` (after building)
