@@ -2,10 +2,10 @@
 Name=ChatGPT
 Comment=ChatGPT
 Exec=brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app="https://chatgpt.com/" %U
-Icon=ChatGPT
+Icon=internet-web-browser
 Terminal=false
 Type=Application
 Encoding=UTF-8
-Categories=Application;
-StartupWMClass=chatgpt
+Categories=Network;WebBrowser;Utility;
+StartupWMClass=brave-browser-chatgpt.com
 Name[en_GB]=ChatGPT
