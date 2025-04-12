@@ -83,6 +83,7 @@
     ".config/qt6ct/qt6ct.conf".source = qt/qt6ct.conf;
     ".local/share/applications/todoist.desktop".source = desktop/todoist.desktop;
     ".local/share/applications/chatgpt.desktop".source = desktop/chatgpt.desktop;
+    ".local/share/icons/chatgpt.png".source = icons/chatgpt.png;
   };
 
   fonts.fontconfig.enable = true;
