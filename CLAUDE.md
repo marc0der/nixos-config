@@ -11,12 +11,26 @@
 
 ## Code Style Guidelines
 - Use 2-space indentation in all Nix files
-- Format with `nixfmt-rfc-style` (installed in home.nix)
+- Format with `nixfmt` before every git commit
 - Organize configurations modularly by machine (xenomorph, neomorph)
 - Use explicit variable naming
 - Follow machine-specific configurations in separate directories
 - Keep system configs in configuration.nix files
 - Keep user configs in home.nix files
+
+## Git Commit Style
+- Use specific, concise imperative statements:
+  - "Add user authentication module"
+  - "Fix login validation bug"
+  - "Update API documentation"
+  - "Refactor data processing pipeline"
+  - "Remove deprecated methods"
+- No lengthy descriptions in commit body
+- Make small, incremental commits after each change
+- Include "Co-Authored-By: Claude <noreply@anthropic.com>" in commits
+- Exclude "🤖 Generated with [Claude Code](https://claude.ai/code)"
+- Add standard prefixes such as `fix:`, `docs:`, `chore`, `feature`, etc to each commit
+- Remember to run `nixfmt` on all files before you commit to git!
 
 ## Repository Structure
 - Shared base configuration in root directory
