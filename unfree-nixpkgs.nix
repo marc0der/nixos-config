@@ -4,6 +4,7 @@
     "code-cursor"
     "claude-code"
     "cursor"
+    "discord"
     "vscode"
     "obsidian"
     "idea-ultimate"
