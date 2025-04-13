@@ -14,7 +14,7 @@
     "label" : "suspend",
     "action" : "systemctl suspend",
     "text" : "Suspend",
-    "keybind" : "u"
+    "keybind" : "s"
 }
 {
     "label" : "hibernate",
@@ -32,5 +32,5 @@
     "label" : "shutdown",
     "action" : "systemctl poweroff ",
     "text" : "Power Off",
-    "keybind" : "s"
+    "keybind" : "p"
 }
