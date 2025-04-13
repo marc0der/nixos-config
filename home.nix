@@ -6,6 +6,7 @@
 }:
 
 {
+
   home.username = "marco";
   home.homeDirectory = "/home/marco";
   home.stateVersion = "24.11";
@@ -25,7 +26,6 @@
     fzf
     gedit
     gh
-    ghostty
     gnome-calculator
     htop
     httpie

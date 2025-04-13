@@ -62,6 +62,7 @@
             ./git.nix
             ./report.nix
             ./zsh.nix
+            ./ghostty.nix
           ];
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
@@ -73,6 +74,7 @@
             ./git.nix
             ./report.nix
             ./zsh.nix
+            ./ghostty.nix
           ];
         };
       };

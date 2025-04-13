@@ -19,6 +19,7 @@
 - Follow machine-specific configurations in separate directories
 - Keep system configs in configuration.nix files
 - Keep user configs in home.nix files
+- NEVER add imports directly in configuration files; always add modules to flake.nix
 
 ## Git Commit Style
 - Use specific, concise imperative statements:
