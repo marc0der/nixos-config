@@ -34,9 +34,17 @@
 - Exclude "🤖 Generated with [Claude Code](https://claude.ai/code)"
 - Add standard prefixes such as `fix:`, `docs:`, `chore`, `feature`, etc to each commit
 - Remember to run `nixfmt` on all files before you commit to git!
+- NEVER commit to git until everything is working and tested
 
 ## Repository Structure
 - Shared base configuration in root directory
 - Machine-specific configs in named subdirectories
 - Desktop entries (.desktop) organized by machine
 - Flake-based repository using NixOS 24.11
+
+## Assistant Behavior
+- Always ask for confirmation before renaming, moving, or restructuring directories
+- Never commit to git until everything is working and tested
+- Use smaller changes when possible for easier review
+- Prefer standalone script files over inline scripts in Nix files
+- Migrate scripts to their own files rather than rewriting their functionality
