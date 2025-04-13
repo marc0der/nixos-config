@@ -237,8 +237,7 @@ window#waybar.empty #window {
 
 #custom-chatgpt {
     margin-right: 16px;
-    background-image: url("../assets/openai.svg");
-    background-repeat: no-repeat;
+        background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
     padding-right: 18px;
