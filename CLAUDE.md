@@ -1,5 +1,13 @@
 # NixOS Configuration Assistant Guide
 
+## Important Notes
+- New files must be staged with `git add <file>` before home-manager/nixos-rebuild can recognize them
+- Always follow this workflow:
+  1. Stage necessary files with git
+  2. Run home-manager/nixos-rebuild to verify changes work
+  3. Only commit to git if the build was successful
+- This ensures we don't commit broken configurations
+
 ## Build Commands
 - System rebuild: `sudo nixos-rebuild switch --flake .`
 - Home manager update: `home-manager switch --flake .`
