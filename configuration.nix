@@ -22,7 +22,7 @@ in {
     settings = {
       connectivity = {
         uri = "http://nmcheck.gnome.org/check_network_status.txt";
-        interval = 300;
+        interval = 60;
         enabled = true;
       };
     };
