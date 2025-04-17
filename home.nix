@@ -99,6 +99,64 @@
 
   programs.home-manager.enable = true;
 
+  xdg = {
+    enable = true;
+
+    # Default applications
+    mimeApps = {
+      enable = true;
+      defaultApplications = {
+        # Web browser
+        "text/html" = [ "brave-browser.desktop" ];
+        "x-scheme-handler/http" = [ "brave-browser.desktop" ];
+        "x-scheme-handler/https" = [ "brave-browser.desktop" ];
+        "x-scheme-handler/about" = [ "brave-browser.desktop" ];
+        "x-scheme-handler/unknown" = [ "brave-browser.desktop" ];
+
+        # PDF viewer
+        "application/pdf" = [ "org.gnome.Evince.desktop" ];
+
+        # Image viewer
+        "image/jpeg" = [ "org.gnome.eog.desktop" ];
+        "image/png" = [ "org.gnome.eog.desktop" ];
+        "image/gif" = [ "org.gnome.eog.desktop" ];
+        "image/svg+xml" = [ "org.gnome.eog.desktop" ];
+
+        # Text editor
+        "text/plain" = [ "nvim.desktop" ];
+        "text/markdown" = [ "nvim.desktop" ];
+        "application/json" = [ "nvim.desktop" ];
+        "application/xml" = [ "nvim.desktop" ];
+
+        # Video player
+        "video/mp4" = [ "mpv.desktop" ];
+        "video/x-matroska" = [ "mpv.desktop" ];
+        "video/webm" = [ "mpv.desktop" ];
+        "video/quicktime" = [ "mpv.desktop" ];
+
+        # Archive files
+        "application/zip" = [ "org.gnome.FileRoller.desktop" ];
+        "application/x-compressed-tar" = [ "org.gnome.FileRoller.desktop" ];
+        "application/x-tar" = [ "org.gnome.FileRoller.desktop" ];
+        "application/x-7z-compressed" = [ "org.gnome.FileRoller.desktop" ];
+      };
+    };
+
+    # Configure user directories
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+      desktop = "$HOME/Desktop";
+      documents = "$HOME/Documents";
+      download = "$HOME/Downloads";
+      music = "$HOME/Music";
+      pictures = "$HOME/Pictures";
+      publicShare = "$HOME/Public";
+      templates = "$HOME/Templates";
+      videos = "$HOME/Videos";
+    };
+  };
+
   services.gnome-keyring = {
     enable = true;
     components = [
