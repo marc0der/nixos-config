@@ -1,4 +1,9 @@
-{ config, pkgs, unstable, ... }:
+{
+  config,
+  pkgs,
+  unstable,
+  ...
+}:
 
 {
   home.packages = with pkgs; [
@@ -11,8 +16,8 @@
     hyprpolkitagent
     kanshi
     kitty
-    rustup
     rofi
+    rustup
     swaynotificationcenter
     waybar
     wl-clipboard

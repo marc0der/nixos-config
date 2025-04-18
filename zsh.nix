@@ -1,7 +1,9 @@
 { config, pkgs, ... }:
 
 {
-  home.file = { ".p10k.zsh".source = powerline/p10k; };
+  home.file = {
+    ".p10k.zsh".source = powerline/p10k;
+  };
 
   programs.zsh = {
     enable = true;
@@ -29,8 +31,7 @@
       gs = "git status";
       gd = "git diff";
       gdt = "git difftool";
-      gl =
-        "git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
+      gl = "git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
       gc = "git commit --verbose";
       gcm = "git commit --message --verbose";
       gca = "git commit --amend --verbose";
@@ -53,10 +54,20 @@
       suvi = "pkexec nvim";
       ll = "ls -lah";
     };
-    history = { size = 100000; };
+    history = {
+      size = 100000;
+    };
     oh-my-zsh = {
       enable = true;
-      plugins = [ "fzf" "gh" "git" "docker" "sudo" "aws" "doctl" ];
+      plugins = [
+        "fzf"
+        "gh"
+        "git"
+        "docker"
+        "sudo"
+        "aws"
+        "doctl"
+      ];
       theme = "wezm+";
     };
   };

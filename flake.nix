@@ -10,7 +10,14 @@
     fenix.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs =
-    inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, fenix, ... }:
+    inputs@{
+      self,
+      nixpkgs,
+      nixpkgs-unstable,
+      home-manager,
+      fenix,
+      ...
+    }:
     let
       lib = nixpkgs.lib;
       system = "x86_64-linux";
@@ -28,7 +35,8 @@
 
       rustToolchain = fenix.packages.${system};
 
-    in {
+    in
+    {
       nixosConfigurations = {
         xenomorph = lib.nixosSystem {
           inherit system;
