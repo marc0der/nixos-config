@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  unstable,
-  ...
-}:
+{ config, pkgs, unstable, ... }:
 
 {
   home.packages = with pkgs; [
@@ -17,6 +12,9 @@
     kanshi
     kitty
     rustup
+    rofi
+    swaynotificationcenter
+    waybar
     wl-clipboard
 
     # themes
