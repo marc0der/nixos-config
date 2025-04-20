@@ -16,10 +16,6 @@
     hyprpolkitagent
     kanshi
     kitty
-    rofi
-    rustup
-    swaynotificationcenter
-    waybar
     wl-clipboard
 
     # themes
