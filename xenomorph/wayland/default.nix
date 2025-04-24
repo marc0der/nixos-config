@@ -78,21 +78,4 @@
       WantedBy = [ "graphical-session.target" ];
     };
   };
-
-  # Enable swaync service
-  systemd.user.services.swaync = {
-    Unit = {
-      Description = "Swaync notification daemon";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
-    };
-    Service = {
-      ExecStart = "${pkgs.swaynotificationcenter}/bin/swaync";
-      Restart = "always";
-      RestartSec = 3;
-    };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
-  };
 }
