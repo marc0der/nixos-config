@@ -13,6 +13,7 @@
     kanshi
     playerctl
     rofi
+    steam-run
     sway-contrib.grimshot
     swaylock-effects
     waybar
@@ -20,6 +21,7 @@
     xdg-desktop-portal
     xdg-desktop-portal-wlr
     xdg-desktop-portal-gtk
+    zoom-us
 
     # themes
     materia-theme
@@ -57,7 +59,6 @@
 
   home.file = {
     ".local/share/applications/slack.desktop".source = desktop/slack.desktop;
-    ".local/share/applications/zoom.desktop".source = desktop/zoom.desktop;
   };
 
   home.sessionVariables = {
@@ -66,16 +67,45 @@
     QT_QPA_PLATFORMTHEME = "qt6ct";
     XCURSOR_SIZE = "24";
     XCURSOR_THEME = "Bibata-Modern-Ice";
+    NIXPKGS_ALLOW_UNFREE = 1;
+  };
+
+  xdg.mimeApps.enable = true;
+  xdg.mimeApps.defaultApplications = {
+    "x-scheme-handler/zoommtg" = [ "zoom.desktop" ];
   };
 
   xdg.portal = {
     enable = true;
-    config.common.default = "*";
-    xdgOpenUsePortal = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-wlr
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-wlr
     ];
+    config.common.default = "*";
   };
 
+  xdg.desktopEntries.zoom = {
+    name = "Zoom (FHS)";
+    exec = "${pkgs.writeShellScriptBin "zoom-wrapper" ''
+      exec ${pkgs.steam-run}/bin/steam-run ${pkgs.zoom-us}/bin/zoom %U
+    ''}";
+    mimeType = [ "x-scheme-handler/zoommtg" ];
+    noDisplay = false;
+  };
+
+  systemd.user.services.xdg-desktop-portal-wlr = {
+    Unit = {
+      Description = "xdg-desktop-portal-wlr";
+      PartOf = [ "graphical-session.target" ];
+    };
+
+    Service = {
+      ExecStart = "${pkgs.xdg-desktop-portal-wlr}/libexec/xdg-desktop-portal-wlr";
+      Restart = "on-failure";
+    };
+
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
 }

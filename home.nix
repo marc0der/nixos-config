@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  unstable,
-  ...
-}:
+{ config, pkgs, unstable, ... }:
 
 {
 
@@ -19,6 +14,7 @@
     brightnessctl
     chafa
     cliphist
+    desktop-file-utils
     eog
     evince
     file-roller
@@ -68,12 +64,7 @@
     fira-code-symbols
     fira-sans
     jetbrains-mono
-    (pkgs.nerdfonts.override {
-      fonts = [
-        "JetBrainsMono"
-        "Noto"
-      ];
-    })
+    (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" "Noto" ]; })
   ];
 
   home.file = {
@@ -81,8 +72,10 @@
     ".gnupg/gpg.conf".source = gnupg/gpg.conf;
     ".config/qt5ct/qt5ct.conf".source = qt/qt5ct.conf;
     ".config/qt6ct/qt6ct.conf".source = qt/qt6ct.conf;
-    ".local/share/applications/todoist.desktop".source = desktop/todoist.desktop;
-    ".local/share/applications/chatgpt.desktop".source = desktop/chatgpt.desktop;
+    ".local/share/applications/todoist.desktop".source =
+      desktop/todoist.desktop;
+    ".local/share/applications/chatgpt.desktop".source =
+      desktop/chatgpt.desktop;
     ".local/share/icons/chatgpt.png".source = icons/chatgpt.png;
   };
 
@@ -159,11 +152,7 @@
 
   services.gnome-keyring = {
     enable = true;
-    components = [
-      "pkcs11"
-      "secrets"
-      "ssh"
-    ];
+    components = [ "pkcs11" "secrets" "ssh" ];
   };
 
 }
