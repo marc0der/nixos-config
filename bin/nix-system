@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo "Running system rebuild with impure evaluation..."
+export NIXPKGS_ALLOW_UNFREE=1
+sudo -E nixos-rebuild switch --flake /home/marco/nixos --impure

@@ -86,7 +86,7 @@
     POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD = "true";
   };
 
-  home.sessionPath = [ "$HOME/bin" ];
+  home.sessionPath = [ "$HOME/bin" "$HOME/nixos/bin" ];
 
   home.changes-report.enable = true;
 

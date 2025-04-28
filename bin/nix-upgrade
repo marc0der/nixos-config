@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+echo "Updating flake inputs..."
+sudo nix flake update --flake /home/marco/nixos
+
+echo "Upgrading system with impure evaluation..."
+export NIXPKGS_ALLOW_UNFREE=1
+sudo -E nixos-rebuild --upgrade switch --flake /home/marco/nixos --impure
+
+echo "Upgrading home-manager with impure evaluation..."
+export NIXPKGS_ALLOW_UNFREE=1
+home-manager switch --flake /home/marco/nixos --impure

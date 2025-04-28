@@ -1,31 +1,21 @@
 # NixOS Configuration
 
-## System Level
+## Convenience Scripts
 
-To apply new changes in `configuration.nix`, run the following:
-
-```bash
-sudo nixos-rebuild switch --flake .
-```
-To upgrade dependencies to the latest in the specified channel in `flake.nix`:
+The following convenience scripts are available in the `bin/` directory:
 
 ```bash
-# update the channel
-sudo nix flake update --flake .
+# Apply home-manager changes
+bin/nix-home
 
-# run full system upgrade
-sudo nixos-rebuild --upgrade switch --flake .
+# Apply system-level changes
+bin/nix-system
+
+# Update channels and upgrade both system and home-manager
+bin/nix-upgrade
 ```
 
-## Home Manager
-
-To apply changes in `home.nix`, run the following:
-
-```bash
-home-manager switch --flake .
-```
-
-Home manager upgrades happen automatically after channel updates.
+These scripts will automatically be added to your `PATH`.
 
 ## Reporting Changes
 
@@ -44,6 +34,5 @@ nvd diff /nix/var/nix/profiles/system-XXX-link /nix/var/nix/profiles/system-YYY-
 ## Repository Structure
 - Shared base configuration in root directory
 - Machine-specific configs in named subdirectories
-- Desktop entries (.desktop) organized by machine
 - Flake-based repository using NixOS 24.11
 
