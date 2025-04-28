@@ -71,9 +71,6 @@
   };
 
   xdg.mimeApps.enable = true;
-  xdg.mimeApps.defaultApplications = {
-    "x-scheme-handler/zoommtg" = [ "zoom.desktop" ];
-  };
 
   xdg.portal = {
     enable = true;
