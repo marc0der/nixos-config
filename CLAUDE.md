@@ -9,11 +9,11 @@
 - This ensures we don't commit broken configurations
 
 ## Build Commands
-- System rebuild: `sudo nixos-rebuild switch --flake .`
-- Channel updates: `sudo nix flake update --flake .`
-- System upgrade:  `sudo nixos-rebuild --upgrade switch --flake .` after channel updates
-- Home manager update: `home-manager switch --flake .`
-- Home manager upgrade happens with update after channel updates
+- System rebuild: `bin/nix-system` (replaces `sudo nixos-rebuild switch --flake .`)
+- Home manager update: `bin/nix-home` (replaces `home-manager switch --flake .`)
+- System and home-manager upgrade: `bin/nix-upgrade` (updates channels and upgrades both)
+
+These convenience scripts are available in the `bin/` directory and handle all necessary flags like `--impure` and environment variables like `NIXPKGS_ALLOW_UNFREE=1`.
 
 ## Reporting Changes
 - Changes reported automatically during activation
