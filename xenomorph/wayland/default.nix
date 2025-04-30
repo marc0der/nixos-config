@@ -19,14 +19,12 @@
     waybar
     wlogout
     swaynotificationcenter
-    pywal
     playerctl
     brightnessctl
     rofi
     gnome.gnome-keyring
     polkit_gnome
     (writeShellScriptBin "hypridle-control" (builtins.readFile ./scripts/hypridle.sh))
-    (writeShellScriptBin "apply-pywal-theme" (builtins.readFile ./scripts/apply-pywal-theme.sh))
   ];
 
   # Create symlinks to the configuration files

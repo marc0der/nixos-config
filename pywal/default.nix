@@ -9,6 +9,11 @@
 {
   # This module manages pywal templates and configuration
 
+  # Add the script to apply pywal theme
+  home.packages = with pkgs; [
+    (pkgs.writeShellScriptBin "apply-pywal-theme" (builtins.readFile ./scripts/apply-pywal-theme.sh))
+  ];
+
   # Create symlinks to all templates
   home.file = {
     # Pywal templates
