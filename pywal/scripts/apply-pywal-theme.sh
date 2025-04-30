@@ -13,6 +13,10 @@
 
 # Check if the wallpaper exists
 if [ -f ~/.wallpaper.jpg ]; then
+  # Delete pywal cache to ensure fresh generation
+  echo "Deleting pywal cache..."
+  rm -rf ~/.cache/wal/*
+  
   # Apply the theme
   wal -i ~/.wallpaper.jpg
 
