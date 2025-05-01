@@ -91,7 +91,7 @@ bindsym $mod+Return exec $term
 bindsym $mod+Shift+n exec nautilus
 
 # Start browser
-bindsym $mod+Return+Shift exec brave --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default --profile-picker-force-availability
+bindsym $mod+Return+Shift exec brave --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default
 
 # Kill focused window
 bindsym $mod+Shift+q kill

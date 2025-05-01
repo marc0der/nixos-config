@@ -81,13 +81,77 @@
     config.common.default = "*";
   };
 
-  xdg.desktopEntries.zoom = {
-    name = "Zoom (FHS)";
-    exec = "${pkgs.writeShellScriptBin "zoom-wrapper" ''
-      exec ${pkgs.steam-run}/bin/steam-run ${pkgs.zoom-us}/bin/zoom %U
-    ''}";
-    mimeType = [ "x-scheme-handler/zoommtg" ];
-    noDisplay = false;
+  xdg.desktopEntries = {
+    zoom = {
+      name = "Zoom (FHS)";
+      exec = "${pkgs.writeShellScriptBin "zoom-wrapper" ''
+        exec ${pkgs.steam-run}/bin/steam-run ${pkgs.zoom-us}/bin/zoom %U
+      ''}";
+      mimeType = [ "x-scheme-handler/zoommtg" ];
+      noDisplay = false;
+    };
+
+    braveDefault = {
+      name = "Browser (Equal Experts)";
+      genericName = "Web Browser";
+      comment = "Equal Experts Browser Profile";
+      exec = "brave --profile-directory=Default --enable-features=UseOzonePlatform --ozone-platform=wayland";
+      icon = "brave";
+      terminal = false;
+      type = "Application";
+      categories = [
+        "Network"
+        "WebBrowser"
+        "GTK"
+      ];
+      startupNotify = false;
+      mimeType = [
+        "text/html"
+        "text/xml"
+        "application/xhtml+xml"
+        "application/xml"
+        "application/rss+xml"
+        "application/rdf+xml"
+        "image/gif"
+        "image/jpeg"
+        "image/png"
+        "x-scheme-handler/http"
+        "x-scheme-handler/https"
+        "x-scheme-handler/ftp"
+        "x-scheme-handler/chrome"
+      ];
+    };
+
+    bravePersonal = {
+      name = "Browser (Personal)";
+      genericName = "Web Browser";
+      comment = "Personal Browser Profile";
+      exec = "brave --profile-directory=\"Profile 1\" --enable-features=UseOzonePlatform --ozone-platform=wayland";
+      icon = "brave";
+      terminal = false;
+      type = "Application";
+      categories = [
+        "Network"
+        "WebBrowser"
+        "GTK"
+      ];
+      startupNotify = false;
+      mimeType = [
+        "text/html"
+        "text/xml"
+        "application/xhtml+xml"
+        "application/xml"
+        "application/rss+xml"
+        "application/rdf+xml"
+        "image/gif"
+        "image/jpeg"
+        "image/png"
+        "x-scheme-handler/http"
+        "x-scheme-handler/https"
+        "x-scheme-handler/ftp"
+        "x-scheme-handler/chrome"
+      ];
+    };
   };
 
   systemd.user.services.xdg-desktop-portal-wlr = {
