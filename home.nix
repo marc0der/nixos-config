@@ -1,4 +1,9 @@
-{ config, pkgs, unstable, ... }:
+{
+  config,
+  pkgs,
+  unstable,
+  ...
+}:
 
 {
 
@@ -64,7 +69,12 @@
     fira-code-symbols
     fira-sans
     jetbrains-mono
-    (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" "Noto" ]; })
+    (pkgs.nerdfonts.override {
+      fonts = [
+        "JetBrainsMono"
+        "Noto"
+      ];
+    })
   ];
 
   home.file = {
@@ -72,10 +82,6 @@
     ".gnupg/gpg.conf".source = gnupg/gpg.conf;
     ".config/qt5ct/qt5ct.conf".source = qt/qt5ct.conf;
     ".config/qt6ct/qt6ct.conf".source = qt/qt6ct.conf;
-    ".local/share/applications/todoist.desktop".source =
-      desktop/todoist.desktop;
-    ".local/share/applications/chatgpt.desktop".source =
-      desktop/chatgpt.desktop;
     ".local/share/icons/chatgpt.png".source = icons/chatgpt.png;
   };
 
@@ -86,7 +92,10 @@
     POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD = "true";
   };
 
-  home.sessionPath = [ "$HOME/bin" "$HOME/nixos/bin" ];
+  home.sessionPath = [
+    "$HOME/bin"
+    "$HOME/nixos/bin"
+  ];
 
   home.changes-report.enable = true;
 
@@ -152,7 +161,40 @@
 
   services.gnome-keyring = {
     enable = true;
-    components = [ "pkcs11" "secrets" "ssh" ];
+    components = [
+      "pkcs11"
+      "secrets"
+      "ssh"
+    ];
+  };
+
+  xdg.desktopEntries = {
+    todoist = {
+      name = "Todoist";
+      exec = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app=\"https://app.todoist.com/app/filter/focus-2348004222\" %U";
+      terminal = false;
+      type = "Application";
+      categories = [
+        "Network"
+        "Application"
+      ];
+      comment = "Todoist";
+      icon = "Todoist";
+    };
+
+    chatgpt = {
+      name = "ChatGPT";
+      exec = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app=\"https://chatgpt.com/\" %U";
+      terminal = false;
+      type = "Application";
+      categories = [
+        "Network"
+        "WebBrowser"
+        "Utility"
+      ];
+      comment = "ChatGPT";
+      icon = "chatgpt";
+    };
   };
 
 }

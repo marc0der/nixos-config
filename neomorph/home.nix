@@ -58,7 +58,6 @@
   };
 
   home.file = {
-    ".local/share/applications/slack.desktop".source = desktop/slack.desktop;
   };
 
   home.sessionVariables = {
@@ -89,6 +88,23 @@
       ''}";
       mimeType = [ "x-scheme-handler/zoommtg" ];
       noDisplay = false;
+    };
+
+    slack = {
+      name = "Slack Equal Experts";
+      comment = "EE Slack";
+      genericName = "EE Slack in Brave";
+      exec = "brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --app=\"https://app.slack.com/client/T02QA1EAG\"";
+      icon = "slack";
+      type = "Application";
+      startupNotify = true;
+      categories = [
+        "GNOME"
+        "GTK"
+        "Network"
+        "InstantMessaging"
+      ];
+      mimeType = [ "x-scheme-handler/slack" ];
     };
 
     braveDefault = {

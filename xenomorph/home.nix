@@ -53,7 +53,6 @@
   };
 
   home.file = {
-    ".local/share/applications/moises.desktop".source = desktop/moises.desktop;
   };
 
   home.sessionVariables = {
@@ -76,6 +75,19 @@
         "Education"
       ];
       comment = "Groove Trainer";
+    };
+
+    moises = {
+      name = "Moises";
+      comment = "Music Studio";
+      exec = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app=\"https://studio.moises.ai/library\"";
+      icon = "Moises";
+      terminal = false;
+      type = "Application";
+      categories = [
+        "Media"
+        "Application"
+      ];
     };
   };
 
