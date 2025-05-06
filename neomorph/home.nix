@@ -69,7 +69,12 @@
     NIXPKGS_ALLOW_UNFREE = 1;
   };
 
-  xdg.mimeApps.enable = true;
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "x-scheme-handler/terminal" = [ "foot.desktop" ];
+    };
+  };
 
   xdg.portal = {
     enable = true;

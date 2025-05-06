@@ -68,7 +68,7 @@
             ./git.nix
             ./report.nix
             ./zsh.nix
-            ./ghostty.nix
+            ./foot.nix
             ./rust.nix
             ./pywal/default.nix
           ];

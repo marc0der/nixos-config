@@ -15,7 +15,6 @@
     ffmpeg
     hyprpolkitagent
     kanshi
-    kitty
     wl-clipboard
 
     # themes
@@ -61,6 +60,13 @@
     QT_QPA_PLATFORMTHEME = "qt6ct";
     XCURSOR_SIZE = "24";
     XCURSOR_THEME = "Bibata-Modern-Ice";
+  };
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "x-scheme-handler/terminal" = [ "ghostty.desktop" ];
+    };
   };
 
   xdg.desktopEntries = {
