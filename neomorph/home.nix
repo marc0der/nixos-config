@@ -13,7 +13,6 @@
     kanshi
     playerctl
     rofi
-    steam-run
     sway-contrib.grimshot
     swaylock-effects
     waybar
@@ -86,15 +85,6 @@
   };
 
   xdg.desktopEntries = {
-    zoom = {
-      name = "Zoom (FHS)";
-      exec = "${pkgs.writeShellScriptBin "zoom-wrapper" ''
-        exec ${pkgs.steam-run}/bin/steam-run ${pkgs.zoom-us}/bin/zoom %U
-      ''}";
-      mimeType = [ "x-scheme-handler/zoommtg" ];
-      noDisplay = false;
-    };
-
     slack = {
       name = "Slack Equal Experts";
       comment = "EE Slack";
