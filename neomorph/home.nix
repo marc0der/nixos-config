@@ -103,7 +103,7 @@
     };
 
     braveDefault = {
-      name = "Browser (Equal Experts)";
+      name = "Brave (Equal Experts)";
       genericName = "Web Browser";
       comment = "Equal Experts Browser Profile";
       exec = "brave --profile-directory=Default --enable-features=UseOzonePlatform --ozone-platform=wayland";
@@ -134,7 +134,7 @@
     };
 
     bravePersonal = {
-      name = "Browser (Personal)";
+      name = "Brave (Personal)";
       genericName = "Web Browser";
       comment = "Personal Browser Profile";
       exec = "brave --profile-directory=\"Profile 1\" --enable-features=UseOzonePlatform --ozone-platform=wayland";
