@@ -169,6 +169,19 @@
   };
 
   xdg.desktopEntries = {
+    groove-trainer = {
+      name = "Groove Trainer";
+      exec = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app=\"https://scottsbasslessons.com/groove-trainer\" %U";
+      terminal = false;
+      type = "Application";
+      categories = [
+        "Network"
+        "WebBrowser"
+        "Education"
+      ];
+      comment = "Groove Trainer";
+    };
+
     todoist = {
       name = "Todoist";
       exec = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app=\"https://app.todoist.com/app/filter/focus-2348004222\" %U";

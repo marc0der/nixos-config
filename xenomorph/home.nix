@@ -70,19 +70,6 @@
   };
 
   xdg.desktopEntries = {
-    groove-trainer = {
-      name = "Groove Trainer";
-      exec = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app=\"https://scottsbasslessons.com/groove-trainer\" %U";
-      terminal = false;
-      type = "Application";
-      categories = [
-        "Network"
-        "WebBrowser"
-        "Education"
-      ];
-      comment = "Groove Trainer";
-    };
-
     moises = {
       name = "Moises";
       comment = "Music Studio";
