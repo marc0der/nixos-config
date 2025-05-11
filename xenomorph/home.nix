@@ -78,8 +78,8 @@
       terminal = false;
       type = "Application";
       categories = [
-        "Media"
-        "Application"
+        "AudioVideo"
+        "Music"
       ];
     };
   };
