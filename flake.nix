@@ -70,7 +70,6 @@
             ./zsh.nix
             ./foot.nix
             ./rust.nix
-            ./pywal/default.nix
           ];
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
@@ -85,7 +84,6 @@
             ./zsh.nix
             ./ghostty.nix
             ./rust.nix
-            ./pywal/default.nix
           ];
         };
       };

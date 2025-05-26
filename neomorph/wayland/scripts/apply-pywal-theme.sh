@@ -23,10 +23,8 @@ if [ -f ~/.wallpaper.jpg ]; then
   # Notify the user
   echo "Pywal theme applied to ~/.wallpaper.jpg"
   
-  # Reload window manager styling if it's running
-  if pgrep -x "hyprland" > /dev/null; then
-    hyprctl reload
-  elif pgrep -x "sway" > /dev/null; then
+  # Reload Sway if it's running
+  if pgrep -x "sway" > /dev/null; then
     swaymsg reload
   fi
 else

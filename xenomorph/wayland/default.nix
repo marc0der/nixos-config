@@ -25,6 +25,7 @@
     gnome.gnome-keyring
     polkit_gnome
     (writeShellScriptBin "hypridle-control" (builtins.readFile ./scripts/hypridle.sh))
+    (writeShellScriptBin "apply-pywal-theme" (builtins.readFile ./scripts/apply-pywal-theme.sh))
   ];
 
   # Create symlinks to the configuration files
@@ -59,6 +60,10 @@
     ".config/wlogout/icons/shutdown.png".source = ./wlogout/icons/shutdown.png;
     ".config/wlogout/icons/suspend.png".source = ./wlogout/icons/suspend.png;
 
+    # Pywal templates - only the ones not conflicting with the Hyprland setup
+    ".config/wal/templates/colors-dunst".source = ./templates/colors-dunst;
+    ".config/wal/templates/colors-swaylock.conf".source = ./templates/colors-swaylock.conf;
+
     # We don't manage the wallpaper through Nix to allow for easy updates
   };
 
@@ -78,4 +83,12 @@
       WantedBy = [ "graphical-session.target" ];
     };
   };
+  
+  # Add an activation script to run pywal when home-manager is activated
+  home.activation.applyPywalTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    echo "Applying pywal theme to current wallpaper..."
+    # Make sure PATH includes the profile bin directory
+    export PATH=$PATH:$HOME/.nix-profile/bin:/run/current-system/sw/bin
+    apply-pywal-theme
+  '';
 }
