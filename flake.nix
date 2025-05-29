@@ -78,7 +78,6 @@
           modules = [
             ./home.nix
             ./xenomorph/home.nix
-            ./xenomorph/wayland/default.nix
             ./git.nix
             ./report.nix
             ./zsh.nix
