@@ -1,8 +1,6 @@
 {
-  config,
   lib,
   pkgs,
-  unstable,
   ...
 }:
 
@@ -32,7 +30,6 @@
     rofi
     gnome.gnome-keyring
     polkit_gnome
-    (writeShellScriptBin "apply-pywal-theme" (builtins.readFile ./scripts/apply-pywal-theme.sh))
 
     # themes
     materia-theme
@@ -114,13 +111,4 @@
       WantedBy = [ "graphical-session.target" ];
     };
   };
-  
-  # Add an activation script to run pywal when home-manager is activated
-  home.activation.applyPywalTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    echo "Applying pywal theme to current wallpaper..."
-    # Make sure PATH includes the profile bin directory
-    export PATH=$PATH:$HOME/.nix-profile/bin:/run/current-system/sw/bin
-    apply-pywal-theme
-  '';
-
 }
