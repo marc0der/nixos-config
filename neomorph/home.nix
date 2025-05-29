@@ -1,7 +1,5 @@
 {
-  config,
   pkgs,
-  unstable,
   ...
 }:
 
@@ -13,6 +11,7 @@
     kanshi
     playerctl
     rofi
+    sway 
     sway-contrib.grimshot
     swaylock-effects
     waybar

@@ -64,7 +64,6 @@
           modules = [
             ./home.nix
             ./neomorph/home.nix
-            ./neomorph/wayland/default.nix
             ./git.nix
             ./report.nix
             ./zsh.nix
