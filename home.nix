@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  claudeDesktop,
   unstable,
   ...
 }:
@@ -60,6 +61,7 @@
     # Unstable packages
     unstable.code-cursor
     unstable.claude-code
+    claudeDesktop.claude-desktop
 
     # fonts
     font-awesome
@@ -83,6 +85,7 @@
     ".config/qt5ct/qt5ct.conf".source = qt/qt5ct.conf;
     ".config/qt6ct/qt6ct.conf".source = qt/qt6ct.conf;
     ".local/share/icons/chatgpt.png".source = icons/chatgpt.png;
+    ".local/share/icons/claude-desktop.png".source = icons/claude-desktop.png;
   };
 
   fonts.fontconfig.enable = true;
