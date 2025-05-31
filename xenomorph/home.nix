@@ -111,4 +111,21 @@
       WantedBy = [ "graphical-session.target" ];
     };
   };
+
+  # Enable waybar service
+  systemd.user.services.waybar = {
+    Unit = {
+      Description = "Waybar status bar";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.waybar}/bin/waybar";
+      Restart = "always";
+      RestartSec = 3;
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
 }
