@@ -66,9 +66,11 @@ in
     isNormalUser = true;
     description = "Marco Vermeulen";
     extraGroups = [
+      "dialout"
+      "docker"
+      "input"
       "networkmanager"
       "wheel"
-      "docker"
     ];
     shell = pkgs.zsh;
     packages = with pkgs; [ ];
@@ -190,6 +192,13 @@ in
   services.openssh.enable = true;
 
   services.gvfs.enable = true;
+
+  services.udev.extraRules = ''
+    # Keychron K3 Pro - specific product ID
+    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0231", MODE="0664", GROUP="dialout"
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0231", MODE="0664", GROUP="dialout"
+    KERNEL=="hidraw*", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0231", MODE="0664", GROUP="dialout"
+  '';
 
   systemd.services.battery-charge-threshold = {
     wantedBy = [ "multi-user.target" ];
