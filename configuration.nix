@@ -97,6 +97,7 @@ in
     nvd
     pciutils
     power-profiles-daemon
+    rclone
     simple-sddm
     tree
     unzip
@@ -115,6 +116,8 @@ in
   programs.zsh.enable = true;
 
   programs.nix-ld.enable = true;
+
+  programs.fuse.userAllowOther = true;
 
   # Install firefox.
   programs.firefox.enable = true;

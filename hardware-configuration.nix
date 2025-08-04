@@ -23,6 +23,7 @@
   boot.kernel.sysctl = {
     "vm.swappiness" = 0;
   };
+  boot.supportedFilesystems = [ "fuse" ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

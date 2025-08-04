@@ -49,7 +49,6 @@
     protonvpn-cli
     protonvpn-gui
     pywal
-    rclone
     ripgrep
     speedtest-rs
     uv
