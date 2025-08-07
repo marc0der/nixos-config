@@ -29,20 +29,8 @@ These convenience scripts are available in the `bin/` directory and handle all n
 - Keep user configs in home.nix files
 - NEVER add imports directly in configuration files; always add modules to flake.nix
 
-## Git Commit Style
-- Use specific, concise imperative statements:
-  - "Add user authentication module"
-  - "Fix login validation bug"
-  - "Update API documentation"
-  - "Refactor data processing pipeline"
-  - "Remove deprecated methods"
-- No lengthy descriptions in commit body
-- Make small, incremental commits after each change
-- Include "Co-Authored-By: Claude <noreply@anthropic.com>" in commits
-- Exclude "🤖 Generated with [Claude Code](https://claude.ai/code)"
-- Add standard prefixes such as `fix:`, `docs:`, `chore`, `feature`, etc to each commit
-- Remember to run `nixfmt` on all files before you commit to git!
-- NEVER commit to git until everything is working and tested
+## Git Commits
+- ALWAYS use the git-committer agent
 
 ## Repository Structure
 - Shared base configuration in root directory
