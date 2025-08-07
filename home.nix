@@ -195,7 +195,7 @@
         "002"
         "--cache-dir=/tmp/rclone-grive-cache"
         "--vfs-cache-mode"
-        "writes"
+        "full"
         "--vfs-cache-max-size"
         "250G"
         "--vfs-cache-max-age"
