@@ -48,6 +48,7 @@
     pinentry-gnome3
     protonvpn-cli
     protonvpn-gui
+    python3
     pywal
     ripgrep
     speedtest-rs
