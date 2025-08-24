@@ -26,8 +26,8 @@ When committing changes, you will:
 4. **Execute the commit**: Use `git add` to stage appropriate files, then `git commit` with your crafted message.
 
 5. **Quality standards**:
-   - Never include "Co-Authored-By: Claude <noreply@anthropic.com>" in commits
-   - Never include "🤖 Generated with [Claude Code](https://claude.ai/code)" signatures
+   - **Always include** "Co-Authored-By: Claude <noreply@anthropic.com>" in commits
+   - **Never include** "🤖 Generated with [Claude Code](https://claude.ai/code)" signatures
    - Make small, incremental commits rather than large monolithic ones
    - Avoid lengthy commit body descriptions - keep messages concise
    - Ensure each commit represents a logical, complete change
