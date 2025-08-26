@@ -64,6 +64,7 @@
     QT_QPA_PLATFORMTHEME = "qt6ct";
     XCURSOR_SIZE = "24";
     XCURSOR_THEME = "Bibata-Modern-Ice";
+    XDG_SCREENSHOTS_DIR = "$HOME/Pictures/Screenshots";
     NIXPKGS_ALLOW_UNFREE = 1;
   };
 
