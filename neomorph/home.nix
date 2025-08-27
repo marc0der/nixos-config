@@ -106,11 +106,11 @@
   };
 
   xdg.desktopEntries = {
-    slack = {
-      name = "Slack Equal Experts";
-      comment = "EE Slack";
-      genericName = "EE Slack in Brave";
-      exec = "brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --app=\"https://app.slack.com/client/T02QA1EAG\"";
+    slackDefra = {
+      name = "Slack (DEFRA)";
+      comment = "DEFRA Slack";
+      genericName = "DEFRA Slack in Brave";
+      exec = "brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Defra --app=\"https://app.slack.com/client/T73HZJ85R/C09C11N6DGA\"";
       icon = "slack";
       type = "Application";
       startupNotify = true;
@@ -123,66 +123,21 @@
       mimeType = [ "x-scheme-handler/slack" ];
     };
 
-    braveDefault = {
-      name = "Brave (Equal Experts)";
-      genericName = "Web Browser";
-      comment = "Equal Experts Browser Profile";
-      exec = "brave --profile-directory=Default --enable-features=UseOzonePlatform --ozone-platform=wayland";
-      icon = "brave";
-      terminal = false;
+    slackEqualExperts = {
+      name = "Slack (Equal Experts)";
+      comment = "EE Slack";
+      genericName = "EE Slack in Brave";
+      exec = "brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default --app=\"https://app.slack.com/client/T02QA1EAG\"";
+      icon = "slack";
       type = "Application";
+      startupNotify = true;
       categories = [
-        "Network"
-        "WebBrowser"
+        "GNOME"
         "GTK"
-      ];
-      startupNotify = false;
-      mimeType = [
-        "text/html"
-        "text/xml"
-        "application/xhtml+xml"
-        "application/xml"
-        "application/rss+xml"
-        "application/rdf+xml"
-        "image/gif"
-        "image/jpeg"
-        "image/png"
-        "x-scheme-handler/http"
-        "x-scheme-handler/https"
-        "x-scheme-handler/ftp"
-        "x-scheme-handler/chrome"
-      ];
-    };
-
-    bravePersonal = {
-      name = "Brave (Personal)";
-      genericName = "Web Browser";
-      comment = "Personal Browser Profile";
-      exec = "brave --profile-directory=\"Profile 1\" --enable-features=UseOzonePlatform --ozone-platform=wayland";
-      icon = "brave";
-      terminal = false;
-      type = "Application";
-      categories = [
         "Network"
-        "WebBrowser"
-        "GTK"
+        "InstantMessaging"
       ];
-      startupNotify = false;
-      mimeType = [
-        "text/html"
-        "text/xml"
-        "application/xhtml+xml"
-        "application/xml"
-        "application/rss+xml"
-        "application/rdf+xml"
-        "image/gif"
-        "image/jpeg"
-        "image/png"
-        "x-scheme-handler/http"
-        "x-scheme-handler/https"
-        "x-scheme-handler/ftp"
-        "x-scheme-handler/chrome"
-      ];
+      mimeType = [ "x-scheme-handler/slack" ];
     };
   };
 
