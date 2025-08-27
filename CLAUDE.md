@@ -5,7 +5,7 @@
 - Always follow this workflow:
   1. Stage necessary files with git
   2. Run home-manager/nixos-rebuild to verify changes work
-  3. Only commit to git if the build was successful
+  3. Only commit to git with git-commiter agent if the build was successful
 - This ensures we don't commit broken configurations
 
 ## Build Commands
@@ -21,7 +21,7 @@ These convenience scripts are available in the `bin/` directory and handle all n
 
 ## Code Style Guidelines
 - Use 2-space indentation in all Nix files
-- Format with `nixfmt` before every git commit
+- Format with `nixfmt` before running git-commiter agent
 - Organize configurations modularly by machine (xenomorph, neomorph)
 - Use explicit variable naming
 - Follow machine-specific configurations in separate directories
@@ -31,6 +31,7 @@ These convenience scripts are available in the `bin/` directory and handle all n
 
 ## Git Commits
 - ALWAYS use the git-committer agent
+- Do not use a task to commit to git
 
 ## Repository Structure
 - Shared base configuration in root directory
