@@ -11,6 +11,5 @@
       "obsidian"
       "idea-ultimate"
       "protonvpn-gui"
-      "zoom-us"
     ];
 }

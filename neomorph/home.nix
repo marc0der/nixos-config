@@ -19,7 +19,6 @@
     xdg-desktop-portal
     xdg-desktop-portal-wlr
     xdg-desktop-portal-gtk
-    zoom-us
 
     # themes
     materia-theme
