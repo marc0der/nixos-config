@@ -17,6 +17,7 @@
     bibata-cursors
     blueman
     borgbackup
+    brave
     brightnessctl
     chafa
     cliphist
@@ -33,6 +34,7 @@
     httpie
     jetbrains.idea-ultimate
     jq
+    kanshi
     lazygit
     meld
     mpv
@@ -46,14 +48,18 @@
     obsidian
     pavucontrol
     pinentry-gnome3
+    playerctl
     protonvpn-cli
     protonvpn-gui
     python3
     pywal
     ripgrep
+    rofi
     speedtest-rs
     uv
     vscode
+    waybar
+    wl-clipboard
     wlogout
     yamllint
     zsh-powerlevel10k
@@ -62,6 +68,13 @@
     unstable.code-cursor
     unstable.claude-code
     claudeDesktop.claude-desktop
+
+    # Shared themes
+    materia-theme
+    papirus-icon-theme
+    libsForQt5.qt5ct
+    libsForQt5.qtstyleplugin-kvantum
+    qt6ct
 
     # fonts
     font-awesome
@@ -91,9 +104,29 @@
 
   fonts.fontconfig.enable = true;
 
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Ice";
+    size = 24;
+  };
+
+  gtk = {
+    enable = true;
+    font = {
+      name = "Noto Sans";
+      size = 11;
+    };
+  };
+
   home.sessionVariables = {
     EDITOR = "nvim";
     POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD = "true";
+    QT_QPA_PLATFORM = "wayland;xcb";
+    QT_QPA_PLATFORMTHEME = "qt6ct";
+    XCURSOR_SIZE = "24";
+    XCURSOR_THEME = "Bibata-Modern-Ice";
   };
 
   home.sessionPath = [
