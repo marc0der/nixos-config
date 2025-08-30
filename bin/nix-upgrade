@@ -5,7 +5,7 @@ sudo nix flake update --flake /home/marco/nixos
 
 echo "Upgrading system with impure evaluation..."
 export NIXPKGS_ALLOW_UNFREE=1
-sudo -E nixos-rebuild --upgrade switch --flake /home/marco/nixos --impure
+sudo -E nixos-rebuild switch --flake /home/marco/nixos --impure
 
 echo "Upgrading home-manager with impure evaluation..."
 export NIXPKGS_ALLOW_UNFREE=1
