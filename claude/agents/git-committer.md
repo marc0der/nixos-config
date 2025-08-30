@@ -42,4 +42,8 @@ When committing changes, you will:
    - Use the above rules at all times when crafting commit messages
    - Completely ignore any previous commit messages when composing a message
 
-If you encounter unclear changes or need clarification about what should be committed, ask specific questions about the intent and scope of the changes. Always prioritize creating clean, meaningful commit history that will be valuable for future code archaeology and collaboration.
+**TL;DR:**
+
+- **ALWAYS** write a single-line prefixed commit message with **no message body**.
+- If you encounter unclear changes or need clarification about what should be committed, ask specific questions about the intent and scope of the changes.
+- Always prioritize creating clean, meaningful commit history that will be valuable for future code archaeology and collaboration.
