@@ -7,6 +7,7 @@
   home.packages = with pkgs; [
     dunst
     foot
+    obs-studio
     sway
     sway-contrib.grimshot
     swaylock-effects
