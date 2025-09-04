@@ -9,9 +9,6 @@
   ...
 }:
 
-let
-  simple-sddm = pkgs.libsForQt5.callPackage ./sddm.nix { };
-in
 {
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -98,7 +95,6 @@ in
     pciutils
     power-profiles-daemon
     rclone
-    simple-sddm
     tree
     unzip
     usbutils
@@ -137,7 +133,7 @@ in
   # SDDM
   services.displayManager.sddm = {
     enable = true;
-    theme = "simple-sddm";
+    theme = "breeze";
   };
 
   # Enable CUPS to print documents.
