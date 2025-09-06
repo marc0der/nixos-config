@@ -30,7 +30,7 @@ These convenience scripts are available in the `bin/` directory and handle all n
 - NEVER add imports directly in configuration files; always add modules to flake.nix
 
 ## Git Commits
-- ALWAYS use the git-committer agent
+- ALWAYS use Git Guy
 - Do not use a task to commit to git
 
 ## Repository Structure

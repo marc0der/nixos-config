@@ -99,7 +99,7 @@
     ".config/qt6ct/qt6ct.conf".source = qt/qt6ct.conf;
     ".local/share/icons/chatgpt.png".source = icons/chatgpt.png;
     ".local/share/icons/claude-desktop.png".source = icons/claude-desktop.png;
-    ".claude/agents/git-committer.md".source = claude/agents/git-committer.md;
+    ".claude/agents/git-guy.md".source = claude/agents/git-guy.md;
   };
 
   fonts.fontconfig.enable = true;
