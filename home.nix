@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   claudeDesktop,
   unstable,
@@ -289,5 +290,55 @@
       icon = "chatgpt";
     };
   };
+
+  programs.zsh = {
+    enable = true;
+    shellAliases = { };
+    initExtra = ''
+      # Source secrets file if it exists
+      [[ -f ~/.config/secrets/env ]] && source ~/.config/secrets/env
+      
+      claude-oneshot() {
+        if [[ -z "$1" ]]; then
+          echo "Error: claude-oneshot requires a file path parameter" >&2
+          return 1
+        fi
+        if [[ ! -f "$1" ]]; then
+          echo "Error: File '$1' does not exist or is not a regular file" >&2
+          return 1
+        fi
+        claude --dangerously-skip-permissions "$1"
+      }
+    '';
+  };
+
+  home.activation.setupClaudeMcpServers = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    echo "Configuring Claude MCP servers..."
+    
+    # Ensure claude command exists
+    if ! command -v claude >/dev/null 2>&1; then
+      echo "Warning: claude command not found, skipping MCP server configuration"
+      exit 0
+    fi
+    
+    # Configure git-mcp server
+    if ! claude mcp get git-mcp >/dev/null 2>&1; then
+      echo "Adding git-mcp server..."
+      claude mcp add git-mcp --scope user uvx mcp-server-git || echo "Failed to add git-mcp server"
+    fi
+    
+    # Configure github-mcp server with environment variable
+    if ! claude mcp get github-mcp >/dev/null 2>&1; then
+      echo "Adding github-mcp server..."
+      if [[ -z "$GITHUB_PERSONAL_ACCESS_TOKEN" ]]; then
+        echo "Warning: GITHUB_PERSONAL_ACCESS_TOKEN environment variable not set"
+        echo "Please set it in your shell profile or environment"
+      else
+        claude mcp add github-mcp --scope user -e GITHUB_PERSONAL_ACCESS_TOKEN="$GITHUB_PERSONAL_ACCESS_TOKEN" npx @modelcontextprotocol/server-github || echo "Failed to add github-mcp server"
+      fi
+    fi
+    
+    echo "Claude MCP servers configured"
+  '';
 
 }
