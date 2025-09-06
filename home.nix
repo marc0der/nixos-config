@@ -312,29 +312,26 @@
     '';
   };
 
-  home.activation.setupClaudeMcpServers = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  home.activation.setupClaudeMcpServers = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     echo "Configuring Claude MCP servers..."
 
-    # Ensure claude command exists
-    if ! command -v claude >/dev/null 2>&1; then
-      echo "Warning: claude command not found, skipping MCP server configuration"
-      exit 0
-    fi
+    # Use the full path to claude from the nix store
+    CLAUDE_BIN="${unstable.claude-code}/bin/claude"
 
     # Configure git-mcp server
-    if ! claude mcp get git-mcp >/dev/null 2>&1; then
+    if ! "$CLAUDE_BIN" mcp get git-mcp >/dev/null 2>&1; then
       echo "Adding git-mcp server..."
-      claude mcp add git-mcp --scope user uvx mcp-server-git || echo "Failed to add git-mcp server"
+      "$CLAUDE_BIN" mcp add git-mcp --scope user uvx mcp-server-git || echo "Failed to add git-mcp server"
     fi
 
     # Configure github-mcp server with environment variable
-    if ! claude mcp get github-mcp >/dev/null 2>&1; then
+    if ! "$CLAUDE_BIN" mcp get github-mcp >/dev/null 2>&1; then
       echo "Adding github-mcp server..."
       if [[ -z "$GITHUB_PERSONAL_ACCESS_TOKEN" ]]; then
         echo "Warning: GITHUB_PERSONAL_ACCESS_TOKEN environment variable not set"
         echo "Please set it in your shell profile or environment"
       else
-        claude mcp add github-mcp --scope user -e GITHUB_PERSONAL_ACCESS_TOKEN="$GITHUB_PERSONAL_ACCESS_TOKEN" npx @modelcontextprotocol/server-github || echo "Failed to add github-mcp server"
+        "$CLAUDE_BIN" mcp add github-mcp --scope user -e GITHUB_PERSONAL_ACCESS_TOKEN="$GITHUB_PERSONAL_ACCESS_TOKEN" npx @modelcontextprotocol/server-github || echo "Failed to add github-mcp server"
       fi
     fi
 
