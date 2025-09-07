@@ -192,60 +192,49 @@
     ];
   };
 
-  systemd.user.services.google-drive = {
+  systemd.user.services.google-drive-bisync = {
     Unit = {
-      Description = "Google Drive mount";
+      Description = "Google Drive bisync service";
       After = [ "network-online.target" ];
-      Wants = [ "network-online.target" ];
     };
 
     Service = {
-      Type = "simple";
+      Type = "oneshot";
       Environment = [
         "RCLONE_CONFIG=%h/.config/rclone/rclone.conf"
         "PATH=/run/wrappers/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:%h/.nix-profile/bin"
       ];
-      KillMode = "none";
-      RestartSec = 5;
-      ExecStartPre = "/run/current-system/sw/bin/bash -c 'until /run/current-system/sw/bin/ping -c1 8.8.8.8; do sleep 1; done'";
       ExecStart = toString [
         "/run/current-system/sw/bin/rclone"
-        "mount"
+        "bisync"
         "drive:Share"
-        "%h/Share"
-        "--dir-cache-time"
-        "8760h"
-        "--poll-interval"
-        "30s"
+        "%h/GoogleDrive"
+        "--resilient"
+        "--create-empty-src-dirs"
+        "--conflict-resolve"
+        "newer"
         "--log-file"
-        "/tmp/rclone-gdrive.log"
+        "/tmp/rclone-bisync.log"
         "--log-level"
         "INFO"
-        "--rc"
-        "--rc-addr"
-        ":5572"
-        "--rc-no-auth"
-        "--attr-timeout"
-        "8700h"
-        "--umask"
-        "002"
-        "--cache-dir=/tmp/rclone-grive-cache"
-        "--vfs-cache-mode"
-        "full"
-        "--vfs-cache-max-size"
-        "250G"
-        "--vfs-cache-max-age"
-        "5000h"
-        "--vfs-cache-poll-interval"
-        "5m"
       ];
-      ExecStop = "/run/wrappers/bin/fusermount -u -z %h/Share";
-      ExecStartPost = "/run/current-system/sw/bin/rclone rc vfs/refresh recursive=true --rc-addr 127.0.0.1:5572 _async=true";
-      Restart = "on-failure";
+    };
+  };
+
+  systemd.user.timers.google-drive-bisync = {
+    Unit = {
+      Description = "Run Google Drive bisync every 10 minutes";
+    };
+
+    Timer = {
+      OnBootSec = "2min";
+      OnUnitInactiveSec = "10min";
+      Unit = "google-drive-bisync.service";
+      Persistent = true;
     };
 
     Install = {
-      WantedBy = [ "default.target" ];
+      WantedBy = [ "timers.target" ];
     };
   };
 
