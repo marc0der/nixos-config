@@ -136,6 +136,9 @@
     theme = "breeze";
   };
 
+  # Enable accounts service for user avatars
+  services.accounts-daemon.enable = true;
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
