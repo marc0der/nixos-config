@@ -139,8 +139,31 @@
   # Enable accounts service for user avatars
   services.accounts-daemon.enable = true;
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [
+      cups-brother-hll2350dw
+    ];
+    browsing = true;
+    defaultShared = true;
+    listenAddresses = [ "*:631" ];
+    allowFrom = [ "all" ];
+    startWhenNeeded = true;
+  };
+  
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      domain = true;
+      hinfo = true;
+      userServices = true;
+      workstation = true;
+    };
+  };
 
   # Power profiles daemon
   services.power-profiles-daemon.enable = true;
