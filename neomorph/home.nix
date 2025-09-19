@@ -109,6 +109,22 @@
       ];
       mimeType = [ "x-scheme-handler/slack" ];
     };
+
+    googleMeet = {
+      name = "Google Meet";
+      comment = "Google Meet Video Conferencing";
+      genericName = "Google Meet in Brave";
+      exec = "brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default --app=\"https://meet.google.com\"";
+      icon = "google-meet";
+      type = "Application";
+      startupNotify = true;
+      categories = [
+        "GNOME"
+        "GTK"
+        "Network"
+        "VideoConference"
+      ];
+    };
   };
 
   systemd.user.services.xdg-desktop-portal-wlr = {
