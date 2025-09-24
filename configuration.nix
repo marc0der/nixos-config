@@ -263,11 +263,18 @@
     ${pkgs.nvd}/bin/nvd diff /run/current-system /nix/var/nix/profiles/system
   '';
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  # Firewall configuration
+  networking.firewall = {
+    enable = true;
+    # Allow SSH
+    allowedTCPPorts = [ 22 ];
+    # Allow common local network services
+    allowedUDPPorts = [ ];
+    # Trust local network interfaces (adjust ranges as needed)
+    trustedInterfaces = [ "lo" ];
+    # Allow ping
+    allowPing = true;
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
