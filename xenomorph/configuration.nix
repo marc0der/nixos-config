@@ -1,11 +1,4 @@
 {
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-
-{
   networking.hostName = "xenomorph";
 
   programs.hyprland = {

@@ -3,8 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 {
-  config,
-  lib,
   pkgs,
   ...
 }:
@@ -70,7 +68,7 @@
       "wheel"
     ];
     shell = pkgs.zsh;
-    packages = with pkgs; [ ];
+    packages = [ ];
   };
 
   # Allow unfree packages
@@ -150,7 +148,7 @@
     allowFrom = [ "all" ];
     startWhenNeeded = true;
   };
-  
+
   services.avahi = {
     enable = true;
     nssmdns4 = true;
