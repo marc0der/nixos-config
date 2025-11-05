@@ -23,7 +23,7 @@
   };
 
   fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/3ab912d9-130b-4b23-a89e-a423119a9c2f";
+    device = "/dev/mapper/luks-25dcf7b3-7d8c-490c-9f63-c06803d54906";
     fsType = "ext4";
   };
 
