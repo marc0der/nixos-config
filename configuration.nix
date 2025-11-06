@@ -56,7 +56,8 @@
   # Configure console keymap
   console.keyMap = "uk";
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Don't forget to set a password with 'passwd'.
+  users.mutableUsers = true;
   users.users.marco = {
     isNormalUser = true;
     description = "Marco Vermeulen";
@@ -65,7 +66,6 @@
       "docker"
       "input"
       "networkmanager"
-      "wheel"
     ];
     shell = pkgs.zsh;
     packages = [ ];
