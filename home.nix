@@ -85,12 +85,9 @@
     fira-code-symbols
     fira-sans
     jetbrains-mono
-    (pkgs.nerdfonts.override {
-      fonts = [
-        "JetBrainsMono"
-        "Noto"
-      ];
-    })
+    # Nerd fonts (NixOS 25.05+ format)
+    pkgs.nerd-fonts.jetbrains-mono
+    pkgs.nerd-fonts.noto
   ];
 
   home.file = {
