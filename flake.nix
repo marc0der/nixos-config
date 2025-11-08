@@ -60,6 +60,7 @@
             ./hardware-configuration.nix
             ./neomorph/configuration.nix
             ./neomorph/hardware-configuration.nix
+            ./neomorph/clamav.nix
           ];
         };
       };

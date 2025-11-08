@@ -1,0 +1,47 @@
+{ config, pkgs, ... }:
+
+{
+  # Enable ClamAV antivirus
+  services.clamav = {
+    daemon.enable = true;
+    updater = {
+      enable = true;
+      interval = "hourly"; # Update virus definitions every hour
+      frequency = 24; # Check for updates 24 times per day
+    };
+  };
+
+  # Create a systemd service for daily scans
+  systemd.services.clamav-scan = {
+    description = "ClamAV daily system scan";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.clamav}/bin/clamdscan --multiscan --fdpass --infected --log=/var/log/clamav/daily-scan.log /home'";
+      User = "root";
+    };
+    # Ensure the daemon is running before scanning
+    after = [ "clamav-daemon.service" ];
+    requires = [ "clamav-daemon.service" ];
+  };
+
+  # Create a systemd timer to run daily scans at 3 AM
+  systemd.timers.clamav-scan = {
+    description = "Daily ClamAV scan timer";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "03:00"; # Run at 3 AM daily
+      Persistent = true; # Run missed scans on boot
+      RandomizedDelaySec = "15m"; # Add up to 15min random delay
+    };
+  };
+
+  # Ensure log directory exists
+  systemd.tmpfiles.rules = [
+    "d /var/log/clamav 0755 clamav clamav -"
+  ];
+
+  # Add clamav tools to system packages for manual scans
+  environment.systemPackages = with pkgs; [
+    clamav
+  ];
+}
