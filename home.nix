@@ -30,6 +30,7 @@
     fzf
     gedit
     gh
+    ghostty
     gnome-calculator
     htop
     httpie
@@ -88,6 +89,8 @@
     # Nerd fonts (NixOS 25.05+ format)
     pkgs.nerd-fonts.jetbrains-mono
     pkgs.nerd-fonts.noto
+    pkgs.nerd-fonts.fira-code
+    pkgs.nerd-fonts.symbols-only
   ];
 
   home.file = {
@@ -293,27 +296,6 @@
       comment = "ChatGPT";
       icon = "chatgpt";
     };
-  };
-
-  programs.zsh = {
-    enable = true;
-    shellAliases = { };
-    initExtra = ''
-      # Source secrets file if it exists
-      [[ -f ~/.config/secrets/env ]] && source ~/.config/secrets/env
-
-      claude-oneshot() {
-        if [[ -z "$1" ]]; then
-          echo "Error: claude-oneshot requires a file path parameter" >&2
-          return 1
-        fi
-        if [[ ! -f "$1" ]]; then
-          echo "Error: File '$1' does not exist or is not a regular file" >&2
-          return 1
-        fi
-        claude --dangerously-skip-permissions "$1"
-      }
-    '';
   };
 
   home.activation.setupClaudeMcpServers = lib.hm.dag.entryAfter [ "linkGeneration" ] ''

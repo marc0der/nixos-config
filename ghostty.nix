@@ -5,8 +5,12 @@
     enableZshIntegration = true;
     settings = {
       # Font settings
-      font-family = "JetBrainsMono Nerd Font";
+      font-family = "JetBrainsMono Nerd Font Mono";
       font-size = 11;
+      font-feature = [
+        "-calt"
+        "-liga"
+      ];
 
       # Appearance
       background-opacity = 0.8;
