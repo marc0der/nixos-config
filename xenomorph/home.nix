@@ -19,15 +19,17 @@
     hyprlock
     hyprshot
     swaynotificationcenter
-    gnome.gnome-keyring
+    gnome-keyring
     polkit_gnome
   ];
 
   gtk = {
-    theme = {
-      name = "Materia-Dark";
-      package = pkgs.materia-theme;
-    };
+    # Materia theme doesn't support GTK4 (needed by Ghostty)
+    # Using default Adwaita theme which has full GTK4 support
+    # theme = {
+    #   name = "Materia-Dark";
+    #   package = pkgs.materia-theme;
+    # };
 
     iconTheme = {
       name = "Papirus-Dark";
@@ -36,7 +38,7 @@
   };
 
   home.sessionVariables = {
-    GTK_THEME = "Materia-Dark";
+    # GTK_THEME = "Materia-Dark";
   };
 
   xdg.mimeApps = {

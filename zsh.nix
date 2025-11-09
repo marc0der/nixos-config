@@ -7,7 +7,10 @@
 
   programs.zsh = {
     enable = true;
-    initExtra = ''
+    initContent = ''
+      # Source secrets file if it exists
+      [[ -f ~/.config/secrets/env ]] && source ~/.config/secrets/env
+
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       source ${pkgs.autojump}/share/autojump/autojump.zsh
       [ -f ${config.home.homeDirectory}/.sdkman/bin/sdkman-init.sh ] && source ${config.home.homeDirectory}/.sdkman/bin/sdkman-init.sh
@@ -16,6 +19,18 @@
       export PATH=$PYENV_ROOT/bin:$PATH
       eval "$(pyenv init --path)"
       eval "$(pyenv init -)"
+
+      claude-oneshot() {
+        if [[ -z "$1" ]]; then
+          echo "Error: claude-oneshot requires a file path parameter" >&2
+          return 1
+        fi
+        if [[ ! -f "$1" ]]; then
+          echo "Error: File '$1' does not exist or is not a regular file" >&2
+          return 1
+        fi
+        claude --dangerously-skip-permissions "$1"
+      }
     '';
     shellAliases = {
       #nix
