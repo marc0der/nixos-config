@@ -171,7 +171,6 @@
   services.logind = {
     lidSwitch = "suspend";
     lidSwitchDocked = "ignore";
-    lidSwitchExternalPower = "ignore";
     extraConfig = ''
       IdleAction=ignore
       HandlePowerKey=ignore
