@@ -2,8 +2,8 @@
 
 {
   home.packages = with pkgs; [
+    alacritty
     dunst
-    foot
     obs-studio
     sway
     sway-contrib.grimshot
