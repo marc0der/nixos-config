@@ -13,6 +13,14 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest; # Install latest stable kernel
 
+  # Disable integrated camera GPIO driver to fix boot errors and shutdown hang
+  # The IPU6 camera doesn't work properly on Linux anyway, and the broken driver
+  # causes GPIO errors and prevents clean shutdown. External USB cameras unaffected.
+  boot.blacklistedKernelModules = [
+    "int3472"
+    "intel_skl_int3472"
+  ];
+
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
