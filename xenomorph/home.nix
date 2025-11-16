@@ -11,13 +11,16 @@
     discord
     doctl
     ffmpeg
-    hyprpolkitagent
+    musescore
+    transcribe
+    yt-dlp
 
     # hyprland packages
     hyprland
     hyprpaper
     hypridle
     hyprlock
+    hyprpolkitagent
     hyprshot
     swaynotificationcenter
     gnome-keyring
