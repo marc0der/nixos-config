@@ -2,7 +2,7 @@
 
 {
   home.file = {
-    ".p10k.zsh".source = powerline/p10k;
+    ".p10k.zsh".source = ./powerline/p10k;
   };
 
   programs.zsh = {

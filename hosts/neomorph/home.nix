@@ -57,7 +57,7 @@
       "x-scheme-handler/about" = [ "brave-browser.desktop" ];
       "x-scheme-handler/http" = [ "brave-browser.desktop" ];
       "x-scheme-handler/https" = [ "brave-browser.desktop" ];
-      "x-scheme-handler/terminal" = [ "foot.desktop" ];
+      "x-scheme-handler/terminal" = [ "alacritty.desktop" ];
       "x-scheme-handler/unknown" = [ "brave-browser.desktop" ];
     };
   };

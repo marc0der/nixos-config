@@ -49,8 +49,8 @@
           modules = [
             ./configuration.nix
             ./hardware-configuration.nix
-            ./xenomorph/configuration.nix
-            ./xenomorph/hardware-configuration.nix
+            ./hosts/xenomorph/configuration.nix
+            ./hosts/xenomorph/hardware-configuration.nix
           ];
         };
         neomorph = lib.nixosSystem {
@@ -58,9 +58,9 @@
           modules = [
             ./configuration.nix
             ./hardware-configuration.nix
-            ./neomorph/configuration.nix
-            ./neomorph/hardware-configuration.nix
-            ./neomorph/clamav.nix
+            ./hosts/neomorph/configuration.nix
+            ./hosts/neomorph/hardware-configuration.nix
+            ./hosts/neomorph/clamav.nix
           ];
         };
       };
@@ -70,12 +70,11 @@
           extraSpecialArgs = { inherit unstable rustToolchain claudeDesktop; };
           modules = [
             ./home.nix
-            ./neomorph/home.nix
-            ./git.nix
-            ./report.nix
-            ./zsh.nix
-            ./foot.nix
-            ./rust.nix
+            ./hosts/neomorph/home.nix
+            ./shared/git.nix
+            ./shared/report.nix
+            ./shared/zsh.nix
+            ./shared/rust.nix
           ];
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
@@ -83,12 +82,12 @@
           extraSpecialArgs = { inherit unstable rustToolchain claudeDesktop; };
           modules = [
             ./home.nix
-            ./xenomorph/home.nix
-            ./git.nix
-            ./report.nix
-            ./zsh.nix
+            ./hosts/xenomorph/home.nix
+            ./shared/git.nix
+            ./shared/report.nix
+            ./shared/zsh.nix
             ./ghostty.nix
-            ./rust.nix
+            ./shared/rust.nix
           ];
         };
       };
