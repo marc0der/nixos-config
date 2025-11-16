@@ -51,6 +51,7 @@
             ./hardware-configuration.nix
             ./hosts/xenomorph/configuration.nix
             ./hosts/xenomorph/hardware-configuration.nix
+            ./modules/system/wayland-common.nix
           ];
         };
         neomorph = lib.nixosSystem {
@@ -61,6 +62,7 @@
             ./hosts/neomorph/configuration.nix
             ./hosts/neomorph/hardware-configuration.nix
             ./hosts/neomorph/clamav.nix
+            ./modules/system/wayland-common.nix
           ];
         };
       };

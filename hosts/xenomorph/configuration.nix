@@ -1,6 +1,8 @@
 {
   networking.hostName = "xenomorph";
 
+  wayland.enable = true;
+
   programs.hyprland = {
     enable = true;
     withUWSM = true;

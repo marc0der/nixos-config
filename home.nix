@@ -124,8 +124,6 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD = "true";
-    QT_QPA_PLATFORM = "wayland;xcb";
-    QT_QPA_PLATFORMTHEME = "qt6ct";
     XCURSOR_SIZE = "24";
     XCURSOR_THEME = "Bibata-Modern-Ice";
   };
