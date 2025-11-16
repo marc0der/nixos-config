@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   ...
 }:
 
@@ -21,6 +22,9 @@
     swaynotificationcenter
     gnome-keyring
     polkit_gnome
+    xdg-desktop-portal
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-hyprland
   ];
 
   gtk = {
@@ -46,6 +50,27 @@
     };
   };
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-hyprland
+    ];
+    config = {
+      common = {
+        default = "gtk";
+      };
+      hyprland = {
+        default = [
+          "gtk"
+          "hyprland"
+        ];
+        "org.freedesktop.impl.portal.ScreenCast" = "hyprland";
+        "org.freedesktop.impl.portal.Screenshot" = "hyprland";
+      };
+    };
+  };
+
   xdg.desktopEntries = {
     moises = {
       name = "Moises";
@@ -61,53 +86,15 @@
     };
   };
 
-  # Enable hypridle service
-  systemd.user.services.hypridle = {
-    Unit = {
-      Description = "Hypridle service";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
+  # Enable services to start with graphical session under UWSM
+  services = {
+    gnome-keyring = {
+      enable = true;
+      components = [ "secrets" ];
     };
-    Service = {
-      ExecStart = "${pkgs.hypridle}/bin/hypridle";
-      Restart = "always";
-      RestartSec = 3;
-    };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
+    network-manager-applet.enable = true;
+    hypridle.enable = true;
+    hyprpaper.enable = true;
   };
 
-  # Enable waybar service
-  systemd.user.services.waybar = {
-    Unit = {
-      Description = "Waybar status bar";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
-    };
-    Service = {
-      ExecStart = "${pkgs.waybar}/bin/waybar";
-      Restart = "always";
-      RestartSec = 3;
-    };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
-  };
-
-  systemd.user.services.polkit-gnome-authentication-agent-1 = {
-    Unit = {
-      Description = "GNOME Polkit Authentication Agent";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
-    };
-    Service = {
-      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-      Restart = "on-failure";
-      RestartSec = 3;
-    };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
-  };
 }
