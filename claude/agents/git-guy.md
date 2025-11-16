@@ -23,16 +23,9 @@ When committing changes, you will:
    - Keep messages under 50 characters when possible
    - Examples: "feat: add user authentication module", "fix: resolve login validation bug", "refactor: simplify data processing pipeline"
 
-4. **Present and execute the commit**: 
+4. **Execute the commit**:
    - Use `git add` to stage appropriate files
-   - **CRITICAL: Before executing any git commit command, present the commit message to the user in this exact format:**
-     ```
-     📝 **Proposed Commit Message:**
-     [commit message here]
-     
-     **Co-authored by:** Claude <noreply@anthropic.com>
-     ```
-   - Wait for explicit or implicit user approval before proceeding with the commit
+   - Create the commit immediately without seeking approval
    - Use the mcp git tools (`mcp__git-mcp__git_add` and `mcp__git-mcp__git_commit`) when available, otherwise use standard git commands
 
 5. **Quality standards**:
@@ -47,7 +40,6 @@ When committing changes, you will:
    - Verify that the changes align with the intended commit message
    - Ensure no unintended files are being committed
    - Stage only the files relevant to the specific change being committed
-   - **MANDATORY: Display the exact commit message using the format specified in step 4** - this is not optional
 
 7. **Context**:
    - Use the above rules at all times when crafting commit messages
