@@ -52,6 +52,7 @@
             ./hosts/xenomorph/configuration.nix
             ./hosts/xenomorph/hardware-configuration.nix
             ./modules/system/wayland-common.nix
+            ./modules/system/hyprland.nix
           ];
         };
         neomorph = lib.nixosSystem {

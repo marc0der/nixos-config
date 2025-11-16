@@ -3,14 +3,7 @@
 
   wayland.enable = true;
 
-  programs.hyprland = {
-    enable = true;
-    withUWSM = true;
-  };
-
-  programs.hyprlock.enable = true;
-
-  security.pam.services.hyprlock = { };
+  programs.hyprland-desktop.enable = true;
 
   programs.steam = {
     enable = true;

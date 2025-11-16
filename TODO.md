@@ -94,7 +94,7 @@ Do NOT include compositor-specific packages or configuration (hyprland vs sway s
 
 ### Task 4: Create Hyprland-specific system module
 
-- [ ] Extract Hyprland configuration into dedicated module
+- [X] Extract Hyprland configuration into dedicated module
 
 **Prompt**: Create a new module `modules/system/hyprland.nix` that contains all Hyprland-specific system configuration extracted from `hosts/xenomorph/configuration.nix`. This should include:
 
