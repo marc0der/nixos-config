@@ -15,12 +15,12 @@
 
   gtk = {
     theme = {
-      name = "Materia-light";
+      name = "Materia-dark";
       package = pkgs.materia-theme;
     };
 
     iconTheme = {
-      name = "Papirus-light";
+      name = "Papirus-Dark";
       package = pkgs.papirus-icon-theme;
     };
   };
@@ -28,7 +28,7 @@
   home.file = { };
 
   home.sessionVariables = {
-    GTK_THEME = "Materia-light";
+    GTK_THEME = "Materia-dark";
     XDG_SCREENSHOTS_DIR = "$HOME/Pictures/Screenshots";
     NIXPKGS_ALLOW_UNFREE = 1;
   };
