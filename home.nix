@@ -94,7 +94,6 @@
   ];
 
   home.file = {
-    ".gnupg/gpg-agent.conf".source = gnupg/gpg-agent.conf;
     ".gnupg/gpg.conf".source = gnupg/gpg.conf;
     ".config/qt5ct/qt5ct.conf".source = qt/qt5ct.conf;
     ".config/qt6ct/qt6ct.conf".source = qt/qt6ct.conf;
@@ -186,8 +185,15 @@
     components = [
       "pkcs11"
       "secrets"
-      "ssh"
     ];
+  };
+
+  services.gpg-agent = {
+    enable = true;
+    enableSshSupport = true;
+    defaultCacheTtl = 31536000; # 1 year
+    maxCacheTtl = 31536000;
+    pinentry.package = pkgs.pinentry-gnome3;
   };
 
   systemd.user.services.google-drive-bisync = {

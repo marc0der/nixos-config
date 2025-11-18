@@ -4,6 +4,32 @@ This TODO list implements the consolidation plan outlined in `consolidation.md` 
 
 ## Tasks
 
+### Task 0: Add neomorph SSH key to GPG agent configuration
+
+- [ ] Configure neomorph SSH key in GPG agent
+
+**Prompt**: When on the neomorph machine, get the SSH key keygrip and add it to the GPG agent configuration:
+
+1. Run this command on neomorph to get the keygrip:
+   ```bash
+   gpg-connect-agent 'keyinfo --ssh-list --ssh-fpr' /bye
+   ```
+2. Add the keygrip to `hosts/neomorph/home.nix`:
+   ```nix
+   services.gpg-agent = {
+     sshKeys = [ "KEYGRIP_FROM_STEP_1" ];
+   };
+   ```
+3. Test with `bin/nix-home` on neomorph
+4. Verify SSH key is loaded automatically without `ssh-add`
+
+**Context**: This completes the GPG agent SSH configuration for both hosts. Xenomorph is already configured with keygrip `A18D2A102BDBA1DEED0F4BCE79834B4865124319`.
+
+**Files affected**:
+- `hosts/neomorph/home.nix`
+
+---
+
 ### Task 1: Create modules directory structure
 
 - [X] Create modular directory structure for better organization
