@@ -167,8 +167,4 @@
       WantedBy = [ "graphical-session.target" ];
     };
   };
-
-  # TODO (Task 0): Add neomorph SSH key keygrip here
-  # Run: gpg-connect-agent 'keyinfo --ssh-list --ssh-fpr' /bye
-  # Then add: services.gpg-agent.sshKeys = [ "KEYGRIP_HERE" ];
 }

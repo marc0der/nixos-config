@@ -98,9 +98,6 @@
     network-manager-applet.enable = true;
     hypridle.enable = true;
     hyprpaper.enable = true;
-    gpg-agent = {
-      sshKeys = [ "A18D2A102BDBA1DEED0F4BCE79834B4865124319" ];
-    };
   };
 
 }
