@@ -64,11 +64,19 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = with pkgs; [ xdg-desktop-portal-gtk xdg-desktop-portal-wlr ];
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-wlr
+    ];
     config = {
-      common = { default = "gtk"; };
+      common = {
+        default = "gtk";
+      };
       sway = {
-        default = [ "gtk" "wlr" ];
+        default = [
+          "gtk"
+          "wlr"
+        ];
         "org.freedesktop.impl.portal.ScreenCast" = "wlr";
         "org.freedesktop.impl.portal.Screenshot" = "wlr";
       };
@@ -80,12 +88,16 @@
       name = "Slack (DEFRA Digital Team)";
       comment = "DEFRA Digital Team Slack";
       genericName = "DEFRA Digital Team Slack in Brave";
-      exec = ''
-        brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Defra --app="https://app.slack.com/client/T73HZJ85R/C09C11N6DGA"'';
+      exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Defra --app="https://app.slack.com/client/T73HZJ85R/C09C11N6DGA"'';
       icon = "slack";
       type = "Application";
       startupNotify = true;
-      categories = [ "GNOME" "GTK" "Network" "InstantMessaging" ];
+      categories = [
+        "GNOME"
+        "GTK"
+        "Network"
+        "InstantMessaging"
+      ];
       mimeType = [ "x-scheme-handler/slack" ];
     };
 
@@ -93,12 +105,16 @@
       name = "Slack (DEFRA Digital)";
       comment = "DEFRA Digital Slack";
       genericName = "DEFRA Digital Slack in Brave";
-      exec = ''
-        brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Defra --app="https://app.slack.com/client/T0ESW1J2D/C0ESX6V26"'';
+      exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Defra --app="https://app.slack.com/client/T0ESW1J2D/C0ESX6V26"'';
       icon = "slack";
       type = "Application";
       startupNotify = true;
-      categories = [ "GNOME" "GTK" "Network" "InstantMessaging" ];
+      categories = [
+        "GNOME"
+        "GTK"
+        "Network"
+        "InstantMessaging"
+      ];
       mimeType = [ "x-scheme-handler/slack" ];
     };
 
@@ -106,12 +122,16 @@
       name = "Slack (Equal Experts)";
       comment = "EE Slack";
       genericName = "EE Slack in Brave";
-      exec = ''
-        brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default --app="https://app.slack.com/client/T02QA1EAG"'';
+      exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default --app="https://app.slack.com/client/T02QA1EAG"'';
       icon = "slack";
       type = "Application";
       startupNotify = true;
-      categories = [ "GNOME" "GTK" "Network" "InstantMessaging" ];
+      categories = [
+        "GNOME"
+        "GTK"
+        "Network"
+        "InstantMessaging"
+      ];
       mimeType = [ "x-scheme-handler/slack" ];
     };
 
@@ -119,12 +139,16 @@
       name = "Google Meet";
       comment = "Google Meet Video Conferencing";
       genericName = "Google Meet in Brave";
-      exec = ''
-        brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default --app="https://meet.google.com"'';
+      exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default --app="https://meet.google.com"'';
       icon = "google-meet";
       type = "Application";
       startupNotify = true;
-      categories = [ "GNOME" "GTK" "Network" "VideoConference" ];
+      categories = [
+        "GNOME"
+        "GTK"
+        "Network"
+        "VideoConference"
+      ];
     };
   };
 
@@ -135,11 +159,12 @@
     };
 
     Service = {
-      ExecStart =
-        "${pkgs.xdg-desktop-portal-wlr}/libexec/xdg-desktop-portal-wlr";
+      ExecStart = "${pkgs.xdg-desktop-portal-wlr}/libexec/xdg-desktop-portal-wlr";
       Restart = "on-failure";
     };
 
-    Install = { WantedBy = [ "graphical-session.target" ]; };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
   };
 }

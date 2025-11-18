@@ -64,6 +64,7 @@
             ./hosts/neomorph/hardware-configuration.nix
             ./hosts/neomorph/clamav.nix
             ./modules/system/wayland-common.nix
+            ./modules/system/sway.nix
           ];
         };
       };

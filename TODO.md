@@ -113,7 +113,7 @@ The module should have an enable option `programs.hyprland-desktop.enable` that 
 
 ### Task 5: Create Sway-specific system module
 
-- [ ] Extract Sway configuration into dedicated module
+- [X] Extract Sway configuration into dedicated module
 
 **Prompt**: Create a new module `modules/system/sway.nix` that contains all Sway-specific system configuration extracted from `hosts/neomorph/configuration.nix`. This should include:
 
