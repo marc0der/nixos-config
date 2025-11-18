@@ -6,7 +6,7 @@ This TODO list implements the consolidation plan outlined in `consolidation.md` 
 
 ### Task 0: Add neomorph SSH key to GPG agent configuration
 
-- [ ] Configure neomorph SSH key in GPG agent
+- [X] Configure neomorph SSH key in GPG agent
 
 **Prompt**: When on the neomorph machine, get the SSH key keygrip and add it to the GPG agent configuration:
 
@@ -100,7 +100,7 @@ Keep `ghostty.nix` in root for now as it will be moved in a later task.
 
 ### Task 3: Extract common Wayland configuration module
 
-- [ ] Create shared Wayland module with common configuration
+- [X] Create shared Wayland module with common configuration
 
 **Prompt**: Create a new module `modules/system/wayland-common.nix` that contains configuration common to both Wayland compositors (Hyprland and Sway). This module should include:
 
