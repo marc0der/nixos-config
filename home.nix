@@ -12,17 +12,17 @@
   home.username = "marco";
   home.homeDirectory = "/home/marco";
   home.stateVersion = "24.11";
+
+  desktop-common.enable = true;
+
   home.packages = with pkgs; [
     autojump
     bat
     bibata-cursors
-    blueman
     borgbackup
     brave
-    brightnessctl
     chafa
     cliphist
-    desktop-file-utils
     eog
     evince
     file-roller
@@ -43,25 +43,19 @@
     nautilus
     ncdu
     neofetch
-    networkmanagerapplet
     nixfmt-rfc-style
     nodejs
     nodePackages.jsonlint
     obsidian
-    pavucontrol
     pinentry-gnome3
-    playerctl
     protonvpn-cli
     protonvpn-gui
     python3
     pywal
     ripgrep
-    rofi
     speedtest-rs
     uv
     vscode
-    waybar
-    wl-clipboard
     wlogout
     yamllint
     zsh-powerlevel10k

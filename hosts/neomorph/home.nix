@@ -8,9 +8,7 @@
     sway
     sway-contrib.grimshot
     swaylock-effects
-    xdg-desktop-portal
     xdg-desktop-portal-wlr
-    xdg-desktop-portal-gtk
   ];
 
   gtk = {

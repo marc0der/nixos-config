@@ -25,8 +25,6 @@
     swaynotificationcenter
     gnome-keyring
     polkit_gnome
-    xdg-desktop-portal
-    xdg-desktop-portal-gtk
     xdg-desktop-portal-hyprland
   ];
 

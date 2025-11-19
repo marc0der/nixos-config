@@ -13,8 +13,16 @@
     claude-desktop.inputs.nixpkgs.follows = "nixpkgs";
     claude-desktop.inputs.flake-utils.follows = "flake-utils";
   };
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, fenix
-    , claude-desktop, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      nixpkgs-unstable,
+      home-manager,
+      fenix,
+      claude-desktop,
+      ...
+    }:
     let
       lib = nixpkgs.lib;
       system = "x86_64-linux";
@@ -33,7 +41,8 @@
       rustToolchain = fenix.packages.${system};
       claudeDesktop = claude-desktop.packages.${system};
 
-    in {
+    in
+    {
       nixosConfigurations = {
         xenomorph = lib.nixosSystem {
           inherit system;
@@ -70,6 +79,7 @@
             ./shared/report.nix
             ./shared/zsh.nix
             ./shared/rust.nix
+            ./modules/home/desktop-common.nix
           ];
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
@@ -83,6 +93,7 @@
             ./shared/zsh.nix
             ./ghostty.nix
             ./shared/rust.nix
+            ./modules/home/desktop-common.nix
           ];
         };
       };

@@ -183,7 +183,7 @@ Update `hosts/neomorph/configuration.nix` to enable the module with `services.cl
 
 ### Task 7: Extract common desktop packages module
 
-- [ ] Create shared home-manager module for common desktop packages
+- [X] Create shared home-manager module for common desktop packages
 
 **Prompt**: Create a new module `modules/home/desktop-common.nix` that contains packages used by both hosts for desktop environments. Extract the following packages from `home.nix` that are desktop-related and common to both:
 
