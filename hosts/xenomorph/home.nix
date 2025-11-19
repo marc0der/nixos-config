@@ -14,18 +14,10 @@
     musescore
     transcribe
     yt-dlp
-
-    # hyprland packages
-    hyprland
-    hyprpaper
-    hypridle
-    hyprlock
-    hyprpolkitagent
-    hyprshot
-    swaynotificationcenter
-    gnome-keyring
-    polkit_gnome
   ];
+
+  # Hyprland desktop environment
+  hyprland-desktop.enable = true;
 
   # GTK theme configuration
   gtk-theme.variant = "dark";
@@ -52,17 +44,6 @@
         "Music"
       ];
     };
-  };
-
-  # Enable services to start with graphical session under UWSM
-  services = {
-    gnome-keyring = {
-      enable = true;
-      components = [ "secrets" ];
-    };
-    network-manager-applet.enable = true;
-    hypridle.enable = true;
-    hyprpaper.enable = true;
   };
 
 }

@@ -308,7 +308,7 @@ Note: neomorph uses alacritty which is already in the package list, no separate 
 
 ### Task 12: Extract Hyprland ecosystem packages module
 
-- [ ] Create module for Hyprland-specific home packages
+- [X] Create module for Hyprland-specific home packages
 
 **Prompt**: Create a new module `modules/home/hyprland-desktop.nix` that contains all Hyprland-specific packages and services from `hosts/xenomorph/home.nix`:
 

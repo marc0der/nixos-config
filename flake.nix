@@ -101,6 +101,7 @@
             ./modules/home/gtk-theme.nix
             ./modules/home/xdg-portal-hyprland.nix
             ./modules/home/xdg-mimetypes.nix
+            ./modules/home/hyprland-desktop.nix
           ];
         };
       };
