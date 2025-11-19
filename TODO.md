@@ -289,7 +289,7 @@ Remove the duplicate MIME type definitions from both host files, keeping only ho
 
 ### Task 11: Move terminal configuration to modules
 
-- [ ] Move ghostty.nix into modules directory
+- [X] Move ghostty.nix into modules directory
 
 **Prompt**: Move the terminal configuration file into the home modules directory:
 

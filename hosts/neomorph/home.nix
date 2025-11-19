@@ -19,6 +19,7 @@
   # XDG MIME types configuration
   xdg-mimetypes = {
     enable = true;
+    terminal = "ghostty.desktop";
     textEditor = "gedit.desktop";
   };
 

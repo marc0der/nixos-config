@@ -78,6 +78,7 @@
             ./shared/git.nix
             ./shared/report.nix
             ./shared/zsh.nix
+            ./modules/home/terminal-ghostty.nix
             ./shared/rust.nix
             ./modules/home/desktop-common.nix
             ./modules/home/gtk-theme.nix
@@ -94,7 +95,7 @@
             ./shared/git.nix
             ./shared/report.nix
             ./shared/zsh.nix
-            ./ghostty.nix
+            ./modules/home/terminal-ghostty.nix
             ./shared/rust.nix
             ./modules/home/desktop-common.nix
             ./modules/home/gtk-theme.nix
