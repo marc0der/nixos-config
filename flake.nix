@@ -13,16 +13,8 @@
     claude-desktop.inputs.nixpkgs.follows = "nixpkgs";
     claude-desktop.inputs.flake-utils.follows = "flake-utils";
   };
-  outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      nixpkgs-unstable,
-      home-manager,
-      fenix,
-      claude-desktop,
-      ...
-    }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, fenix
+    , claude-desktop, ... }:
     let
       lib = nixpkgs.lib;
       system = "x86_64-linux";
@@ -41,8 +33,7 @@
       rustToolchain = fenix.packages.${system};
       claudeDesktop = claude-desktop.packages.${system};
 
-    in
-    {
+    in {
       nixosConfigurations = {
         xenomorph = lib.nixosSystem {
           inherit system;
@@ -62,7 +53,7 @@
             ./hardware-configuration.nix
             ./hosts/neomorph/configuration.nix
             ./hosts/neomorph/hardware-configuration.nix
-            ./hosts/neomorph/clamav.nix
+            ./modules/system/clamav.nix
             ./modules/system/wayland-common.nix
             ./modules/system/sway.nix
           ];

@@ -157,7 +157,7 @@ The module should have an enable option `programs.sway-desktop.enable` that when
 
 ### Task 6: Extract ClamAV antivirus module
 
-- [ ] Move ClamAV configuration to security module
+- [X] Move ClamAV configuration to security module
 
 **Prompt**: Create a new module `modules/system/clamav.nix` that contains the ClamAV antivirus configuration currently in `hosts/neomorph/clamav.nix`. This is a security feature that could be useful on either host, so it should be a reusable module.
 
