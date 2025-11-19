@@ -82,6 +82,7 @@
             ./modules/home/desktop-common.nix
             ./modules/home/gtk-theme.nix
             ./modules/home/xdg-portal-sway.nix
+            ./modules/home/xdg-mimetypes.nix
           ];
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
@@ -98,6 +99,7 @@
             ./modules/home/desktop-common.nix
             ./modules/home/gtk-theme.nix
             ./modules/home/xdg-portal-hyprland.nix
+            ./modules/home/xdg-mimetypes.nix
           ];
         };
       };

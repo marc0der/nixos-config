@@ -259,7 +259,7 @@ Each module should have an enable option. Update the host configurations to enab
 
 ### Task 10: Consolidate XDG MIME types configuration
 
-- [ ] Create base MIME types with host-specific overrides
+- [X] Create base MIME types with host-specific overrides
 
 **Prompt**: Create a new module `modules/home/xdg-mimetypes.nix` that contains the common XDG MIME type associations shared by both hosts. Extract all the common MIME types from both `hosts/neomorph/home.nix` and root `home.nix`, particularly:
 

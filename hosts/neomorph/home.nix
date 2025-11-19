@@ -16,40 +16,17 @@
   # XDG portal configuration
   xdg-portal-sway.enable = true;
 
+  # XDG MIME types configuration
+  xdg-mimetypes = {
+    enable = true;
+    textEditor = "gedit.desktop";
+  };
+
   home.file = { };
 
   home.sessionVariables = {
     XDG_SCREENSHOTS_DIR = "$HOME/Pictures/Screenshots";
     NIXPKGS_ALLOW_UNFREE = 1;
-  };
-
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      "application/json" = [ "gedit.desktop" ];
-      "application/pdf" = [ "org.gnome.Evince.desktop" ];
-      "application/x-7z-compressed" = [ "org.gnome.FileRoller.desktop" ];
-      "application/x-compressed-tar" = [ "org.gnome.FileRoller.desktop" ];
-      "application/x-tar" = [ "org.gnome.FileRoller.desktop" ];
-      "application/xml" = [ "gedit.desktop" ];
-      "application/zip" = [ "org.gnome.FileRoller.desktop" ];
-      "image/gif" = [ "org.gnome.eog.desktop" ];
-      "image/jpeg" = [ "org.gnome.eog.desktop" ];
-      "image/png" = [ "org.gnome.eog.desktop" ];
-      "image/svg+xml" = [ "org.gnome.eog.desktop" ];
-      "text/html" = [ "brave-browser.desktop" ];
-      "text/markdown" = [ "gedit.desktop" ];
-      "text/plain" = [ "gedit.desktop" ];
-      "video/mp4" = [ "mpv.desktop" ];
-      "video/quicktime" = [ "mpv.desktop" ];
-      "video/webm" = [ "mpv.desktop" ];
-      "video/x-matroska" = [ "mpv.desktop" ];
-      "x-scheme-handler/about" = [ "brave-browser.desktop" ];
-      "x-scheme-handler/http" = [ "brave-browser.desktop" ];
-      "x-scheme-handler/https" = [ "brave-browser.desktop" ];
-      "x-scheme-handler/terminal" = [ "alacritty.desktop" ];
-      "x-scheme-handler/unknown" = [ "brave-browser.desktop" ];
-    };
   };
 
   xdg.desktopEntries = {

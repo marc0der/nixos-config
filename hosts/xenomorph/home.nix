@@ -33,11 +33,10 @@
   # XDG portal configuration
   xdg-portal-hyprland.enable = true;
 
-  xdg.mimeApps = {
+  # XDG MIME types configuration
+  xdg-mimetypes = {
     enable = true;
-    defaultApplications = {
-      "x-scheme-handler/terminal" = [ "ghostty.desktop" ];
-    };
+    terminal = "ghostty.desktop";
   };
 
   xdg.desktopEntries = {
