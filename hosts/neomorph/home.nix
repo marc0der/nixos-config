@@ -8,11 +8,13 @@
     sway
     sway-contrib.grimshot
     swaylock-effects
-    xdg-desktop-portal-wlr
   ];
 
   # GTK theme configuration
   gtk-theme.variant = "dark";
+
+  # XDG portal configuration
+  xdg-portal-sway.enable = true;
 
   home.file = { };
 
@@ -47,27 +49,6 @@
       "x-scheme-handler/https" = [ "brave-browser.desktop" ];
       "x-scheme-handler/terminal" = [ "alacritty.desktop" ];
       "x-scheme-handler/unknown" = [ "brave-browser.desktop" ];
-    };
-  };
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-wlr
-    ];
-    config = {
-      common = {
-        default = "gtk";
-      };
-      sway = {
-        default = [
-          "gtk"
-          "wlr"
-        ];
-        "org.freedesktop.impl.portal.ScreenCast" = "wlr";
-        "org.freedesktop.impl.portal.Screenshot" = "wlr";
-      };
     };
   };
 
@@ -137,22 +118,6 @@
         "Network"
         "VideoConference"
       ];
-    };
-  };
-
-  systemd.user.services.xdg-desktop-portal-wlr = {
-    Unit = {
-      Description = "xdg-desktop-portal-wlr";
-      PartOf = [ "graphical-session.target" ];
-    };
-
-    Service = {
-      ExecStart = "${pkgs.xdg-desktop-portal-wlr}/libexec/xdg-desktop-portal-wlr";
-      Restart = "on-failure";
-    };
-
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
     };
   };
 }

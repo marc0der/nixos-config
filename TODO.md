@@ -232,7 +232,7 @@ Remove the duplicate GTK configuration from both host files.
 
 ### Task 9: Create XDG portal modules per compositor
 
-- [ ] Extract XDG portal configuration into compositor-specific modules
+- [X] Extract XDG portal configuration into compositor-specific modules
 
 **Prompt**: Create two new home-manager modules for XDG portal configuration:
 

@@ -81,6 +81,7 @@
             ./shared/rust.nix
             ./modules/home/desktop-common.nix
             ./modules/home/gtk-theme.nix
+            ./modules/home/xdg-portal-sway.nix
           ];
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
@@ -96,6 +97,7 @@
             ./shared/rust.nix
             ./modules/home/desktop-common.nix
             ./modules/home/gtk-theme.nix
+            ./modules/home/xdg-portal-hyprland.nix
           ];
         };
       };

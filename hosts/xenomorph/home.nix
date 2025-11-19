@@ -25,37 +25,18 @@
     swaynotificationcenter
     gnome-keyring
     polkit_gnome
-    xdg-desktop-portal-hyprland
   ];
 
   # GTK theme configuration
   gtk-theme.variant = "dark";
 
+  # XDG portal configuration
+  xdg-portal-hyprland.enable = true;
+
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
       "x-scheme-handler/terminal" = [ "ghostty.desktop" ];
-    };
-  };
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-hyprland
-    ];
-    config = {
-      common = {
-        default = "gtk";
-      };
-      hyprland = {
-        default = [
-          "gtk"
-          "hyprland"
-        ];
-        "org.freedesktop.impl.portal.ScreenCast" = "hyprland";
-        "org.freedesktop.impl.portal.Screenshot" = "hyprland";
-      };
     };
   };
 
