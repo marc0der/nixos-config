@@ -11,22 +11,12 @@
     xdg-desktop-portal-wlr
   ];
 
-  gtk = {
-    theme = {
-      name = "Materia-dark";
-      package = pkgs.materia-theme;
-    };
-
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
-    };
-  };
+  # GTK theme configuration
+  gtk-theme.variant = "dark";
 
   home.file = { };
 
   home.sessionVariables = {
-    GTK_THEME = "Materia-dark";
     XDG_SCREENSHOTS_DIR = "$HOME/Pictures/Screenshots";
     NIXPKGS_ALLOW_UNFREE = 1;
   };

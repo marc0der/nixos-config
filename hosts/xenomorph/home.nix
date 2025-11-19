@@ -28,21 +28,8 @@
     xdg-desktop-portal-hyprland
   ];
 
-  gtk = {
-    theme = {
-      name = "Materia-Dark";
-      package = pkgs.materia-theme;
-    };
-
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
-    };
-  };
-
-  home.sessionVariables = {
-    GTK_THEME = "Materia-Dark";
-  };
+  # GTK theme configuration
+  gtk-theme.variant = "dark";
 
   xdg.mimeApps = {
     enable = true;

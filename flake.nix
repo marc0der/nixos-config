@@ -80,6 +80,7 @@
             ./shared/zsh.nix
             ./shared/rust.nix
             ./modules/home/desktop-common.nix
+            ./modules/home/gtk-theme.nix
           ];
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
@@ -94,6 +95,7 @@
             ./ghostty.nix
             ./shared/rust.nix
             ./modules/home/desktop-common.nix
+            ./modules/home/gtk-theme.nix
           ];
         };
       };

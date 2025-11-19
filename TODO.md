@@ -208,7 +208,7 @@ The module should have an enable option `desktop-common.enable`. Keep other pack
 
 ### Task 8: Extract GTK theming module with dark/light variants
 
-- [ ] Create themed GTK module supporting dark and light variants
+- [X] Create themed GTK module supporting dark and light variants
 
 **Prompt**: Create a new module `modules/home/gtk-theme.nix` that handles GTK theming configuration with support for both dark and light variants. The module should:
 
