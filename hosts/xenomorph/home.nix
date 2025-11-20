@@ -30,11 +30,6 @@
         ",preferred,auto,1"
       ];
 
-      # XWayland settings
-      xwayland = {
-        force_zero_scaling = true;
-      };
-
       # Environment variables
       env = [
         "XCURSOR_SIZE,24"

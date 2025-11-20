@@ -32,7 +32,7 @@ with lib;
       pavucontrol
       playerctl
       wl-clipboard
-      rofi
+      rofi-wayland
       waybar
       xdg-desktop-portal
       xdg-desktop-portal-gtk

@@ -36,10 +36,6 @@ with lib;
 
     # Common environment variables for Wayland
     environment.sessionVariables = {
-      # Qt applications should prefer Wayland, fall back to X11
-      QT_QPA_PLATFORM = "wayland;xcb";
-      # Use qt6ct for Qt theming
-      QT_QPA_PLATFORMTHEME = "qt6ct";
       # Ensure SDL2 uses Wayland when available
       SDL_VIDEODRIVER = "wayland";
       # Clutter backend

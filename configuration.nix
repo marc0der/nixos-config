@@ -82,6 +82,18 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Override 1Password to use Wayland natively with Ozone platform
+  nixpkgs.config.packageOverrides = pkgs: {
+    _1password-gui = pkgs._1password-gui.overrideAttrs (oldAttrs: {
+      postFixup = (oldAttrs.postFixup or "") + ''
+        # Wrap the 1password binary to add Ozone Wayland flags
+        wrapProgram $out/bin/1password \
+          --add-flags "--ozone-platform-hint=auto" \
+          --add-flags "--enable-features=WaylandWindowDecorations"
+      '';
+    });
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
