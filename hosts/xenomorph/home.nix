@@ -30,6 +30,11 @@
         ",preferred,auto,1"
       ];
 
+      # XWayland settings
+      xwayland = {
+        force_zero_scaling = true;
+      };
+
       # Environment variables
       env = [
         "XCURSOR_SIZE,24"
@@ -55,7 +60,7 @@
         gaps_in = 5;
         gaps_out = 10;
         border_size = 2;
-        resize_on_border = false;
+        resize_on_border = true;
         allow_tearing = false;
         layout = "dwindle";
       };
@@ -146,7 +151,7 @@
         # Window management
         "$mainMod SHIFT, Q, killactive"
         "$mainMod SHIFT, E, exec, wlogout"
-        "$mainMod, V, togglefloating"
+        "$mainMod SHIFT, F, togglefloating"
         "$mainMod, P, pseudo"
         "$mainMod, T, layoutmsg, togglesplit"
         "$mainMod, F, fullscreen"
