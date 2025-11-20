@@ -358,7 +358,7 @@ Update `hosts/neomorph/home.nix` to import and enable this module, removing the 
 
 ### Task 14: Create gaming profile module
 
-- [ ] Extract Steam and gaming configuration into profile
+- [X] Extract Steam and gaming configuration into profile
 
 **Prompt**: Create a new profile module `profiles/gaming.nix` that contains gaming-related system configuration currently in `hosts/xenomorph/configuration.nix`:
 
