@@ -10,6 +10,9 @@
     swaylock-effects
   ];
 
+  # Music production profile
+  profiles.music-production.enable = true;
+
   # GTK theme configuration
   gtk-theme.variant = "dark";
 
