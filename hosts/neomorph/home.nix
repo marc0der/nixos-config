@@ -2,13 +2,11 @@
 
 {
   home.packages = with pkgs; [
-    alacritty
-    dunst
     obs-studio
-    sway
-    sway-contrib.grimshot
-    swaylock-effects
   ];
+
+  # Sway desktop environment
+  sway-desktop.enable = true;
 
   # Music production profile
   profiles.music-production.enable = true;

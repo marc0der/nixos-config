@@ -85,6 +85,7 @@
             ./modules/home/gtk-theme.nix
             ./modules/home/xdg-portal-sway.nix
             ./modules/home/xdg-mimetypes.nix
+            ./modules/home/sway-desktop.nix
             ./profiles/music-production.nix
           ];
         };

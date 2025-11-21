@@ -335,7 +335,7 @@ Update `hosts/xenomorph/home.nix` to import and enable this module, removing the
 
 ### Task 13: Extract Sway ecosystem packages module
 
-- [ ] Create module for Sway-specific home packages
+- [X] Create module for Sway-specific home packages
 
 **Prompt**: Create a new module `modules/home/sway-desktop.nix` that contains all Sway-specific packages from `hosts/neomorph/home.nix`:
 
