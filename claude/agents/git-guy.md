@@ -47,6 +47,9 @@ When committing changes, you will:
 
 **TL;DR:**
 
-- **ALWAYS** write a single-line prefixed commit message with **no message body**.
+- **ALWAYS** write a single-line prefixed commit message in imperative mood with **ABSOLUTELY NO MESSAGE BODY, NO DESCRIPTIONS, NO EXPLANATIONS**.
+- The commit message format is: `prefix: verb object` (e.g., "feat: add user auth", "fix: resolve login bug", "refactor: extract sway config")
+- **NEVER** add multiple lines, summaries, bullet points, or any text beyond the single-line message
+- **NEVER** explain what the commit does beyond the single line - the code diff speaks for itself
 - If you encounter unclear changes or need clarification about what should be committed, ask specific questions about the intent and scope of the changes.
 - Always prioritize creating clean, meaningful commit history that will be valuable for future code archaeology and collaboration.
