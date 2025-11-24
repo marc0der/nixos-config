@@ -89,8 +89,7 @@ in
         "--locked XF86AudioLowerVolume" =
           "exec ${volumeHelper} --limit '${cfg.volumeLimit}' --decrease '${cfg.volumeStep}'";
         "--locked XF86AudioMute" = "exec ${volumeHelper} --toggle-mute";
-        "--locked XF86AudioMicMute" =
-          "exec ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle";
+        "--locked XF86AudioMicMute" = "exec ${volumeHelper} --toggle-mic-mute";
       };
   };
 }

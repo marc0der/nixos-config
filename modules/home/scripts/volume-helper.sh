@@ -33,11 +33,16 @@ get_sink_volume() { # sink
 CHANGE=0
 VOLUME=-1
 TOGGLE_MUTE=0
+TOGGLE_MIC_MUTE=0
+SOURCE="@DEFAULT_SOURCE@"
 
 while true; do
     case $1 in
         --sink)
             SINK=${2:-$SINK}
+            shift;;
+        --source)
+            SOURCE=${2:-$SOURCE}
             shift;;
         -l|--limit)
             LIMIT=$((${2:-$LIMIT}))
@@ -54,6 +59,9 @@ while true; do
         --toggle-mute)
             TOGGLE_MUTE=1
             ;;
+        --toggle-mic-mute)
+            TOGGLE_MIC_MUTE=1
+            ;;
         *)
             break
             ;;
@@ -61,7 +69,9 @@ while true; do
     shift
 done
 
-if [ "$TOGGLE_MUTE" -eq 1 ]; then
+if [ "$TOGGLE_MIC_MUTE" -eq 1 ]; then
+    pactl set-source-mute "$SOURCE" toggle
+elif [ "$TOGGLE_MUTE" -eq 1 ]; then
     pactl set-sink-mute "$SINK" toggle
 elif [ "$CHANGE" -ne 0 ]; then
     VOLUME=$(get_sink_volume "$SINK")
@@ -77,14 +87,29 @@ if ! command -v notify-send >/dev/null; then
     exit 0;
 fi
 
-VOLUME=$(get_sink_volume "$SINK")
-TEXT="Volume: ${VOLUME}%"
-case $(pactl get-sink-mute "$SINK") in
-    *yes)
-        TEXT="Volume: muted"
-        VOLUME=0
-        ;;
-esac
+# Check if this was a mic mute action
+if [ "$TOGGLE_MIC_MUTE" -eq 1 ]; then
+    case $(pactl get-source-mute "$SOURCE") in
+        *yes)
+            TEXT="Microphone: muted"
+            VOLUME=0
+            ;;
+        *)
+            TEXT="Microphone: unmuted"
+            VOLUME=100
+            ;;
+    esac
+else
+    # Regular volume/mute notification
+    VOLUME=$(get_sink_volume "$SINK")
+    TEXT="Volume: ${VOLUME}%"
+    case $(pactl get-sink-mute "$SINK") in
+        *yes)
+            TEXT="Volume: muted"
+            VOLUME=0
+            ;;
+    esac
+fi
 
 notify-send \
     --app-name sway \
