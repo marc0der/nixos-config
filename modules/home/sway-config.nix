@@ -189,6 +189,9 @@ with lib;
 
             # Resize mode
             "${mod}+r" = "mode resize";
+
+            # Passthrough mode (toggle with Mod+Shift+Escape)
+            "${mod}+Shift+Escape" = "mode passthrough";
           };
 
         # Modes
@@ -200,6 +203,12 @@ with lib;
             "l" = "resize grow width 40px";
             "Return" = "mode default";
             "Escape" = "mode default";
+          };
+
+          # Passthrough mode - passes all keys to focused application
+          # Useful for nested WMs, remote desktop, or apps with extensive shortcuts
+          passthrough = {
+            "Mod4+Shift+Escape" = "mode default";
           };
         };
 
