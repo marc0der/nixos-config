@@ -88,6 +88,7 @@
             ./modules/home/sway-desktop.nix
             ./modules/home/sway-config.nix
             ./modules/home/sway-rules.nix
+            ./modules/home/sway-keybindings.nix
             ./profiles/music-production.nix
           ];
         };

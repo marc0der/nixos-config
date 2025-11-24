@@ -9,6 +9,7 @@
   sway-desktop.enable = true;
   sway-config.enable = true;
   sway-rules.enable = true;
+  sway-keybindings.enable = true;
 
   # Music production profile
   profiles.music-production.enable = true;
@@ -26,7 +27,12 @@
     textEditor = "gedit.desktop";
   };
 
-  home.file = { };
+  home.file = {
+    "bin/volume-helper" = {
+      source = ../../modules/home/scripts/volume-helper.sh;
+      executable = true;
+    };
+  };
 
   home.sessionVariables = {
     XDG_SCREENSHOTS_DIR = "$HOME/Pictures/Screenshots";
