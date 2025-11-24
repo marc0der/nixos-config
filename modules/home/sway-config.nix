@@ -107,6 +107,9 @@ with lib;
             "${mod}+Shift+v" =
               "exec mpv --really-quiet --speed=0.5 --vo=wlshm --stop-screensaver --fullscreen --no-audio --shuffle --loop-playlist=inf $HOME/Videos/MovingWallpaper/";
 
+            # 1Password quick access
+            "${mod}+q" = "exec 1password --quick-access";
+
             # Lock screen
             "${mod}+Escape" =
               "exec swaylock --clock --indicator --screenshots --effect-scale 0.4 --effect-vignette 0.2:0.5 --effect-blur 4x2 --datestr '%a %e.%m.%Y' --timestr '%k:%M' -f";
@@ -215,6 +218,7 @@ with lib;
           { command = "dunst"; }
           { command = "nm-applet"; }
           { command = "blueman-applet"; }
+          { command = "1password --silent"; }
           {
             command = "systemctl --user restart kanshi.service";
             always = true;

@@ -87,6 +87,7 @@
             ./modules/home/xdg-mimetypes.nix
             ./modules/home/sway-desktop.nix
             ./modules/home/sway-config.nix
+            ./modules/home/sway-rules.nix
             ./profiles/music-production.nix
           ];
         };
