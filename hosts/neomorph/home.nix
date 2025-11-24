@@ -7,6 +7,7 @@
 
   # Sway desktop environment
   sway-desktop.enable = true;
+  sway-config.enable = true;
 
   # Music production profile
   profiles.music-production.enable = true;

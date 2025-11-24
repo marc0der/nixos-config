@@ -26,7 +26,6 @@ with lib;
     home.packages = with pkgs; [
       alacritty
       dunst
-      sway
       sway-contrib.grimshot
       swaylock-effects
     ];

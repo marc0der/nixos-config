@@ -21,6 +21,8 @@ with lib;
     wayland.windowManager.sway = {
       enable = true;
       wrapperFeatures.gtk = true;
+      checkConfig = false; # Disable validation since we use pywal runtime variables
+      xwayland = true; # Enable XWayland for X11 app compatibility
 
       # Load pywal colors FIRST before any config
       extraConfigEarly = ''
@@ -68,9 +70,6 @@ with lib;
             scale = "1.0";
             subpixel = "none";
           };
-          "*" = {
-            bg = "$wallpaper fill";
-          };
         };
 
         # Input configuration
@@ -105,10 +104,12 @@ with lib;
             "${mod}+Shift+n" = "exec nautilus";
             "${mod}+Shift+q" = "kill";
             "${mod}+Space" = "exec rofi -terminal 'alacritty' -show combi -combi-modes drun#run -modes combi";
-            "${mod}+Shift+v" = "exec mpv --really-quiet --speed=0.5 --vo=wlshm --stop-screensaver --fullscreen --no-audio --shuffle --loop-playlist=inf $HOME/Videos/MovingWallpaper/";
+            "${mod}+Shift+v" =
+              "exec mpv --really-quiet --speed=0.5 --vo=wlshm --stop-screensaver --fullscreen --no-audio --shuffle --loop-playlist=inf $HOME/Videos/MovingWallpaper/";
 
             # Lock screen
-            "${mod}+Escape" = "exec swaylock --clock --indicator --screenshots --effect-scale 0.4 --effect-vignette 0.2:0.5 --effect-blur 4x2 --datestr '%a %e.%m.%Y' --timestr '%k:%M' -f";
+            "${mod}+Escape" =
+              "exec swaylock --clock --indicator --screenshots --effect-scale 0.4 --effect-vignette 0.2:0.5 --effect-blur 4x2 --datestr '%a %e.%m.%Y' --timestr '%k:%M' -f";
 
             # Reload and exit
             "${mod}+Shift+c" = "reload";
@@ -203,44 +204,8 @@ with lib;
           };
         };
 
-        # Colors (using pywal variables)
-        colors = {
-          focused = {
-            border = "$color1";
-            background = "$color2";
-            text = "$color0";
-            indicator = "$color3";
-            childBorder = "$color1";
-          };
-          focusedInactive = {
-            border = "$background";
-            background = "$background";
-            text = "$foreground";
-            indicator = "$foreground";
-            childBorder = "$background";
-          };
-          unfocused = {
-            border = "$background";
-            background = "$background";
-            text = "$foreground";
-            indicator = "$foreground";
-            childBorder = "$background";
-          };
-          urgent = {
-            border = "$color1";
-            background = "$background";
-            text = "$foreground";
-            indicator = "$color1";
-            childBorder = "$color1";
-          };
-          placeholder = {
-            border = "$color8";
-            background = "$background";
-            text = "$foreground";
-            indicator = "$color8";
-            childBorder = "$color8";
-          };
-        };
+        # Disable default bar (using waybar from config.d instead)
+        bars = [ ];
 
         # Startup programs
         startup = [
@@ -260,8 +225,26 @@ with lib;
         ];
       };
 
-      # Additional config: include existing config.d files for incremental migration
+      # Additional config: pywal colors, wallpaper, and config.d includes
       extraConfig = ''
+        # Wallpaper (using pywal variable)
+        output * bg $wallpaper fill
+
+        # Colors (using pywal variables)
+        client.focused           $color1       $color2      $color0      $color3      $color1
+        client.focused_inactive  $background   $background  $foreground  $foreground  $background
+        client.unfocused         $background   $background  $foreground  $foreground  $background
+        client.urgent            $color1       $background  $foreground  $color1      $color1
+        client.placeholder       $color8       $background  $foreground  $color8      $color8
+        client.background        $background
+
+        # Variables for config.d files
+        set $mod Mod4
+        set $term alacritty
+        set $lock_timeout 1200
+        set $screen_timeout 300
+
+        # Include existing config.d files for incremental migration
         include "$HOME/.config/sway/config.d/*.conf"
       '';
     };
