@@ -47,3 +47,5 @@ These scripts require `sudo` so needs to be run manually by the user. Always pro
 - Use smaller changes when possible for easier review
 - Prefer standalone script files over inline scripts in Nix files
 - Migrate scripts to their own files rather than rewriting their functionality
+- Never declare victory or confirm a fix is working until the user has tested and confirmed it works
+- After making changes, ask the user to test and report back rather than assuming success
