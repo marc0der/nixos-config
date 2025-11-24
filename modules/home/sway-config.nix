@@ -187,13 +187,6 @@ with lib;
             "${mod}+Ctrl+m" = "move scratchpad";
             "${mod}+Ctrl+a" = "scratchpad show";
 
-            # Screenshots
-            "${mod}+Shift+p" = "exec grimshot savecopy area";
-            "${mod}+Print" = "exec grimshot save active";
-            "${mod}+Ctrl+Print" = "exec grimshot save window";
-            "${mod}+Shift+Print" = "exec grimshot save area";
-            "${mod}+Ctrl+Shift+Print" = "exec grimshot save screen";
-
             # Resize mode
             "${mod}+r" = "mode resize";
           };
