@@ -39,7 +39,6 @@ in
 
       # System services
       gnome-keyring
-      polkit_gnome
     ];
 
     services = {
