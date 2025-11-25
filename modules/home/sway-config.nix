@@ -212,8 +212,13 @@ with lib;
           };
         };
 
-        # Disable default bar (using waybar from config.d instead)
-        bars = [ ];
+        # Waybar status bar configuration
+        bars = [
+          {
+            command = "${pkgs.waybar}/bin/waybar";
+            position = "bottom";
+          }
+        ];
 
         # Startup programs
         startup = [
@@ -231,6 +236,20 @@ with lib;
           }
           { command = "systemctl --user import-environment XDG_SESSION_TYPE XDG_CURRENT_DESKTOP"; }
           { command = "dbus-update-activation-environment WAYLAND_DISPLAY"; }
+          # Swayidle - idle timeout and screen locking
+          {
+            command = ''
+              ${pkgs.swayidle}/bin/swayidle -w \
+                timeout 1200 '${pkgs.swaylock-effects}/bin/swaylock --clock --indicator --screenshots --effect-scale 0.4 --effect-vignette 0.2:0.5 --effect-blur 4x2 --datestr "%a %e.%m.%Y" --timestr "%k:%M" -f' \
+                timeout 1500 'swaymsg "output * power off"' \
+                resume 'swaymsg "output * power on"' \
+                timeout 300 'pgrep -xu "$USER" swaylock >/dev/null && swaymsg "output * power off"' \
+                resume 'pgrep -xu "$USER" swaylock >/dev/null && swaymsg "output * power on"' \
+                before-sleep '${pkgs.swaylock-effects}/bin/swaylock --clock --indicator --screenshots --effect-scale 0.4 --effect-vignette 0.2:0.5 --effect-blur 4x2 --datestr "%a %e.%m.%Y" --timestr "%k:%M" -f' \
+                lock '${pkgs.swaylock-effects}/bin/swaylock --clock --indicator --screenshots --effect-scale 0.4 --effect-vignette 0.2:0.5 --effect-blur 4x2 --datestr "%a %e.%m.%Y" --timestr "%k:%M" -f' \
+                unlock 'pkill -xu "$USER" -SIGUSR1 swaylock'
+            '';
+          }
         ];
       };
 
@@ -246,15 +265,6 @@ with lib;
         client.urgent            $color1       $background  $foreground  $color1      $color1
         client.placeholder       $color8       $background  $foreground  $color8      $color8
         client.background        $background
-
-        # Variables for config.d files
-        set $mod Mod4
-        set $term alacritty
-        set $lock_timeout 1200
-        set $screen_timeout 300
-
-        # Include existing config.d files for incremental migration
-        include "$HOME/.config/sway/config.d/*.conf"
       '';
     };
   };
