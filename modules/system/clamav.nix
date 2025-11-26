@@ -36,7 +36,7 @@ in
       description = "ClamAV daily system scan";
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.clamav}/bin/clamdscan --multiscan --fdpass --infected --log=/var/log/clamav/daily-scan.log /home'";
+        ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.clamav}/bin/clamdscan --multiscan --fdpass --infected /home 2>&1 | grep -v \"Not supported file type\\|WARNING\" > /var/log/clamav/daily-scan.log'";
         User = "root";
       };
       # Ensure the daemon is running before scanning
