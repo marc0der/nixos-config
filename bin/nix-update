@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Running system rebuild with impure evaluation..."
-export NIXPKGS_ALLOW_UNFREE=1
 sudo -E nixos-rebuild switch --flake /home/marco/nixos --impure
 
 echo "Running home-manager with impure evaluation..."
-export NIXPKGS_ALLOW_UNFREE=1
 home-manager switch --flake /home/marco/nixos --impure

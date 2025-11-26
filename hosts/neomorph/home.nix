@@ -34,9 +34,4 @@
       executable = true;
     };
   };
-
-  home.sessionVariables = {
-    XDG_SCREENSHOTS_DIR = "$HOME/Pictures/Screenshots";
-    NIXPKGS_ALLOW_UNFREE = 1;
-  };
 }

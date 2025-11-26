@@ -437,7 +437,7 @@ Update `flake.nix` to import `./profiles/music-production.nix` in the xenomorph 
 
 ### Task 17: Consolidate session variables
 
-- [ ] Extract common session variables to shared module
+- [X] Extract common session variables to shared module
 
 **Prompt**: Create a new module `modules/home/session-variables.nix` that contains session variables common to both hosts from `home.nix`:
 

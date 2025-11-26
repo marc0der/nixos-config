@@ -89,6 +89,7 @@
             ./modules/home/sway-config.nix
             ./modules/home/sway-rules.nix
             ./modules/home/sway-keybindings.nix
+            ./modules/home/session-variables.nix
             ./profiles/music-production.nix
             ./profiles/work.nix
           ];
@@ -109,6 +110,7 @@
             ./modules/home/xdg-portal-hyprland.nix
             ./modules/home/xdg-mimetypes.nix
             ./modules/home/hyprland-desktop.nix
+            ./modules/home/session-variables.nix
             ./profiles/music-production.nix
           ];
         };
