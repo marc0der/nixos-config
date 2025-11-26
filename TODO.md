@@ -6,7 +6,7 @@ This TODO list implements the consolidation plan outlined in `consolidation.md` 
 
 ### Task 0: Add neomorph SSH key to GPG agent configuration
 
-- [X] Configure neomorph SSH key in GPG agent
+- [ ] Configure neomorph SSH key in GPG agent
 
 **Prompt**: When on the neomorph machine, get the SSH key keygrip and add it to the GPG agent configuration:
 
@@ -409,7 +409,7 @@ Update `flake.nix` to import `./profiles/work.nix` in the neomorph home modules 
 
 ### Task 16: Create music production profile module
 
-- [ ] Extract music production packages into profile
+- [X] Extract music production packages into profile
 
 **Prompt**: Create a new profile module `profiles/music-production.nix` that contains music-related packages and desktop entries from `hosts/xenomorph/home.nix`:
 
@@ -599,7 +599,7 @@ Keep documentation concise and practical.
 
 ### Task 22: Fix GTK theme name capitalization
 
-- [ ] Correct Materia-Dark to Materia-dark
+- [X] Correct Materia-Dark to Materia-dark
 
 **Prompt**: Fix the GTK theme name capitalization in xenomorph configuration. The correct theme name is "Materia-dark" with a lowercase 'd', not "Materia-Dark".
 
