@@ -385,7 +385,7 @@ Update `flake.nix` to import `./profiles/gaming.nix` in the xenomorph system mod
 
 ### Task 15: Create work profile module
 
-- [ ] Extract work-specific packages into profile
+- [X] Extract work-specific packages into profile
 
 **Prompt**: Create a new profile module `profiles/work.nix` that contains work-related packages currently in `hosts/neomorph/home.nix`:
 

@@ -90,6 +90,7 @@
             ./modules/home/sway-rules.nix
             ./modules/home/sway-keybindings.nix
             ./profiles/music-production.nix
+            ./profiles/work.nix
           ];
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
