@@ -110,6 +110,9 @@
             ./modules/home/xdg-portal-hyprland.nix
             ./modules/home/xdg-mimetypes.nix
             ./modules/home/hyprland-desktop.nix
+            ./modules/home/hyprland-config.nix
+            ./modules/home/hyprland-rules.nix
+            ./modules/home/hyprland-extras.nix
             ./modules/home/session-variables.nix
             ./profiles/music-production.nix
           ];

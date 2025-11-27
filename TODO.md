@@ -513,7 +513,7 @@ Ensure all paths are correct and the flake builds successfully for both hosts.
 
 ### Task 19: Clean up host configuration files
 
-- [ ] Remove duplicated configuration from host-specific files
+- [X] Remove duplicated configuration from host-specific files
 
 **Prompt**: Clean up the host-specific configuration files to remove all duplicated code that has been extracted to modules. After all the previous tasks, the host files should be minimal and only contain:
 
