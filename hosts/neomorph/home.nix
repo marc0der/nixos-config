@@ -5,6 +5,9 @@
     obs-studio
   ];
 
+  # SSH configuration
+  ssh-config.enable = true;
+
   # Sway desktop environment
   sway-desktop.enable = true;
   sway-config.enable = true;

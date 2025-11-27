@@ -12,6 +12,9 @@
     doctl
   ];
 
+  # SSH configuration
+  ssh-config.enable = true;
+
   # Profile modules
   profiles.music-production.enable = true;
 

@@ -80,6 +80,7 @@
             ./shared/report.nix
             ./shared/zsh.nix
             ./modules/home/terminal-ghostty.nix
+            ./modules/home/ssh-config.nix
             ./shared/rust.nix
             ./modules/home/desktop-common.nix
             ./modules/home/gtk-theme.nix
@@ -104,6 +105,7 @@
             ./shared/report.nix
             ./shared/zsh.nix
             ./modules/home/terminal-ghostty.nix
+            ./modules/home/ssh-config.nix
             ./shared/rust.nix
             ./modules/home/desktop-common.nix
             ./modules/home/gtk-theme.nix

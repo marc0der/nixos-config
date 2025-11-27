@@ -142,7 +142,6 @@
     defaultCacheTtl = 31536000; # 1 year
     maxCacheTtl = 31536000;
     pinentry.package = pkgs.pinentry-gnome3;
-    sshKeys = [ "A18D2A102BDBA1DEED0F4BCE79834B4865124319" ];
   };
 
   systemd.user.services.polkit-gnome-authentication-agent-1 = {

@@ -4,29 +4,38 @@ This TODO list implements the consolidation plan outlined in `consolidation.md` 
 
 ## Tasks
 
-### Task 0: Add neomorph SSH key to GPG agent configuration
+### Task 0: SSH Configuration Management
 
-- [ ] Configure neomorph SSH key in GPG agent
+- [X] Configure SSH management via home-manager (not GPG)
 
-**Prompt**: When on the neomorph machine, get the SSH key keygrip and add it to the GPG agent configuration:
+**Decision**: After investigation, we chose to manage SSH configuration via home-manager while keeping traditional SSH keys:
 
-1. Run this command on neomorph to get the keygrip:
-   ```bash
-   gpg-connect-agent 'keyinfo --ssh-list --ssh-fpr' /bye
-   ```
-2. Add the keygrip to `hosts/neomorph/home.nix`:
-   ```nix
-   services.gpg-agent = {
-     sshKeys = [ "KEYGRIP_FROM_STEP_1" ];
-   };
-   ```
-3. Test with `bin/nix-home` on neomorph
-4. Verify SSH key is loaded automatically without `ssh-add`
+**What was implemented**:
+1. Created `modules/home/ssh-config.nix` - manages `~/.ssh/config` via home-manager
+2. Private keys remain in `~/.ssh/` and are managed outside of Nix (for security)
+3. SSH config is declaratively managed with sensible defaults
+4. Enabled on both hosts
 
-**Context**: This completes the GPG agent SSH configuration for both hosts. Xenomorph is already configured with keygrip `A18D2A102BDBA1DEED0F4BCE79834B4865124319`.
+**Why not GPG SSH authentication**:
+- GPG key lacks authentication subkey (`[A]` capability)
+- Traditional SSH keys (`~/.ssh/id_rsa`) already work correctly
+- Each machine has its own SSH key pair (neomorph: `marco@neomorph`, xenomorph: `marco@xenomorph`)
+- Simpler and more portable than GPG-based SSH authentication
+
+**What home-manager manages**:
+- SSH client configuration (`~/.ssh/config`)
+- SSH connection settings (ServerAliveInterval, etc.)
+- Host-specific SSH configurations
+- AddKeysToAgent setting
+
+**What remains manual**:
+- Private keys in `~/.ssh/id_rsa`
+- Public keys in `~/.ssh/id_rsa.pub`
+- SSH agent for key management
 
 **Files affected**:
-- `hosts/neomorph/home.nix`
+- Created: `modules/home/ssh-config.nix`
+- Modified: `flake.nix`, `hosts/neomorph/home.nix`, `hosts/xenomorph/home.nix`
 
 ---
 
