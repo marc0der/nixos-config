@@ -8,16 +8,16 @@ The following convenience scripts are available in the `bin/` directory:
 
 ```bash
 # Apply home-manager changes
-bin/nix-home
+bin/nix-rebuild-home
 
 # Apply system-level changes
-bin/nix-system
+bin/nix-rebuild-system
 
-# Apply system and home-manager changes without updating channels
-bin/nix-update
+# Apply system and home-manager changes without updating flake inputs
+bin/nix-rebuild-all
 
-# Update channels and upgrade both system and home-manager
-bin/nix-upgrade
+# Update flake inputs and upgrade both system and home-manager
+bin/nix-upgrade-all
 ```
 
 These scripts will automatically be added to your `PATH`.

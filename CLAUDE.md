@@ -9,10 +9,10 @@
 - This ensures we don't commit broken configurations
 
 ## Build Commands
-- System rebuild: `bin/nix-system` (replaces `sudo nixos-rebuild switch --flake .`)
-- Home manager update: `bin/nix-home` (replaces `home-manager switch --flake .`)
-- System and home-manager upgrade: `bin/nix-upgrade` (updates channels and upgrades both)
-- System and home-manager upgrade: `bin/nix-update` (only rebuilds without upgrade, to be used on secondary host)
+- System rebuild: `bin/nix-rebuild-system` (replaces `sudo nixos-rebuild switch --flake .`)
+- Home manager update: `bin/nix-rebuild-home` (replaces `home-manager switch --flake .`)
+- Rebuild all without upgrade: `bin/nix-rebuild-all` (rebuilds both system and home without updating flake inputs)
+- Update and upgrade all: `bin/nix-upgrade-all` (updates flake inputs and upgrades both system and home)
 
 These convenience scripts are available in the `bin/` directory and handle all necessary flags like `--impure` and environment variables like `NIXPKGS_ALLOW_UNFREE=1`.
 These scripts require `sudo` so needs to be run manually by the user. Always prompt the user to run it manually when you get to this step. 
