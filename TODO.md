@@ -465,7 +465,7 @@ Update `flake.nix` to import this module for both hosts and remove session varia
 
 ### Task 18: Update flake.nix with all new module imports
 
-- [ ] Final flake.nix update to import all new modules
+- [X] Final flake.nix update to import all new modules
 
 **Prompt**: Update `flake.nix` to import all newly created modules in the appropriate host configurations. The import structure should follow this pattern:
 
