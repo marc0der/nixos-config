@@ -21,11 +21,7 @@
     "intel_skl_int3472"
   ];
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
+  # Networking
   networking.networkmanager = {
     enable = true;
     settings = {
@@ -55,13 +51,13 @@
     LC_TIME = "en_GB.UTF-8";
   };
 
-  # special flags
+  # Nix settings
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
   ];
 
-  # Configure console keymap
+  # Console configuration
   console.keyMap = "uk";
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -119,27 +115,22 @@
     zip
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
+  # System programs
   programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-
+  programs.gnupg.agent.enable = true;
   programs.zsh.enable = true;
 
   programs.nix-ld.enable = true;
 
   programs.fuse.userAllowOther = true;
 
-  # Install firefox.
+  # Firefox
   programs.firefox.enable = true;
 
-  # security
+  # Security
   security.pam.services.sddm.enableGnomeKeyring = true;
 
-  # xserver for SDDM
+  # Display server and manager
   services.xserver = {
     enable = true;
     xkb = {
@@ -148,15 +139,16 @@
     };
   };
 
-  # SDDM
+  # Display manager (SDDM)
   services.displayManager.sddm = {
     enable = true;
     theme = "breeze";
   };
 
-  # Enable accounts service for user avatars
+  # User accounts service
   services.accounts-daemon.enable = true;
 
+  # Printing
   services.printing = {
     enable = true;
     drivers = with pkgs; [
@@ -169,6 +161,7 @@
     startWhenNeeded = true;
   };
 
+  # Network discovery
   services.avahi = {
     enable = true;
     nssmdns4 = true;
@@ -183,10 +176,8 @@
     };
   };
 
-  # Power profiles daemon
+  # Power management
   services.power-profiles-daemon.enable = true;
-
-  # Logind prevent system suspend when docked
 
   services.logind = {
     lidSwitch = "suspend";
@@ -197,7 +188,7 @@
     '';
   };
 
-  # Enable sound with pipewire.
+  # Audio
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -233,10 +224,13 @@
     };
   };
 
+  # Remote access
   services.openssh.enable = true;
 
+  # Virtual filesystems
   services.gvfs.enable = true;
 
+  # Hardware configuration
   services.udev.extraRules = ''
     # Keychron K3 Pro - specific product ID
     SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0231", MODE="0664", GROUP="dialout"
@@ -256,7 +250,7 @@
     };
   };
 
-  # 1password
+  # Password manager
   programs._1password.enable = true;
   programs._1password-gui = {
     enable = true;
@@ -265,8 +259,10 @@
     polkitPolicyOwners = [ "marco" ];
   };
 
+  # Application platforms
   services.flatpak.enable = true;
 
+  # Virtualization
   virtualisation.docker = {
     enable = true;
     rootless = {
@@ -275,6 +271,7 @@
     };
   };
 
+  # System reporting
   system.activationScripts.changes-report.text = ''
     export PATH=${pkgs.nix}/bin:$PATH
     ${pkgs.nvd}/bin/nvd diff /run/current-system /nix/var/nix/profiles/system
