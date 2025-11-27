@@ -1,12 +1,14 @@
 {
+  # Host name
   networking.hostName = "neomorph";
 
+  # Wayland desktop
   wayland.enable = true;
-
   programs.sway-desktop.enable = true;
 
+  # Security
   services.clamav-security.enable = true;
 
-  # Never suspend when plugged in, only suspend on battery when lid is closed
+  # Power management: Never suspend when plugged in
   services.logind.lidSwitchExternalPower = "ignore";
 }

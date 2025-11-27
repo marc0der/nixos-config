@@ -1,6 +1,7 @@
 { pkgs, ... }:
 
 {
+  # Host-specific packages
   home.packages = with pkgs; [
     obs-studio
   ];
@@ -8,7 +9,7 @@
   # SSH configuration
   ssh-config.enable = true;
 
-  # Sway desktop environment
+  # Desktop environment
   sway-desktop.enable = true;
   sway-config.enable = true;
   sway-rules.enable = true;
@@ -31,6 +32,7 @@
     textEditor = "gedit.desktop";
   };
 
+  # Host-specific scripts
   home.file = {
     "bin/volume-helper" = {
       source = ../../modules/home/scripts/volume-helper.sh;

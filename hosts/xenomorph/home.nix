@@ -1,11 +1,7 @@
-{
-  pkgs,
-  lib,
-  ...
-}:
+{ pkgs, ... }:
 
 {
-  # Xenomorph-specific packages
+  # Host-specific packages
   home.packages = with pkgs; [
     ansible
     discord
@@ -15,20 +11,22 @@
   # SSH configuration
   ssh-config.enable = true;
 
-  # Profile modules
-  profiles.music-production.enable = true;
-
-  # Desktop environment modules
+  # Desktop environment
   hyprland-desktop.enable = true;
   hyprland-config.enable = true;
   hyprland-rules.enable = true;
   hyprland-extras.enable = true;
 
-  # GTK theme
+  # Profiles
+  profiles.music-production.enable = true;
+
+  # GTK theme configuration
   gtk-theme.variant = "dark";
 
-  # XDG configuration
+  # XDG portal configuration
   xdg-portal-hyprland.enable = true;
+
+  # XDG MIME types configuration
   xdg-mimetypes = {
     enable = true;
     terminal = "ghostty.desktop";
