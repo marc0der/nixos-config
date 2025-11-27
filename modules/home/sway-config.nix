@@ -31,7 +31,7 @@ with lib;
 
       config = {
         modifier = "Mod4";
-        terminal = "alacritty";
+        terminal = "ghostty";
 
         # Font configuration
         fonts = {
@@ -103,7 +103,7 @@ with lib;
             "${mod}+Shift+Return" = "exec brave --enable-features=UseOzonePlatform --ozone-platform=wayland";
             "${mod}+Shift+n" = "exec nautilus";
             "${mod}+Shift+q" = "kill";
-            "${mod}+Space" = "exec rofi -terminal 'alacritty' -show combi -combi-modes drun#run -modes combi";
+            "${mod}+Space" = "exec rofi -terminal 'ghostty' -show combi -combi-modes drun#run -modes combi";
             "${mod}+Shift+v" =
               "exec mpv --really-quiet --speed=0.5 --vo=wlshm --stop-screensaver --fullscreen --no-audio --shuffle --loop-playlist=inf $HOME/Videos/MovingWallpaper/";
 

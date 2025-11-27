@@ -24,7 +24,6 @@ with lib;
 
   config = mkIf config.sway-desktop.enable {
     home.packages = with pkgs; [
-      alacritty
       dunst
       sway-contrib.grimshot
       swaylock-effects

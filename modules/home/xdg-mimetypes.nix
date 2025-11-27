@@ -5,7 +5,7 @@
 #
 # Options:
 #   xdg-mimetypes.enable - Enable XDG MIME type configuration
-#   xdg-mimetypes.terminal - Terminal emulator to use (default: "alacritty.desktop")
+#   xdg-mimetypes.terminal - Terminal emulator to use (default: "ghostty.desktop")
 #   xdg-mimetypes.textEditor - Text editor to use (default: "nvim.desktop")
 #
 # Example usage:
@@ -27,7 +27,7 @@ in
 
     terminal = lib.mkOption {
       type = lib.types.str;
-      default = "alacritty.desktop";
+      default = "ghostty.desktop";
       description = "Default terminal emulator";
     };
 
