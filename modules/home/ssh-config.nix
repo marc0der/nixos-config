@@ -19,6 +19,11 @@ with lib;
     programs.ssh = {
       enable = true;
 
+      # Include configs from ~/.ssh/config.d/
+      includes = [
+        "~/.ssh/config.d/*"
+      ];
+
       # Common SSH configuration
       matchBlocks = {
         # GitHub
