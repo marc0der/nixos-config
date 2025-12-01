@@ -2,24 +2,19 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 
 {
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest; # Install latest stable kernel
+  boot.kernelPackages =
+    pkgs.linuxPackages_latest; # Install latest stable kernel
 
   # Disable integrated camera GPIO driver to fix boot errors and shutdown hang
   # The IPU6 camera doesn't work properly on Linux anyway, and the broken driver
   # causes GPIO errors and prevents clean shutdown. External USB cameras unaffected.
-  boot.blacklistedKernelModules = [
-    "int3472"
-    "intel_skl_int3472"
-  ];
+  boot.blacklistedKernelModules = [ "int3472" "intel_skl_int3472" ];
 
   # Networking
   networking.networkmanager = {
@@ -52,10 +47,7 @@
   };
 
   # Nix settings
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Console configuration
   console.keyMap = "uk";
@@ -64,13 +56,7 @@
   users.users.marco = {
     isNormalUser = true;
     description = "Marco Vermeulen";
-    extraGroups = [
-      "dialout"
-      "docker"
-      "input"
-      "networkmanager"
-      "wheel"
-    ];
+    extraGroups = [ "dialout" "docker" "input" "networkmanager" "wheel" ];
     shell = pkgs.zsh;
     packages = [ ];
   };
@@ -95,6 +81,7 @@
   environment.systemPackages = with pkgs; [
     bzip2
     cage
+    cmake
     fragments
     gcc
     git
@@ -151,9 +138,7 @@
   # Printing
   services.printing = {
     enable = true;
-    drivers = with pkgs; [
-      cups-brother-hll2350dw
-    ];
+    drivers = with pkgs; [ cups-brother-hll2350dw ];
     browsing = true;
     defaultShared = true;
     listenAddresses = [ "*:631" ];
@@ -204,23 +189,10 @@
       "bluez5.enable-sbc-xq" = true;
       "bluez5.enable-msbc" = true;
       "bluez5.enable-hw-volume" = true;
-      "bluez5.roles" = [
-        "hsp_hs"
-        "hsp_ag"
-        "hfp_hf"
-        "hfp_ag"
-        "a2dp_sink"
-        "a2dp_source"
-      ];
-      "bluez5.codecs" = [
-        "bc"
-        "sbc_xq"
-        "aac"
-        "ldac"
-        "aptx"
-        "aptx_hd"
-        "aptx_ll"
-      ];
+      "bluez5.roles" =
+        [ "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" "a2dp_sink" "a2dp_source" ];
+      "bluez5.codecs" =
+        [ "bc" "sbc_xq" "aac" "ldac" "aptx" "aptx_hd" "aptx_ll" ];
     };
   };
 
@@ -246,7 +218,8 @@
     serviceConfig = {
       Type = "oneshot";
       Restart = "on-failure";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold' ";
+      ExecStart =
+        "${pkgs.bash}/bin/bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold' ";
     };
   };
 
