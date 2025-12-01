@@ -120,6 +120,7 @@
   home.sessionPath = [
     "$HOME/bin"
     "$HOME/nixos/bin"
+    "$HOME/.cargo/bin"
   ];
 
   home.changes-report.enable = true;
