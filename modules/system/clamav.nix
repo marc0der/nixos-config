@@ -50,7 +50,7 @@ in
       wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "03:00"; # Run at 3 AM daily
-        Persistent = true; # Run missed scans on boot
+        Persistent = false; # Don't run missed scans on boot
         RandomizedDelaySec = "15m"; # Add up to 15min random delay
       };
     };
