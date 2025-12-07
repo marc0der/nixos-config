@@ -14,8 +14,11 @@
 - Rebuild all without upgrade: `bin/nix-rebuild-all` (rebuilds both system and home without updating flake inputs)
 - Update and upgrade all: `bin/nix-upgrade-all` (updates flake inputs and upgrades both system and home)
 
-These convenience scripts are available in the `bin/` directory and handle all necessary flags like `--impure` and environment variables like `NIXPKGS_ALLOW_UNFREE=1`.
-These scripts require `sudo` so needs to be run manually by the user. Always prompt the user to run it manually when you get to this step. 
+These convenience scripts are available in the `bin/` directory and handle all necessary flags like `--impure` and `--no-warn-dirty`.
+
+### Automated vs Manual Rebuilds
+- **Home manager changes**: Automatically run `bin/nix-rebuild-home` (no sudo required)
+- **System changes**: Ask user to run `bin/nix-rebuild-system` or `bin/nix-rebuild-all` (requires sudo) 
 
 ## Reporting Changes
 - Changes reported automatically during activation
@@ -24,6 +27,7 @@ These scripts require `sudo` so needs to be run manually by the user. Always pro
 ## Code Style Guidelines
 - Use 2-space indentation in all Nix files
 - Format with `nixfmt` before running git-commiter agent
+- Keep comments short and concise
 - Organize configurations modularly by machine (xenomorph, neomorph)
 - Use explicit variable naming
 - Follow machine-specific configurations in separate directories
