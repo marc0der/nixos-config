@@ -57,6 +57,7 @@
     speedtest-rs
     uv
     vscode
+    wl-mirror
     wlogout
     yamllint
     zsh-powerlevel10k
