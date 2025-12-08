@@ -8,13 +8,15 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages =
-    pkgs.linuxPackages_latest; # Install latest stable kernel
+  boot.kernelPackages = pkgs.linuxPackages_latest; # Install latest stable kernel
 
   # Disable integrated camera GPIO driver to fix boot errors and shutdown hang
   # The IPU6 camera doesn't work properly on Linux anyway, and the broken driver
   # causes GPIO errors and prevents clean shutdown. External USB cameras unaffected.
-  boot.blacklistedKernelModules = [ "int3472" "intel_skl_int3472" ];
+  boot.blacklistedKernelModules = [
+    "int3472"
+    "intel_skl_int3472"
+  ];
 
   # Networking
   networking.networkmanager = {
@@ -47,7 +49,10 @@
   };
 
   # Nix settings
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Console configuration
   console.keyMap = "uk";
@@ -56,7 +61,13 @@
   users.users.marco = {
     isNormalUser = true;
     description = "Marco Vermeulen";
-    extraGroups = [ "dialout" "docker" "input" "networkmanager" "wheel" ];
+    extraGroups = [
+      "dialout"
+      "docker"
+      "input"
+      "networkmanager"
+      "wheel"
+    ];
     shell = pkgs.zsh;
     packages = [ ];
   };
@@ -167,10 +178,12 @@
   services.logind = {
     lidSwitch = "suspend";
     lidSwitchDocked = "ignore";
-    extraConfig = ''
-      IdleAction=ignore
-      HandlePowerKey=ignore
-    '';
+    settings = {
+      Login = {
+        IdleAction = "ignore";
+        HandlePowerKey = "ignore";
+      };
+    };
   };
 
   # Audio
@@ -189,10 +202,23 @@
       "bluez5.enable-sbc-xq" = true;
       "bluez5.enable-msbc" = true;
       "bluez5.enable-hw-volume" = true;
-      "bluez5.roles" =
-        [ "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" "a2dp_sink" "a2dp_source" ];
-      "bluez5.codecs" =
-        [ "bc" "sbc_xq" "aac" "ldac" "aptx" "aptx_hd" "aptx_ll" ];
+      "bluez5.roles" = [
+        "hsp_hs"
+        "hsp_ag"
+        "hfp_hf"
+        "hfp_ag"
+        "a2dp_sink"
+        "a2dp_source"
+      ];
+      "bluez5.codecs" = [
+        "bc"
+        "sbc_xq"
+        "aac"
+        "ldac"
+        "aptx"
+        "aptx_hd"
+        "aptx_ll"
+      ];
     };
   };
 
@@ -218,8 +244,7 @@
     serviceConfig = {
       Type = "oneshot";
       Restart = "on-failure";
-      ExecStart =
-        "${pkgs.bash}/bin/bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold' ";
+      ExecStart = "${pkgs.bash}/bin/bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold' ";
     };
   };
 

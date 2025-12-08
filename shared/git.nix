@@ -2,9 +2,9 @@
   programs = {
     git = {
       enable = true;
-      userEmail = "vermeulen.mp@gmail.com";
-      userName = "Marco Vermeulen";
-      extraConfig = {
+      settings = {
+        user.email = "vermeulen.mp@gmail.com";
+        user.name = "Marco Vermeulen";
         init.defaultBranch = "main";
         commit.gpgSign = true;
         core.autocrlf = "input";

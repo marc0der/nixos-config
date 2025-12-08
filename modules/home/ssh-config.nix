@@ -18,6 +18,7 @@ with lib;
   config = mkIf config.ssh-config.enable {
     programs.ssh = {
       enable = true;
+      enableDefaultConfig = false;
 
       # Include configs from ~/.ssh/config.d/
       includes = [

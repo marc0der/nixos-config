@@ -45,11 +45,9 @@
     neofetch
     nixfmt-rfc-style
     nodejs
-    nodePackages.jsonlint
     obsidian
     pinentry-gnome3
     polkit_gnome
-    protonvpn-cli
     protonvpn-gui
     python3
     pywal
@@ -72,12 +70,12 @@
     papirus-icon-theme
     libsForQt5.qt5ct
     libsForQt5.qtstyleplugin-kvantum
-    qt6ct
+    qt6Packages.qt6ct
 
     # fonts
     font-awesome
     noto-fonts
-    noto-fonts-emoji
+    noto-fonts-color-emoji
     fira-code
     fira-code-symbols
     fira-sans
