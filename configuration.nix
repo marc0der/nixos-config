@@ -122,9 +122,6 @@
 
   programs.fuse.userAllowOther = true;
 
-  # Firefox
-  programs.firefox.enable = true;
-
   # Security
   security.pam.services.sddm.enableGnomeKeyring = true;
 

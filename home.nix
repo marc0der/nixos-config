@@ -26,6 +26,7 @@
     eog
     evince
     file-roller
+    firefox
     font-manager
     fzf
     gedit
