@@ -57,6 +57,8 @@ with lib;
           "1password --silent"
           "flatpak run com.borgbase.Vorta --daemonize"
           "wal -i $(hyprctl hyprpaper listactive | cut -d '=' -f 2 | xargs)"
+          "wl-paste --type text --watch cliphist store"
+          "wl-paste --type image --watch cliphist store"
         ];
 
         # General settings
