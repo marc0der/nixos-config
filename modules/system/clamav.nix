@@ -36,6 +36,8 @@ in
       description = "ClamAV daily system scan";
       serviceConfig = {
         Type = "oneshot";
+        # Only run between midnight and 6am to avoid running during work hours
+        ExecCondition = "${pkgs.bash}/bin/bash -c 'hour=$(${pkgs.coreutils}/bin/date +%%H); [ $hour -ge 0 ] && [ $hour -lt 6 ]'";
         ExecStart = "${pkgs.bash}/bin/bash -c '${pkgs.clamav}/bin/clamdscan --multiscan --fdpass --infected /home 2>&1 | grep -v \"Not supported file type\\|WARNING\" > /var/log/clamav/daily-scan.log'";
         User = "root";
       };
