@@ -137,11 +137,6 @@ with lib;
           }
         ];
 
-        # Gestures
-        gestures = {
-          workspace_swipe = false;
-        };
-
         # Main modifier key
         "$mainMod" = "SUPER";
 
