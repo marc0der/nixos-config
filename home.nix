@@ -292,6 +292,12 @@
       fi
     fi
 
+    # Configure sdkman-mcp server
+    if ! "$CLAUDE_BIN" mcp get sdkman >/dev/null 2>&1; then
+      echo "Adding sdkman-mcp server..."
+      "$CLAUDE_BIN" mcp add sdkman -s user /home/marco/src/oss/sdkman-mcp-server/target/release/sdkman-mcp-server || echo "Failed to add sdkman-mcp server"
+    fi
+
     echo "Claude MCP servers configured"
   '';
 
