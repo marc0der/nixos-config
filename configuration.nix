@@ -10,12 +10,19 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest; # Install latest stable kernel
 
-  # Disable integrated camera GPIO driver to fix boot errors and shutdown hang
-  # The IPU6 camera doesn't work properly on Linux anyway, and the broken driver
-  # causes GPIO errors and prevents clean shutdown. External USB cameras unaffected.
+  # Disable Intel IPU6 integrated camera (unsupported, breaks Zoom)
   boot.blacklistedKernelModules = [
-    "int3472"
-    "intel_skl_int3472"
+    "intel_ipu6"
+    "intel_ipu6_isys"
+    "intel_ipu6_psys"
+    "ipu_bridge"
+    "ov08x40"
+    "ov01a10"
+    "ov02c10"
+    "hm11b1"
+    "intel_skl_int3472_common"
+    "intel_skl_int3472_discrete"
+    "intel_skl_int3472_tps68470"
   ];
 
   # Networking
