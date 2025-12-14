@@ -180,10 +180,10 @@
   services.power-profiles-daemon.enable = true;
 
   services.logind = {
-    lidSwitch = "suspend";
-    lidSwitchDocked = "ignore";
     settings = {
       Login = {
+        HandleLidSwitch = "suspend";
+        HandleLidSwitchDocked = "ignore";
         IdleAction = "ignore";
         HandlePowerKey = "ignore";
       };

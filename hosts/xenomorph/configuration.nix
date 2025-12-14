@@ -10,5 +10,5 @@
   profiles.gaming.enable = true;
 
   # Power management: Suspend even when plugged in
-  services.logind.lidSwitchExternalPower = "suspend";
+  services.logind.settings.Login.HandleLidSwitchExternalPower = "suspend";
 }
