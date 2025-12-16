@@ -46,5 +46,18 @@ with lib;
         AddKeysToAgent yes
       '';
     };
+
+    # TODO: Replace this workaround when home-manager adds native support
+    # See: https://github.com/nix-community/home-manager/issues/3090
+    # Copy SSH config with proper permissions instead of symlinking.
+    # Some tools (like Vorta) require 600 permissions and reject symlinks to read-only nix store files.
+    home.activation.copySshConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      sshConfig="${config.home.file.".ssh/config".source}"
+      if [ -e "$sshConfig" ]; then
+        $DRY_RUN_CMD rm -f ~/.ssh/config
+        $DRY_RUN_CMD cp "$sshConfig" ~/.ssh/config
+        $DRY_RUN_CMD chmod 600 ~/.ssh/config
+      fi
+    '';
   };
 }
