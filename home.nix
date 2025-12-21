@@ -95,6 +95,7 @@
     ".local/share/icons/chatgpt.png".source = icons/chatgpt.png;
     ".local/share/icons/claude-desktop.png".source = icons/claude-desktop.png;
     ".claude/agents/git-guy.md".source = claude/agents/git-guy.md;
+    ".claude/commands/git-commit.md".source = claude/commands/git-commit.md;
   };
 
   fonts.fontconfig.enable = true;
