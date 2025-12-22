@@ -96,6 +96,7 @@
     ".local/share/icons/claude-desktop.png".source = icons/claude-desktop.png;
     ".claude/agents/git-guy.md".source = claude/agents/git-guy.md;
     ".claude/commands/git-commit.md".source = claude/commands/git-commit.md;
+    ".claude/commands/metaprompt.md".source = claude/commands/metaprompt.md;
   };
 
   fonts.fontconfig.enable = true;
