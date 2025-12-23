@@ -28,6 +28,9 @@
   # Networking
   networking.networkmanager = {
     enable = true;
+    plugins = with pkgs; [
+      networkmanager-openvpn
+    ];
     settings = {
       connectivity = {
         uri = "http://nmcheck.gnome.org/check_network_status.txt";
