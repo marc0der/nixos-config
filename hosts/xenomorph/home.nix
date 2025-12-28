@@ -6,6 +6,9 @@
     ansible
     discord
     doctl
+    libplacebo
+    makemkv
+    video2x
   ];
 
   # SSH configuration
