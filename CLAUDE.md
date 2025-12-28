@@ -35,6 +35,36 @@ These convenience scripts are available in the `bin/` directory and handle all n
 - Keep user configs in home.nix files
 - NEVER add imports directly in configuration files; always add modules to flake.nix
 
+### Comment Style
+Two-tier approach based on file type:
+
+**Configuration files** (`configuration.nix`, `hosts/*/configuration.nix`, `home.nix`):
+- Use simple inline comments above configuration blocks
+- Format: `# Category` or `# Category: specific detail`
+- Examples:
+  ```nix
+  # Networking
+  # Kernel modules: SCSI generic support
+  # Power management: Suspend even when plugged in
+  ```
+
+**Module files** (`modules/`, `profiles/`):
+- Use structured documentation headers at top of file
+- Include: module description, features/options, example usage
+- Format with section headers using colons (`# Options:`, `# Example usage:`)
+- Example:
+  ```nix
+  # Module Name
+  #
+  # Brief description of module purpose.
+  #
+  # Options:
+  #   option.name - Description (default: value)
+  #
+  # Example usage:
+  #   option.name = value;
+  ```
+
 ## Git Commits
 - ALWAYS use Git Guy
 - Do not use a task to commit to git

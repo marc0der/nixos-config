@@ -5,10 +5,10 @@
 { pkgs, ... }:
 
 {
-  # Bootloader.
+  # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest; # Install latest stable kernel
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Disable Intel IPU6 integrated camera (unsupported, breaks Zoom)
   boot.blacklistedKernelModules = [
@@ -40,10 +40,10 @@
     };
   };
 
-  # Set your time zone.
+  # Time zone
   time.timeZone = "Europe/London";
 
-  # Select internationalisation properties.
+  # Internationalisation
   i18n.defaultLocale = "en_GB.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -67,7 +67,7 @@
   # Console configuration
   console.keyMap = "uk";
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # User account
   users.users.marco = {
     isNormalUser = true;
     description = "Marco Vermeulen";
@@ -97,8 +97,7 @@
     });
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # System packages
   environment.systemPackages = with pkgs; [
     bzip2
     cage
@@ -295,12 +294,7 @@
     allowPing = true;
   };
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11"; # Did you read the comment?
+  # NixOS release version
+  system.stateVersion = "24.11";
 
 }
