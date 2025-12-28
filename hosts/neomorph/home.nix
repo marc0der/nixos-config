@@ -32,11 +32,6 @@
     textEditor = "gedit.desktop";
   };
 
-  # Host-specific scripts
-  home.file = {
-    "bin/volume-helper" = {
-      source = ../../modules/home/scripts/volume-helper.sh;
-      executable = true;
-    };
-  };
+  # Shared scripts
+  home-scripts.enable = true;
 }

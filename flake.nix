@@ -91,6 +91,7 @@
             ./modules/home/sway-rules.nix
             ./modules/home/sway-keybindings.nix
             ./modules/home/session-variables.nix
+            ./modules/home/home-scripts.nix
             ./profiles/music-production.nix
             ./profiles/work.nix
           ];
@@ -116,6 +117,7 @@
             ./modules/home/hyprland-rules.nix
             ./modules/home/hyprland-extras.nix
             ./modules/home/session-variables.nix
+            ./modules/home/home-scripts.nix
             ./profiles/music-production.nix
           ];
         };
