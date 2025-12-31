@@ -6,9 +6,13 @@
     ansible
     discord
     doctl
+    ffmpeg
     libplacebo
     makemkv
+    mkvtoolnix
+    tesseract
     video2x
+    vobsub2srt
   ];
 
   # SSH configuration
