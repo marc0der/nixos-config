@@ -229,7 +229,12 @@
   };
 
   # Remote access
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      X11Forwarding = true;
+    };
+  };
 
   # Virtual filesystems
   services.gvfs.enable = true;

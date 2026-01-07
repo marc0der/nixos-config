@@ -44,6 +44,8 @@ with lib;
       # Additional SSH client options
       extraConfig = ''
         AddKeysToAgent yes
+        ForwardX11 yes
+        ForwardX11Trusted yes
       '';
     };
 
