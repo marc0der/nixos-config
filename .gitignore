@@ -1,0 +1,23 @@
+# Secrets and sensitive files
+# Note: The actual secrets file is at ~/.config/secrets/env (outside this repo)
+# but we exclude these patterns in case any secrets are accidentally created here
+secrets/
+*.secret
+*.key
+.env
+.env.local
+
+# Build artifacts
+result
+result-*
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
