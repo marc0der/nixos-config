@@ -10,5 +10,5 @@
   services.clamav-security.enable = true;
 
   # Power management: Never suspend when plugged in
-  services.logind.lidSwitchExternalPower = "ignore";
+  services.logind.settings.Login.HandleLidSwitchExternalPower = "ignore";
 }

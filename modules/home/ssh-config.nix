@@ -49,6 +49,9 @@ with lib;
       '';
     };
 
+    # Force overwrite existing SSH config
+    home.file.".ssh/config".force = true;
+
     # TODO: Replace this workaround when home-manager adds native support
     # See: https://github.com/nix-community/home-manager/issues/3090
     # Copy SSH config with proper permissions instead of symlinking.
