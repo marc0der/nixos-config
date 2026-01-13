@@ -100,6 +100,7 @@
   # System packages
   environment.systemPackages = with pkgs; [
     bzip2
+    btop
     cage
     cmake
     fragments
