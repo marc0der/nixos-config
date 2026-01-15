@@ -91,6 +91,23 @@ in
           "VideoConference"
         ];
       };
+
+      microsoftTeams = {
+        name = "Microsoft Teams";
+        comment = "Microsoft Teams Collaboration";
+        genericName = "Microsoft Teams in Brave";
+        exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default --app="https://teams.microsoft.com/v2/"'';
+        icon = "teams";
+        type = "Application";
+        startupNotify = true;
+        categories = [
+          "GNOME"
+          "GTK"
+          "Network"
+          "InstantMessaging"
+          "VideoConference"
+        ];
+      };
     };
   };
 }
