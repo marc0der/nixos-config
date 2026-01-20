@@ -12,6 +12,7 @@
       shell-integration-features = "no-cursor";
       theme = "/home/marco/.cache/wal/colors-ghostty";
       gtk-titlebar = false;
+      keybind = "shift+enter=text:\\n";
     };
   };
 }
