@@ -81,6 +81,7 @@
         "sudo"
         "aws"
         "doctl"
+        "per-directory-history"
       ];
       theme = "wezm+";
     };
