@@ -1,10 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  claudeDesktop,
-  unstable,
-  ...
+{ config
+, lib
+, pkgs
+, claudeDesktop
+, unstable
+, ...
 }:
 
 {
@@ -35,7 +34,7 @@
     gnome-calculator
     htop
     httpie
-    jetbrains.idea-ultimate
+    jetbrains.idea
     jq
     kanshi
     lazygit

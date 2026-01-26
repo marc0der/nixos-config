@@ -9,7 +9,7 @@
       "discord"
       "vscode"
       "obsidian"
-      "idea-ultimate"
+      "idea"
       "protonvpn-gui"
       "transcribe"
     ];
