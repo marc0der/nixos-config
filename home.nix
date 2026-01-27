@@ -49,7 +49,7 @@
     pinentry-gnome3
     polkit_gnome
     protonvpn-gui
-    python3
+    (python3.withPackages (ps: [ ps.faster-whisper ]))
     pywal
     ripgrep
     speedtest-rs
@@ -228,7 +228,7 @@
   xdg.desktopEntries = {
     groove-trainer = {
       name = "Groove Trainer";
-      exec = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app=\"https://scottsbasslessons.com/groove-trainer\" %U";
+      exec = ''brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app="https://scottsbasslessons.com/groove-trainer" %U'';
       terminal = false;
       type = "Application";
       categories = [
@@ -241,7 +241,7 @@
 
     todoist = {
       name = "Todoist";
-      exec = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app=\"https://app.todoist.com/app/filter/focus-2348004222\" %U";
+      exec = ''brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app="https://app.todoist.com/app/filter/focus-2348004222" %U'';
       terminal = false;
       type = "Application";
       categories = [
@@ -254,7 +254,7 @@
 
     chatgpt = {
       name = "ChatGPT";
-      exec = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app=\"https://chatgpt.com/\" %U";
+      exec = ''brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app="https://chatgpt.com/" %U'';
       terminal = false;
       type = "Application";
       categories = [
