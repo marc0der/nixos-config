@@ -4,6 +4,7 @@
   # Host-specific packages
   home.packages = with pkgs; [
     ansible
+    jetbrains.idea
     discord
     doctl
     ffmpeg
