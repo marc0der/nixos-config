@@ -5,20 +5,20 @@
 - Always follow this workflow:
   1. Stage necessary files with git
   2. Run home-manager/nixos-rebuild to verify changes work
-  3. Only commit to git with git-commiter agent if the build was successful
+  3. Only commit to git with `/commit` skill if the build was successful
 - This ensures we don't commit broken configurations
 
 ## Build Commands
-- System rebuild: `bin/nix-rebuild-system` (replaces `sudo nixos-rebuild switch --flake .`)
-- Home manager update: `bin/nix-rebuild-home` (replaces `home-manager switch --flake .`)
-- Rebuild all without upgrade: `bin/nix-rebuild-all` (rebuilds both system and home without updating flake inputs)
-- Update and upgrade all: `bin/nix-upgrade-all` (updates flake inputs and upgrades both system and home)
+- System rebuild: `nix-rebuild-system` (replaces `sudo nixos-rebuild switch --flake .`)
+- Home manager update: `nix-rebuild-home` (replaces `home-manager switch --flake .`)
+- Rebuild all without upgrade: `nix-rebuild-all` (rebuilds both system and home without updating flake inputs)
+- Update and upgrade all: `nix-upgrade-all` (updates flake inputs and upgrades both system and home)
 
-These convenience scripts are available in the `bin/` directory and handle all necessary flags like `--impure` and `--no-warn-dirty`.
+These convenience scripts are on the PATH and handle all necessary flags like `--impure` and `--no-warn-dirty`.
 
 ### Automated vs Manual Rebuilds
-- **Home manager changes**: Automatically run `bin/nix-rebuild-home` (no sudo required)
-- **System changes**: Ask user to run `bin/nix-rebuild-system` or `bin/nix-rebuild-all` (requires sudo) 
+- **Home manager changes**: Always run `nix-rebuild-home` automatically after making changes (no sudo required)
+- **System changes**: Ask user to run `nix-rebuild-system` or `nix-rebuild-all` (requires sudo) 
 
 ## Reporting Changes
 - Changes reported automatically during activation
@@ -26,7 +26,7 @@ These convenience scripts are available in the `bin/` directory and handle all n
 
 ## Code Style Guidelines
 - Use 2-space indentation in all Nix files
-- Format with `nixfmt` before running git-commiter agent
+- Format with `nixfmt` before committing
 - Keep comments short and concise
 - Organize configurations modularly by machine (xenomorph, neomorph)
 - Use explicit variable naming
@@ -66,7 +66,7 @@ Two-tier approach based on file type:
   ```
 
 ## Git Commits
-- ALWAYS use Git Guy
+- ALWAYS use the `/commit` skill
 - Do not use a task to commit to git
 
 ## Repository Structure
