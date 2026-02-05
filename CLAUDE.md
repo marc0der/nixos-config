@@ -17,7 +17,7 @@
 These convenience scripts are on the PATH and handle all necessary flags like `--impure` and `--no-warn-dirty`.
 
 ### Automated vs Manual Rebuilds
-- **Home manager changes**: Always run `nix-rebuild-home` automatically after making changes (no sudo required)
+- **Home manager changes**: ALWAYS run `nix-rebuild-home` automatically after making changes. Do NOT ask the user - just run it immediately. No sudo required.
 - **System changes**: Ask user to run `nix-rebuild-system` or `nix-rebuild-all` (requires sudo) 
 
 ## Reporting Changes
@@ -73,7 +73,7 @@ Two-tier approach based on file type:
 - Shared base configuration in root directory
 - Machine-specific configs in named subdirectories
 - Desktop entries (.desktop) organized by machine
-- Flake-based repository using NixOS 24.11
+- Flake-based repository using NixOS 25.11
 
 ## Assistant Behavior
 - Always ask for confirmation before renaming, moving, or restructuring directories
