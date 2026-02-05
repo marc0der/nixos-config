@@ -157,10 +157,10 @@
   services.printing = {
     enable = true;
     drivers = with pkgs; [ cups-brother-hll2350dw ];
-    browsing = true;
-    defaultShared = true;
-    listenAddresses = [ "*:631" ];
-    allowFrom = [ "all" ];
+    browsing = false;
+    defaultShared = false;
+    listenAddresses = [ "localhost:631" ];
+    allowFrom = [ "localhost" ];
     startWhenNeeded = true;
   };
 
