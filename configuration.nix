@@ -135,6 +135,23 @@
   # Security
   security.pam.services.sddm.enableGnomeKeyring = true;
 
+  # Passwordless sudo for nix rebuild
+  security.sudo.extraRules = [
+    {
+      users = [ "marco" ];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/nixos-rebuild";
+          options = [ "NOPASSWD" "SETENV" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/nix";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
+
   # Display server and manager
   services.xserver = {
     enable = true;

@@ -5,19 +5,18 @@
   },
   "permissions": {
     "allow": [
-      "Bash(sudo nix flake update:*)",
       "WebSearch",
-      "Bash(systemctl:*)",
-      "Bash(rclone bisync:*)",
-      "Bash(lsblk:*)",
-      "Bash(sudo blkid:*)",
-      "Bash(sudo cryptsetup status:*)",
-      "Bash(sudo cryptsetup:*)",
-      "Bash(cat:*)",
-      "Bash(chmod:*)",
-      "Bash(nixfmt:*)",
-      "Bash(curl:*)",
-      "Bash(nix-rebuild-home:*)"
+      "Bash(systemctl *)",
+      "Bash(rclone bisync *)",
+      "Bash(lsblk *)",
+      "Bash(cat *)",
+      "Bash(chmod *)",
+      "Bash(nixfmt *)",
+      "Bash(curl *)",
+      "Bash(nix-rebuild-home *)",
+      "Bash(nix-rebuild-system *)",
+      "Bash(nix-rebuild-all *)",
+      "Bash(nix-upgrade-all *)"
     ],
     "defaultMode": "default"
   },
