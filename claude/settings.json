@@ -1,0 +1,32 @@
+{
+  "spinnerVerbs": {
+    "mode": "replace",
+    "verbs": ["Working"]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(sudo nix flake update:*)",
+      "WebSearch",
+      "Bash(systemctl:*)",
+      "Bash(rclone bisync:*)",
+      "Bash(lsblk:*)",
+      "Bash(sudo blkid:*)",
+      "Bash(sudo cryptsetup status:*)",
+      "Bash(sudo cryptsetup:*)",
+      "Bash(cat:*)",
+      "Bash(chmod:*)",
+      "Bash(nixfmt:*)",
+      "Bash(curl:*)",
+      "Bash(nix-rebuild-home:*)"
+    ],
+    "defaultMode": "default"
+  },
+  "promptSuggestionEnabled": false,
+  "enableAllProjectMcpServers": false,
+  "outputStyle": "default",
+  "spinnerTipsEnabled": false,
+  "statusLine": {
+    "type": "command",
+    "command": "npx -y @owloops/claude-powerline@latest --style=powerline --theme=nord"
+  }
+}

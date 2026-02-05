@@ -94,6 +94,7 @@
     ".local/share/icons/claude-desktop.png".source = icons/claude-desktop.png;
     ".claude/skills/commit/SKILL.md".source = claude/skills/commit/SKILL.md;
     ".claude/commands/metaprompt.md".source = claude/commands/metaprompt.md;
+    ".claude/settings.json".source = claude/settings.json;
   };
 
   fonts.fontconfig.enable = true;
