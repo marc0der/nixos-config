@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Default to keeping 7 days of generations
+KEEP_DAYS="${1:-7}"
+
+echo "=== Nix Purge ==="
+echo "Keeping generations from the last $KEEP_DAYS days"
+echo ""
+
+# Get initial store size
+BEFORE=$(df --output=used /nix | tail -1)
+
+echo "Cleaning nix-env profile generations..."
+nix-env --delete-generations "+$KEEP_DAYS"
+
+echo ""
+echo "Cleaning home-manager generations..."
+home-manager expire-generations "-${KEEP_DAYS} days"
+
+echo ""
+echo "Cleaning system generations (requires sudo)..."
+sudo nix-env --delete-generations "+$KEEP_DAYS" -p /nix/var/nix/profiles/system
+
+echo ""
+echo "Running garbage collection..."
+sudo nix-collect-garbage
+
+# Get final store size
+AFTER=$(df --output=used /nix | tail -1)
+
+# Calculate freed space in human-readable format
+FREED_KB=$((BEFORE - AFTER))
+if [ $FREED_KB -gt 1048576 ]; then
+  FREED="$((FREED_KB / 1048576)) GB"
+elif [ $FREED_KB -gt 1024 ]; then
+  FREED="$((FREED_KB / 1024)) MB"
+else
+  FREED="$FREED_KB KB"
+fi
+
+echo ""
+echo "=== Complete ==="
+echo "Freed approximately $FREED"
