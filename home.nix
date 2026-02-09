@@ -34,6 +34,7 @@
     gnome-calculator
     htop
     httpie
+    jetbrains.idea
     jq
     kanshi
     lazygit
