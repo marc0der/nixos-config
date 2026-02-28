@@ -15,6 +15,9 @@
   # Gaming profile
   profiles.gaming.enable = true;
 
+  # Tailscale VPN
+  services.tailscale-vpn.enable = true;
+
   # Power management: Suspend even when plugged in
   services.logind.settings.Login.HandleLidSwitchExternalPower = "suspend";
 }

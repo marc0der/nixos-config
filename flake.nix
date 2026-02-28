@@ -58,6 +58,7 @@
             ./hosts/xenomorph/hardware-configuration.nix
             ./modules/system/wayland-common.nix
             ./modules/system/hyprland.nix
+            ./modules/system/tailscale.nix
             ./profiles/gaming.nix
           ];
         };
