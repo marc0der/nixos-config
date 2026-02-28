@@ -24,6 +24,9 @@
   "enableAllProjectMcpServers": false,
   "outputStyle": "default",
   "spinnerTipsEnabled": false,
+  "enabledPlugins": {
+    "kotlin-lsp@claude-plugins-official": true
+  },
   "statusLine": {
     "type": "command",
     "command": "npx -y @owloops/claude-powerline@latest --style=powerline --theme=nord"
