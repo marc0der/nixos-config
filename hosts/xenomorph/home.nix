@@ -3,7 +3,6 @@
 {
   # Host-specific packages
   home.packages = with pkgs; [
-    kotlin-lsp
     ansible
     jetbrains.idea
     discord

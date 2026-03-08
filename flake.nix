@@ -32,11 +32,6 @@
       pkgs = import nixpkgs {
         inherit system;
         config = nixpkgsConfig.config;
-        overlays = [
-          (final: prev: {
-            kotlin-lsp = final.callPackage ./pkgs/kotlin-lsp.nix { };
-          })
-        ];
       };
       unstable = import nixpkgs-unstable {
         inherit system;
