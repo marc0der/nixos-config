@@ -32,16 +32,16 @@ C_BOLD_RED=$'\033[1;38;5;131m'
 format_tokens() {
     local num="$1"
 
-    # Handle null or empty input
-    if [ -z "$num" ] || [ "$num" = "null" ]; then
+    # Handle empty input
+    if [ -z "$num" ]; then
         echo "0"
         return
     fi
 
     if [ "$num" -ge 1000000 ]; then
-        printf "%.1fM" "$(echo "scale=1; $num/1000000" | bc)"
+        printf "%d.%dM" "$((num / 1000000))" "$(( (num % 1000000) / 100000 ))"
     elif [ "$num" -ge 1000 ]; then
-        printf "%.1fK" "$(echo "scale=1; $num/1000" | bc)"
+        printf "%d.%dK" "$((num / 1000))" "$(( (num % 1000) / 100 ))"
     else
         echo "$num"
     fi
@@ -53,7 +53,7 @@ format_percentage() {
     local pct_int=${pct%.*}  # Remove decimal part for comparison
 
     # Handle empty or invalid input
-    if [ -z "$pct_int" ] || [ "$pct_int" = "null" ]; then
+    if [ -z "$pct_int" ]; then
         pct_int=0
     fi
 
@@ -110,12 +110,9 @@ render_git() {
 
 # Render context window info (always shown, defaults to 0 if unavailable)
 render_context() {
-    local pct="${ctx_pct}"
-    local in_tokens="${total_in}"
-    local out_tokens="${total_out}"
-    [ "$pct" = "null" ] || [ -z "$pct" ] && pct=0
-    [ "$in_tokens" = "null" ] || [ -z "$in_tokens" ] && in_tokens=0
-    [ "$out_tokens" = "null" ] || [ -z "$out_tokens" ] && out_tokens=0
+    local pct="${ctx_pct:-0}"
+    local in_tokens="${total_in:-0}"
+    local out_tokens="${total_out:-0}"
     printf "${C_DARK_GRAY}| ${C_CYAN}▤ ${C_RESET}%s  " "$(format_percentage $pct)"
     printf "${C_CYAN}↑${C_RESET}${C_GRAY}%s${C_RESET}  " "$(format_tokens $in_tokens)"
     printf "${C_CYAN}↓${C_RESET}${C_GRAY}%s${C_RESET}" "$(format_tokens $out_tokens)"
@@ -133,8 +130,8 @@ render_ratelimits() {
 parse_model_name() {
     local model_id="$1"
 
-    # Handle null or empty input
-    if [ -z "$model_id" ] || [ "$model_id" = "null" ]; then
+    # Handle empty input
+    if [ -z "$model_id" ]; then
         echo "---"
         return
     fi
@@ -235,36 +232,28 @@ fetch_oauth_usage() {
 # MAIN LOGIC
 # ============================================================================
 
-# Read and parse input JSON in a single jq call
+# Read and parse input JSON
 input=$(cat)
 
-data=$(echo "$input" | jq -r '
-    {
-        model_id: .model.id,
-        model_display: .model.display_name,
-        cwd: .workspace.current_dir,
-        session_id: .session_id,
-        ctx_pct: .context_window.used_percentage,
-        total_in: .context_window.total_input_tokens,
-        total_out: .context_window.total_output_tokens
-    } | @json
-')
-
-model_id=$(echo "$data" | jq -r '.model_id')
-model_display=$(echo "$data" | jq -r '.model_display')
-cwd=$(echo "$data" | jq -r '.cwd')
-session_id=$(echo "$data" | jq -r '.session_id')
-ctx_pct=$(echo "$data" | jq -r '.ctx_pct')
-total_in=$(echo "$data" | jq -r '.total_in')
-total_out=$(echo "$data" | jq -r '.total_out')
+# Parse all fields in a single jq call using tab-separated output
+# (avoids fragile @json double-parse and echo mangling issues)
+IFS=$'\t' read -r model_id model_display cwd session_id ctx_pct total_in total_out \
+    <<< "$(printf '%s' "$input" | jq -r '[
+        (.model.id // ""),
+        (.model.display_name // ""),
+        (.workspace.current_dir // ""),
+        (.session_id // ""),
+        (.context_window.used_percentage // ""),
+        (.context_window.total_input_tokens // ""),
+        (.context_window.total_output_tokens // "")
+    ] | @tsv')"
 
 # Parse model name
-if [ "$model_display" != "null" ] && [ -n "$model_display" ]; then
+if [ -n "$model_display" ]; then
     model_name="$model_display"
-elif [ "$model_id" != "null" ] && [ -n "$model_id" ]; then
+elif [ -n "$model_id" ]; then
     model_name=$(parse_model_name "$model_id")
 else
-    # Model info not yet available (startup or mode switch)
     model_name="---"
 fi
 
@@ -286,7 +275,7 @@ fi
 # Update usage tracking
 now=$(date +%s)
 
-if [ "$total_in" != "null" ] && [ "$total_out" != "null" ] && [ -n "$total_in" ] && [ -n "$total_out" ]; then
+if [ -n "$total_in" ] && [ -n "$total_out" ]; then
     # Read current data
     usage_data=$(cat "$USAGE_FILE")
 
@@ -319,10 +308,8 @@ fi
 # ============================================================================
 
 # Fetch OAuth usage data
-oauth_result=$(fetch_oauth_usage)
 oauth_available=false
-
-if [ $? -eq 0 ]; then
+if oauth_result=$(fetch_oauth_usage); then
     # Use OAuth data (real utilization from Anthropic)
     pct_5h=$(echo "$oauth_result" | cut -d'|' -f1)
     time_5h=$(echo "$oauth_result" | cut -d'|' -f2)

@@ -15,8 +15,9 @@
       source ${pkgs.autojump}/share/autojump/autojump.zsh
       [ -f ${config.home.homeDirectory}/.sdkman/bin/sdkman-init.sh ] && source ${config.home.homeDirectory}/.sdkman/bin/sdkman-init.sh
       (cat ~/.cache/wal/sequences &)
+      export LOCAL_BIN=${config.home.homeDirectory}/.local/bin
       export PYENV_ROOT=${config.home.homeDirectory}/.pyenv
-      export PATH=$PYENV_ROOT/bin:$PATH
+      export PATH=$LOCAL_BIN:$PYENV_ROOT/bin:$PATH
       eval "$(pyenv init --path)"
       eval "$(pyenv init -)"
 
