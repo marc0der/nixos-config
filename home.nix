@@ -22,6 +22,7 @@
     brave
     chafa
     cliphist
+    devcontainer
     eog
     evince
     file-roller
