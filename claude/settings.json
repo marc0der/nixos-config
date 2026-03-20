@@ -26,6 +26,6 @@
   "spinnerTipsEnabled": false,
   "statusLine": {
     "type": "command",
-    "command": "bash ~/.claude/statusline-command.sh"
+    "command": "bash ~/.claude/meterstick-command.sh"
   }
 }

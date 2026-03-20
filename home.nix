@@ -97,8 +97,13 @@
     ".claude/skills/commit/SKILL.md".source = claude/skills/commit/SKILL.md;
     ".claude/skills/metaprompt/SKILL.md".source = claude/skills/metaprompt/SKILL.md;
     ".claude/settings.json".source = claude/settings.json;
-    ".claude/statusline-command.sh" = {
-      source = claude/statusline-command.sh;
+    ".claude/meterstick-command.sh" = {
+      source = claude/meterstick.sh;
+      executable = true;
+    };
+    ".claude/meterstick-config.json".source = claude/meterstick-config.json;
+    ".claude/claude_usage_oauth.py" = {
+      source = claude/claude_usage_oauth.py;
       executable = true;
     };
   };
