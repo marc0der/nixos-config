@@ -161,10 +161,10 @@ render_context() {
     local ctx_color=$(context_color "${pct%.*}")
     if [ "$ctx_max_known" = true ]; then
         local ctx_max_fmt=$(format_tokens $ctx_max_tokens)
-        printf "${C_DARK_GRAY}| ${C_CYAN}▤ %s/%s (%s)${C_RESET}" \
+        printf "${C_DARK_GRAY}| ${C_CYAN}▤ %s/%s (~%s)${C_RESET}" \
             "${ctx_color}${ctx_used_fmt}" "${ctx_max_fmt}" "$(format_context_percentage $pct)"
     else
-        printf "${C_DARK_GRAY}| ${C_CYAN}▤ %s/? (%s)${C_RESET}" \
+        printf "${C_DARK_GRAY}| ${C_CYAN}▤ %s/? (~%s)${C_RESET}" \
             "${ctx_color}${ctx_used_fmt}" "$(format_context_percentage $pct)"
     fi
     printf " ${C_DARK_GRAY}| ${C_CYAN}↑${C_RESET}${C_GRAY}%s${C_RESET}  " "$(format_tokens $in_tokens)"
