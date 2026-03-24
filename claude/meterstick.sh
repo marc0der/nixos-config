@@ -23,6 +23,10 @@ C_GRAY=$'\033[38;5;245m'
 C_DARK_GRAY=$'\033[38;5;240m'
 C_YELLOW=$'\033[38;5;178m'
 C_BOLD_RED=$'\033[1;38;5;131m'
+C_DARK_ORANGE=$'\033[38;5;166m'
+C_BRIGHT_RED=$'\033[38;5;196m'
+C_ORANGE=$'\033[38;5;208m'
+C_YELLOW_GREEN=$'\033[38;5;142m'
 
 # ============================================================================
 # HELPER FUNCTIONS
@@ -63,6 +67,44 @@ format_percentage() {
         printf "${C_YELLOW}%d%%${C_RESET}" "$pct_int"
     else
         printf "${C_LIGHT_GRAY}%d%%${C_RESET}" "$pct_int"
+    fi
+}
+
+# Format context usage percentage with gradient based on useful context research
+# Research basis: LLM performance degrades with context length ("Lost in the Middle",
+# Liu et al. 2023). Effective retrieval drops significantly past ~30-40% of window.
+#   0-10%:  yellow (barely used)
+#   10-20%: yellow-green (light usage)
+#   20-35%: orange (sweet spot - good utilization)
+#   35-50%: dark orange (getting crowded)
+#   50-70%: red (quality degrading)
+#   70%+:   bright red (significant degradation)
+format_context_percentage() {
+    local pct="$1"
+    local pct_int=${pct%.*}
+
+    if [ -z "$pct_int" ]; then
+        pct_int=0
+    fi
+
+    printf "%s" "$(context_color $pct_int)${pct_int}%${C_RESET}"
+}
+
+# Get color code for context usage percentage
+context_color() {
+    local pct_int="$1"
+    if [ "$pct_int" -ge 70 ]; then
+        printf "%s" "$C_BRIGHT_RED"
+    elif [ "$pct_int" -ge 50 ]; then
+        printf "%s" "$C_RED"
+    elif [ "$pct_int" -ge 35 ]; then
+        printf "%s" "$C_DARK_ORANGE"
+    elif [ "$pct_int" -ge 20 ]; then
+        printf "%s" "$C_ORANGE"
+    elif [ "$pct_int" -ge 10 ]; then
+        printf "%s" "$C_YELLOW_GREEN"
+    else
+        printf "%s" "$C_YELLOW"
     fi
 }
 
@@ -113,8 +155,19 @@ render_context() {
     local pct="${ctx_pct:-0}"
     local in_tokens="${total_in:-0}"
     local out_tokens="${total_out:-0}"
-    printf "${C_DARK_GRAY}| ${C_CYAN}▤ ${C_RESET}%s  " "$(format_percentage $pct)"
-    printf "${C_CYAN}↑${C_RESET}${C_GRAY}%s${C_RESET}  " "$(format_tokens $in_tokens)"
+    local used_tokens=$((in_tokens + out_tokens))
+    local ctx_used_fmt=$(format_tokens $used_tokens)
+
+    local ctx_color=$(context_color "${pct%.*}")
+    if [ "$ctx_max_known" = true ]; then
+        local ctx_max_fmt=$(format_tokens $ctx_max_tokens)
+        printf "${C_DARK_GRAY}| ${C_CYAN}▤ %s/%s (%s)${C_RESET}" \
+            "${ctx_color}${ctx_used_fmt}" "${ctx_max_fmt}" "$(format_context_percentage $pct)"
+    else
+        printf "${C_DARK_GRAY}| ${C_CYAN}▤ %s/? (%s)${C_RESET}" \
+            "${ctx_color}${ctx_used_fmt}" "$(format_context_percentage $pct)"
+    fi
+    printf " ${C_DARK_GRAY}| ${C_CYAN}↑${C_RESET}${C_GRAY}%s${C_RESET}  " "$(format_tokens $in_tokens)"
     printf "${C_CYAN}↓${C_RESET}${C_GRAY}%s${C_RESET}" "$(format_tokens $out_tokens)"
 }
 
@@ -237,7 +290,7 @@ input=$(cat)
 
 # Parse all fields in a single jq call using tab-separated output
 # (avoids fragile @json double-parse and echo mangling issues)
-IFS=$'\t' read -r model_id model_display cwd session_id ctx_pct total_in total_out \
+IFS=$'\t' read -r model_id model_display cwd session_id ctx_pct total_in total_out ctx_max_tokens \
     <<< "$(printf '%s' "$input" | jq -r '[
         (.model.id // ""),
         (.model.display_name // ""),
@@ -245,12 +298,19 @@ IFS=$'\t' read -r model_id model_display cwd session_id ctx_pct total_in total_o
         (.session_id // ""),
         (.context_window.used_percentage // ""),
         (.context_window.total_input_tokens // ""),
-        (.context_window.total_output_tokens // "")
+        (.context_window.total_output_tokens // ""),
+        (.context_window.max_tokens // 1000000)
     ] | @tsv')"
 
-# Parse model name
+# Track whether we know the context max
+ctx_max_known=true
+if [ -z "$ctx_max_tokens" ] || [ "$ctx_max_tokens" = "null" ] || [ "$ctx_max_tokens" -eq 0 ] 2>/dev/null; then
+    ctx_max_known=false
+fi
+
+# Parse model name (strip parenthetical like "(1M context)" if present)
 if [ -n "$model_display" ]; then
-    model_name="$model_display"
+    model_name="${model_display%% (*}"
 elif [ -n "$model_id" ]; then
     model_name=$(parse_model_name "$model_id")
 else
