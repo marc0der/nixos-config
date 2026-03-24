@@ -76,11 +76,15 @@
       "docker"
       "input"
       "networkmanager"
+      "sandbox"
       "wheel"
     ];
     shell = pkgs.zsh;
     packages = [ ];
   };
+
+  # Groups
+  users.groups.sandbox.gid = 1000;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
