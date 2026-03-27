@@ -12,6 +12,7 @@
     claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
     claude-desktop.inputs.nixpkgs.follows = "nixpkgs";
     claude-desktop.inputs.flake-utils.follows = "flake-utils";
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
   outputs =
     inputs@{
@@ -21,6 +22,7 @@
       home-manager,
       fenix,
       claude-desktop,
+      llm-agents,
       ...
     }:
     let
@@ -40,6 +42,7 @@
 
       rustToolchain = fenix.packages.${system};
       claudeDesktop = claude-desktop.packages.${system};
+      llmAgents = llm-agents.packages.${system};
 
     in
     {
@@ -73,7 +76,7 @@
       homeConfigurations = {
         "marco@neomorph" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit unstable rustToolchain claudeDesktop; };
+          extraSpecialArgs = { inherit unstable rustToolchain claudeDesktop llmAgents; };
           modules = [
             ./home.nix
             ./hosts/neomorph/home.nix
@@ -99,7 +102,7 @@
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit unstable rustToolchain claudeDesktop; };
+          extraSpecialArgs = { inherit unstable rustToolchain claudeDesktop llmAgents; };
           modules = [
             ./home.nix
             ./hosts/xenomorph/home.nix

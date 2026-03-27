@@ -2,6 +2,7 @@
 , lib
 , pkgs
 , claudeDesktop
+, llmAgents
 , unstable
 , ...
 }:
@@ -65,6 +66,7 @@
     unstable.code-cursor
     unstable.claude-code
     claudeDesktop.claude-desktop
+    llmAgents.copilot-cli
 
     # Shared themes
     materia-theme
