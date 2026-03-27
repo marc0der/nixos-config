@@ -64,8 +64,8 @@
 
     # Unstable packages
     unstable.code-cursor
-    unstable.claude-code
     claudeDesktop.claude-desktop
+    llmAgents.claude-code
     llmAgents.copilot-cli
 
     # Shared themes
@@ -286,7 +286,7 @@
     [[ -f ~/.config/secrets/env ]] && source ~/.config/secrets/env
 
     # Use the full path to claude from the nix store
-    CLAUDE_BIN="${unstable.claude-code}/bin/claude"
+    CLAUDE_BIN="${llmAgents.claude-code}/bin/claude"
 
     # Configure git-mcp server
     if ! "$CLAUDE_BIN" mcp get git-mcp >/dev/null 2>&1; then
