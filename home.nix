@@ -1,11 +1,4 @@
-{ config
-, lib
-, pkgs
-, claudeDesktop
-, llmAgents
-, unstable
-, ...
-}:
+{ config, lib, pkgs, claudeDesktop, llmAgents, unstable, ... }:
 
 {
 
@@ -66,6 +59,7 @@
     unstable.code-cursor
     claudeDesktop.claude-desktop
     llmAgents.claude-code
+    llmAgents.codex
     llmAgents.copilot-cli
 
     # Shared themes
@@ -97,7 +91,8 @@
     ".local/share/icons/chatgpt.png".source = icons/chatgpt.png;
     ".local/share/icons/claude-desktop.png".source = icons/claude-desktop.png;
     ".claude/skills/commit/SKILL.md".source = claude/skills/commit/SKILL.md;
-    ".claude/skills/metaprompt/SKILL.md".source = claude/skills/metaprompt/SKILL.md;
+    ".claude/skills/metaprompt/SKILL.md".source =
+      claude/skills/metaprompt/SKILL.md;
     ".claude/settings.json".source = claude/settings.json;
     ".claude/meterstick-command.sh" = {
       source = claude/meterstick.sh;
@@ -130,11 +125,7 @@
 
   session-variables.enable = true;
 
-  home.sessionPath = [
-    "$HOME/bin"
-    "$HOME/nixos/bin"
-    "$HOME/.cargo/bin"
-  ];
+  home.sessionPath = [ "$HOME/bin" "$HOME/nixos/bin" "$HOME/.cargo/bin" ];
 
   home.changes-report.enable = true;
 
@@ -144,10 +135,7 @@
 
   services.gnome-keyring = {
     enable = true;
-    components = [
-      "pkcs11"
-      "secrets"
-    ];
+    components = [ "pkcs11" "secrets" ];
   };
 
   services.gpg-agent = {
@@ -164,13 +152,12 @@
       After = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      ExecStart =
+        "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
       Restart = "on-failure";
       RestartSec = 3;
     };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
+    Install = { WantedBy = [ "graphical-session.target" ]; };
   };
 
   systemd.user.services.google-drive-bisync = {
@@ -214,104 +201,93 @@
     };
   };
 
-  systemd.user.timers.google-drive-bisync =
-    let
-      # Staggered timing: neomorph syncs at :00,:10,:20 etc, xenomorph at :05,:15,:25 etc
-      hostname = config.networking.hostName or "unknown";
-      syncSchedule = if hostname == "neomorph" then "*:00/10" else "*:05/10";
-    in
-    {
-      Unit = {
-        Description = "Run Google Drive bisync every 10 minutes (staggered)";
-      };
-
-      Timer = {
-        OnBootSec = if hostname == "neomorph" then "2min" else "7min";
-        OnCalendar = syncSchedule;
-        Unit = "google-drive-bisync.service";
-        Persistent = true;
-      };
-
-      Install = {
-        WantedBy = [ "timers.target" ];
-      };
+  systemd.user.timers.google-drive-bisync = let
+    # Staggered timing: neomorph syncs at :00,:10,:20 etc, xenomorph at :05,:15,:25 etc
+    hostname = config.networking.hostName or "unknown";
+    syncSchedule = if hostname == "neomorph" then "*:00/10" else "*:05/10";
+  in {
+    Unit = {
+      Description = "Run Google Drive bisync every 10 minutes (staggered)";
     };
+
+    Timer = {
+      OnBootSec = if hostname == "neomorph" then "2min" else "7min";
+      OnCalendar = syncSchedule;
+      Unit = "google-drive-bisync.service";
+      Persistent = true;
+    };
+
+    Install = { WantedBy = [ "timers.target" ]; };
+  };
 
   xdg.desktopEntries = {
     groove-trainer = {
       name = "Groove Trainer";
-      exec = ''brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app="https://scottsbasslessons.com/groove-trainer" %U'';
+      exec = ''
+        brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app="https://scottsbasslessons.com/groove-trainer" %U'';
       terminal = false;
       type = "Application";
-      categories = [
-        "Network"
-        "WebBrowser"
-        "Education"
-      ];
+      categories = [ "Network" "WebBrowser" "Education" ];
       comment = "Groove Trainer";
     };
 
     todoist = {
       name = "Todoist";
-      exec = ''brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app="https://app.todoist.com/app/filter/focus-2348004222" %U'';
+      exec = ''
+        brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app="https://app.todoist.com/app/filter/focus-2348004222" %U'';
       terminal = false;
       type = "Application";
-      categories = [
-        "Network"
-        "Application"
-      ];
+      categories = [ "Network" "Application" ];
       comment = "Todoist";
       icon = "Todoist";
     };
 
     chatgpt = {
       name = "ChatGPT";
-      exec = ''brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app="https://chatgpt.com/" %U'';
+      exec = ''
+        brave --enable-features=UseOzonePlatform --ozone-platform=wayland --app="https://chatgpt.com/" %U'';
       terminal = false;
       type = "Application";
-      categories = [
-        "Network"
-        "WebBrowser"
-        "Utility"
-      ];
+      categories = [ "Network" "WebBrowser" "Utility" ];
       comment = "ChatGPT";
       icon = "chatgpt";
     };
   };
 
-  home.activation.setupClaudeMcpServers = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-    echo "Configuring Claude MCP servers..."
+  home.activation.setupClaudeMcpServers =
+    lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+      echo "Configuring Claude MCP servers..."
 
-    # Source secrets file if it exists
-    [[ -f ~/.config/secrets/env ]] && source ~/.config/secrets/env
+      # Source secrets file if it exists
+      [[ -f ~/.config/secrets/env ]] && source ~/.config/secrets/env
 
-    # Use the full path to claude from the nix store
-    CLAUDE_BIN="${llmAgents.claude-code}/bin/claude"
+      # Use the full path to claude from the nix store
+      CLAUDE_BIN="${llmAgents.claude-code}/bin/claude"
 
-    # Configure git-mcp server
-    if ! "$CLAUDE_BIN" mcp get git-mcp >/dev/null 2>&1; then
-      echo "Adding git-mcp server..."
-      "$CLAUDE_BIN" mcp add git-mcp -s user uvx mcp-server-git || echo "Failed to add git-mcp server"
-    fi
-
-    # Configure github-mcp server with environment variable
-    if ! "$CLAUDE_BIN" mcp get github-mcp >/dev/null 2>&1; then
-      echo "Adding github-mcp server..."
-      if [[ -z "$GITHUB_PERSONAL_ACCESS_TOKEN" ]]; then
-        echo "Warning: GITHUB_PERSONAL_ACCESS_TOKEN environment variable not set"
-        echo "Please set it in your shell profile or environment"
-      else
-        "$CLAUDE_BIN" mcp add github-mcp -e GITHUB_PERSONAL_ACCESS_TOKEN="$GITHUB_PERSONAL_ACCESS_TOKEN" -s user npx @modelcontextprotocol/server-github || echo "Failed to add github-mcp server"
+      # Configure git-mcp server
+      if ! "$CLAUDE_BIN" mcp get git-mcp >/dev/null 2>&1; then
+        echo "Adding git-mcp server..."
+        "$CLAUDE_BIN" mcp add git-mcp -s user uvx mcp-server-git || echo "Failed to add git-mcp server"
       fi
-    fi
 
-    # Configure sdkman-mcp server
-    if ! "$CLAUDE_BIN" mcp get sdkman >/dev/null 2>&1; then
-      echo "Adding sdkman-mcp server..."
-      "$CLAUDE_BIN" mcp add sdkman -s user /home/marco/src/oss/sdkman-mcp-server/target/release/sdkman-mcp-server || echo "Failed to add sdkman-mcp server"
-    fi
+      # Configure github-mcp server with environment variable
+      if ! "$CLAUDE_BIN" mcp get github-mcp >/dev/null 2>&1; then
+        echo "Adding github-mcp server..."
+        if [[ -z "$GITHUB_PERSONAL_ACCESS_TOKEN" ]]; then
+          echo "Warning: GITHUB_PERSONAL_ACCESS_TOKEN environment variable not set"
+          echo "Please set it in your shell profile or environment"
+        else
+          "$CLAUDE_BIN" mcp add github-mcp -e GITHUB_PERSONAL_ACCESS_TOKEN="$GITHUB_PERSONAL_ACCESS_TOKEN" -s user npx @modelcontextprotocol/server-github || echo "Failed to add github-mcp server"
+        fi
+      fi
 
-    echo "Claude MCP servers configured"
-  '';
+      # Configure sdkman-mcp server
+      if ! "$CLAUDE_BIN" mcp get sdkman >/dev/null 2>&1; then
+        echo "Adding sdkman-mcp server..."
+        "$CLAUDE_BIN" mcp add sdkman -s user /home/marco/src/oss/sdkman-mcp-server/target/release/sdkman-mcp-server || echo "Failed to add sdkman-mcp server"
+      fi
+
+      echo "Claude MCP servers configured"
+    '';
 
 }
