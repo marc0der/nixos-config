@@ -56,7 +56,6 @@
     zsh-powerlevel10k
 
     # Unstable packages
-    unstable.code-cursor
     claudeDesktop.claude-desktop
     llmAgents.claude-code
     llmAgents.codex
