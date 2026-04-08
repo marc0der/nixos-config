@@ -2,7 +2,10 @@
 
 {
   # Host-specific packages
-  home.packages = with pkgs; [ google-chrome ];
+  home.packages = with pkgs; [
+    google-chrome
+    pnpm
+  ];
 
   # SSH configuration
   ssh-config.enable = true;
