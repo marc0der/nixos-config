@@ -82,6 +82,7 @@
             ./hosts/neomorph/home.nix
             ./shared/git.nix
             ./shared/report.nix
+            ./shared/tmux.nix
             ./shared/zsh.nix
             ./modules/home/terminal-ghostty.nix
             ./modules/home/ssh-config.nix
@@ -108,6 +109,7 @@
             ./hosts/xenomorph/home.nix
             ./shared/git.nix
             ./shared/report.nix
+            ./shared/tmux.nix
             ./shared/zsh.nix
             ./modules/home/terminal-ghostty.nix
             ./modules/home/ssh-config.nix

@@ -48,7 +48,6 @@
     pywal
     ripgrep
     speedtest-rs
-    tmux
     uv
     vscode
     wl-mirror
