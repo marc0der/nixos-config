@@ -118,6 +118,7 @@ with lib;
         # Input settings
         input = {
           kb_layout = "gb";
+          kb_variant = "extd";
           follow_mouse = 1;
           sensitivity = 0;
           touchpad = {

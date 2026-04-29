@@ -89,6 +89,7 @@ with lib;
           };
           "*" = {
             xkb_layout = "gb";
+            xkb_variant = "extd";
           };
         };
 
