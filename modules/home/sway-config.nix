@@ -88,8 +88,7 @@ with lib;
             natural_scroll = "enabled";
           };
           "*" = {
-            xkb_layout = "gb";
-            xkb_variant = "extd";
+            xkb_layout = "gbx";
           };
         };
 

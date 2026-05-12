@@ -117,8 +117,7 @@ with lib;
 
         # Input settings
         input = {
-          kb_layout = "gb";
-          kb_variant = "extd";
+          kb_layout = "gbx";
           follow_mouse = 1;
           sensitivity = 0;
           touchpad = {

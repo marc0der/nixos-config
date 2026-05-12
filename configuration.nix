@@ -164,8 +164,22 @@
   services.xserver = {
     enable = true;
     xkb = {
-      layout = "gb";
-      variant = "extd";
+      layout = "gbx";
+      extraLayouts.gbx = {
+        description = "English (UK, extended, literal backtick)";
+        languages = [ "eng" ];
+        # Inherits gb(extd) for AltGr accents but restores the literal
+        # backtick on TLDE (extd makes it a dead_grave key, which doesn't
+        # compose reliably in Wayland terminals like Ghostty).
+        symbolsFile = pkgs.writeText "gbx-symbols" ''
+          default partial alphanumeric_keys
+          xkb_symbols "basic" {
+            include "gb(extd)"
+            name[Group1]="English (UK, extended, literal backtick)";
+            key <TLDE> { [ grave, notsign, brokenbar, NoSymbol ] };
+          };
+        '';
+      };
     };
   };
 
