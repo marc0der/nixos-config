@@ -26,7 +26,7 @@ These convenience scripts are on the PATH and handle all necessary flags like `-
 
 ## Code Style Guidelines
 - Use 2-space indentation in all Nix files
-- Format with `nixfmt` before committing
+- Format with `nix fmt` before committing (uses `nixfmt` 1.x, RFC 166 style)
 - Keep comments short and concise
 - Organize configurations modularly by machine (xenomorph, neomorph)
 - Use explicit variable naming

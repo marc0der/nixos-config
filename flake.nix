@@ -46,6 +46,8 @@
 
     in
     {
+      formatter.${system} = pkgs.nixfmt;
+
       nixosConfigurations = {
         xenomorph = lib.nixosSystem {
           inherit system;
