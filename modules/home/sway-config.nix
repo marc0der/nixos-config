@@ -226,6 +226,7 @@ with lib;
           { command = "nm-applet"; }
           { command = "blueman-applet"; }
           { command = "1password --silent"; }
+          { command = "flatpak run com.borgbase.Vorta --daemonize"; }
           {
             command = "systemctl --user restart kanshi.service";
             always = true;
