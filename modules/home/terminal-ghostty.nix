@@ -5,7 +5,7 @@
     enableZshIntegration = true;
     settings = {
       font-family = "JetBrains Mono NL Light";
-      font-size = 11;
+      font-size = 13;
       background-opacity = 0.95;
       cursor-style = "block";
       cursor-style-blink = false;
