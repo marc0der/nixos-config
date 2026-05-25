@@ -7,6 +7,9 @@
     pnpm
   ];
 
+  # Ghostty: larger font on this host
+  programs.ghostty.settings.font-size = 13;
+
   # SSH configuration
   ssh-config.enable = true;
 
