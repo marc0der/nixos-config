@@ -21,6 +21,7 @@
     bibata-cursors
     borgbackup
     brave
+    bun
     chafa
     cliphist
     devcontainer
