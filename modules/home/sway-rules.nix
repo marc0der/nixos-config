@@ -25,11 +25,10 @@ with lib;
 
   config = mkIf config.sway-rules.enable {
     wayland.windowManager.sway.config = {
-      # Workspace 1 default layout: assign Slack PWA + Brave there
+      # Workspace 1 default layout: assign EE Slack PWA there
       assigns = {
         "1" = [
           { app_id = "brave-app\\.slack\\.com.*"; }
-          { app_id = "brave-browser"; }
         ];
       };
 
@@ -161,18 +160,12 @@ with lib;
           command = "floating enable, resize set 1200 800, move position center";
         }
 
-        # Workspace 1 columns: Slack 33% (left), Brave 67% (right)
+        # Workspace 1 left column: Slack 33% width
         {
           criteria = {
             app_id = "brave-app\\.slack\\.com.*";
           };
           command = "resize set width 33 ppt";
-        }
-        {
-          criteria = {
-            app_id = "brave-browser";
-          };
-          command = "resize set width 67 ppt";
         }
       ];
     };

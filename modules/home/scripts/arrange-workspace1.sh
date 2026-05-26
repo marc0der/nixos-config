@@ -28,7 +28,8 @@ fi
 
 # Brave second -> right column
 if ! has_window "$brave_id"; then
-  brave --enable-features=UseOzonePlatform --ozone-platform=wayland >/dev/null 2>&1 &
+  brave --enable-features=UseOzonePlatform --ozone-platform=wayland \
+    --profile-directory=Default >/dev/null 2>&1 &
   wait_for "$brave_id"
 fi
 
