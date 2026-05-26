@@ -24,133 +24,157 @@ with lib;
   };
 
   config = mkIf config.sway-rules.enable {
-    wayland.windowManager.sway.config.window.commands = [
-      # Blueman Manager - floating, centered
-      {
-        criteria = {
-          app_id = ".blueman-manager-wrapped";
-        };
-        command = "floating enable, move position center";
-      }
+    wayland.windowManager.sway.config = {
+      # Workspace 1 default layout: assign Slack PWA + Brave there
+      assigns = {
+        "1" = [
+          { app_id = "brave-app\\.slack\\.com.*"; }
+          { app_id = "brave-browser"; }
+        ];
+      };
 
-      # Browser windows - mark and inhibit idle when fullscreen
-      {
-        criteria = {
-          class = "Chromium-browser";
-        };
-        command = "mark Browser";
-      }
-      {
-        criteria = {
-          class = "Brave-browser";
-        };
-        command = "mark Browser";
-      }
-      {
-        criteria = {
-          class = "firefox";
-        };
-        command = "mark Browser";
-      }
-      {
-        criteria = {
-          app_id = "Chromium-browser";
-        };
-        command = "mark Browser";
-      }
-      {
-        criteria = {
-          app_id = "brave-browser";
-        };
-        command = "mark Browser";
-      }
-      {
-        criteria = {
-          app_id = "firefox";
-        };
-        command = "mark Browser";
-      }
-      {
-        criteria = {
-          con_mark = "Browser";
-        };
-        command = "inhibit_idle fullscreen";
-      }
+      window.commands = [
+        # Blueman Manager - floating, centered
+        {
+          criteria = {
+            app_id = ".blueman-manager-wrapped";
+          };
+          command = "floating enable, move position center";
+        }
 
-      # Firefox screensharing indicator - floating
-      {
-        criteria = {
-          app_id = "firefox";
-          title = "Firefox — Sharing Indicator";
-        };
-        command = "floating enable";
-      }
+        # Browser windows - mark and inhibit idle when fullscreen
+        {
+          criteria = {
+            class = "Chromium-browser";
+          };
+          command = "mark Browser";
+        }
+        {
+          criteria = {
+            class = "Brave-browser";
+          };
+          command = "mark Browser";
+        }
+        {
+          criteria = {
+            class = "firefox";
+          };
+          command = "mark Browser";
+        }
+        {
+          criteria = {
+            app_id = "Chromium-browser";
+          };
+          command = "mark Browser";
+        }
+        {
+          criteria = {
+            app_id = "brave-browser";
+          };
+          command = "mark Browser";
+        }
+        {
+          criteria = {
+            app_id = "firefox";
+          };
+          command = "mark Browser";
+        }
+        {
+          criteria = {
+            con_mark = "Browser";
+          };
+          command = "inhibit_idle fullscreen";
+        }
 
-      # Network Manager applications - floating, centered
-      {
-        criteria = {
-          app_id = "nm-connection-editor";
-        };
-        command = "floating enable, move position center";
-      }
-      {
-        criteria = {
-          app_id = "nm-applet";
-        };
-        command = "floating enable, move position center";
-      }
+        # Firefox screensharing indicator - floating
+        {
+          criteria = {
+            app_id = "firefox";
+            title = "Firefox — Sharing Indicator";
+          };
+          command = "floating enable";
+        }
 
-      # PulseAudio volume control - floating, centered
-      {
-        criteria = {
-          app_id = "pavucontrol";
-        };
-        command = "floating enable, move position center";
-      }
-      {
-        criteria = {
-          app_id = "pavucontrol-qt";
-        };
-        command = "floating enable, move position center";
-      }
+        # Network Manager applications - floating, centered
+        {
+          criteria = {
+            app_id = "nm-connection-editor";
+          };
+          command = "floating enable, move position center";
+        }
+        {
+          criteria = {
+            app_id = "nm-applet";
+          };
+          command = "floating enable, move position center";
+        }
 
-      # PolicyKit agent - floating, centered
-      {
-        criteria = {
-          app_id = "lxqt-policykit-agent";
-        };
-        command = "floating enable, move position center";
-      }
+        # PulseAudio volume control - floating, centered
+        {
+          criteria = {
+            app_id = "pavucontrol";
+          };
+          command = "floating enable, move position center";
+        }
+        {
+          criteria = {
+            app_id = "pavucontrol-qt";
+          };
+          command = "floating enable, move position center";
+        }
 
-      # Google Meet (Brave PWA) - floating, sized
-      {
-        criteria = {
-          app_id = "brave-meet.google.com__-Default";
-        };
-        command = "floating enable, resize set 1400 900, move position center";
-      }
+        # PolicyKit agent - floating, centered
+        {
+          criteria = {
+            app_id = "lxqt-policykit-agent";
+          };
+          command = "floating enable, move position center";
+        }
 
-      # Zoom (X11) - floating, sized
-      {
-        criteria = {
-          class = "zoom";
-        };
-        command = "floating enable, resize set 1400 900, move position center";
-      }
+        # Google Meet (Brave PWA) - floating, sized
+        {
+          criteria = {
+            app_id = "brave-meet.google.com__-Default";
+          };
+          command = "floating enable, resize set 1400 900, move position center";
+        }
 
-      # 1Password - floating, sized
-      {
-        criteria = {
-          class = "1Password";
-        };
-        command = "floating enable, resize set 1200 800, move position center";
-      }
-      {
-        criteria = {
-          app_id = "1Password";
-        };
-        command = "floating enable, resize set 1200 800, move position center";
-      }
-    ];
+        # Zoom (X11) - floating, sized
+        {
+          criteria = {
+            class = "zoom";
+          };
+          command = "floating enable, resize set 1400 900, move position center";
+        }
+
+        # 1Password - floating, sized
+        {
+          criteria = {
+            class = "1Password";
+          };
+          command = "floating enable, resize set 1200 800, move position center";
+        }
+        {
+          criteria = {
+            app_id = "1Password";
+          };
+          command = "floating enable, resize set 1200 800, move position center";
+        }
+
+        # Workspace 1 columns: Slack 33% (left), Brave 67% (right)
+        {
+          criteria = {
+            app_id = "brave-app\\.slack\\.com.*";
+          };
+          command = "resize set width 33 ppt";
+        }
+        {
+          criteria = {
+            app_id = "brave-browser";
+          };
+          command = "resize set width 67 ppt";
+        }
+      ];
+    };
   };
 }
