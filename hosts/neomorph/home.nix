@@ -16,6 +16,11 @@
   sway-rules.enable = true;
   sway-keybindings.enable = true;
 
+  # Workspace 1 default layout: Slack left, Brave right
+  wayland.windowManager.sway.config.startup = [
+    { command = "/home/marco/bin/arrange-workspace1"; }
+  ];
+
   # Profiles
   profiles.music-production.enable = true;
   profiles.work.enable = true;

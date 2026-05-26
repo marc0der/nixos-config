@@ -27,6 +27,10 @@ in
         source = ./scripts/volume-helper.sh;
         executable = true;
       };
+      "bin/arrange-workspace1" = {
+        source = ./scripts/arrange-workspace1.sh;
+        executable = true;
+      };
     };
   };
 }
