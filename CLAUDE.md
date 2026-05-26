@@ -65,6 +65,21 @@ Two-tier approach based on file type:
   #   option.name = value;
   ```
 
+### Comment Discipline (avoid verbose comments)
+- Inline comments are ONE line. Never write multi-line comments explaining mechanism, rationale, or edge cases inside config blocks.
+- Comment WHAT a block is, not WHY or HOW it works. The code shows how.
+- If you feel the need to explain why something works, that belongs in a commit message or the module's header doc — not inline.
+- Match the density of surrounding comments. Don't add a comment where neighboring entries have none.
+- Examples:
+  ```nix
+  # Bad (verbose, explains mechanism):
+  # Complementary rules so whichever window opens second snaps the split;
+  # the other's rule no-ops while it is the only window on the workspace.
+
+  # Good (one line, says what):
+  # Workspace 1 columns: Slack 33% (left), Brave 67% (right)
+  ```
+
 ## Git Commits
 - ALWAYS use the `/commit` skill
 - Do not use a task to commit to git
