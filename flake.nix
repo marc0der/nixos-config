@@ -78,7 +78,14 @@
       homeConfigurations = {
         "marco@neomorph" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit unstable rustToolchain claudeDesktop llmAgents; };
+          extraSpecialArgs = {
+            inherit
+              unstable
+              rustToolchain
+              claudeDesktop
+              llmAgents
+              ;
+          };
           modules = [
             ./home.nix
             ./hosts/neomorph/home.nix
@@ -105,7 +112,14 @@
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit unstable rustToolchain claudeDesktop llmAgents; };
+          extraSpecialArgs = {
+            inherit
+              unstable
+              rustToolchain
+              claudeDesktop
+              llmAgents
+              ;
+          };
           modules = [
             ./home.nix
             ./hosts/xenomorph/home.nix
