@@ -60,6 +60,20 @@ This is a flake-based repository using **NixOS 25.05**.
 - **[hosts/xenomorph/configuration.nix](hosts/xenomorph/configuration.nix)**: Xenomorph system config (Hyprland + Gaming)
 - **[hosts/xenomorph/home.nix](hosts/xenomorph/home.nix)**: Xenomorph user config
 
+## Playwright MCP Setup
+
+The Playwright MCP browser config (`~/.config/playwright-mcp/config.json`, which
+points at Brave and enables the Chromium sandbox) is managed by home-manager. The
+MCP server registration itself lives in the mutable `~/.claude.json` and is not in
+this repo, so register it once per machine with:
+
+```bash
+claude mcp add playwright -- npx @playwright/mcp@latest --config ~/.config/playwright-mcp/config.json
+```
+
+The `--` separates Claude's flags from the subprocess command. Restart the Claude
+Code session afterwards for the server to load.
+
 ## Reporting Changes
 
 The system is configured to automatically show changes between system generations during activation.
