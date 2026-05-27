@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "nix fmt --no-warn-dirty -- . < /dev/null",
+            "statusMessage": "Formatting Nix files"
+          }
+        ]
+      }
+    ]
+  }
+}
