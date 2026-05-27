@@ -92,6 +92,7 @@
 
   home.file = {
     ".gnupg/gpg.conf".source = gnupg/gpg.conf;
+    ".config/playwright-mcp/config.json".source = claude/playwright-mcp/config.json;
     ".config/qt5ct/qt5ct.conf".source = qt/qt5ct.conf;
     ".config/qt6ct/qt6ct.conf".source = qt/qt6ct.conf;
     ".local/share/icons/chatgpt.png".source = icons/chatgpt.png;

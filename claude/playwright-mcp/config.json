@@ -1,0 +1,9 @@
+{
+  "browser": {
+    "browserName": "chromium",
+    "launchOptions": {
+      "executablePath": "/home/marco/.nix-profile/bin/brave",
+      "chromiumSandbox": true
+    }
+  }
+}
