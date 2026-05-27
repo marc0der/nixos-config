@@ -9,9 +9,6 @@
     fenix.url = "github:nix-community/fenix";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
-    claude-desktop.url = "github:k3d3/claude-desktop-linux-flake";
-    claude-desktop.inputs.nixpkgs.follows = "nixpkgs";
-    claude-desktop.inputs.flake-utils.follows = "flake-utils";
     llm-agents.url = "github:numtide/llm-agents.nix";
   };
   outputs =
@@ -21,7 +18,6 @@
       nixpkgs-unstable,
       home-manager,
       fenix,
-      claude-desktop,
       llm-agents,
       ...
     }:
@@ -41,7 +37,6 @@
       };
 
       rustToolchain = fenix.packages.${system};
-      claudeDesktop = claude-desktop.packages.${system};
       llmAgents = llm-agents.packages.${system};
 
     in
@@ -82,7 +77,6 @@
             inherit
               unstable
               rustToolchain
-              claudeDesktop
               llmAgents
               ;
           };
@@ -116,7 +110,6 @@
             inherit
               unstable
               rustToolchain
-              claudeDesktop
               llmAgents
               ;
           };

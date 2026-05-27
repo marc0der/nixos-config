@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  claudeDesktop,
   llmAgents,
   unstable,
   ...
@@ -64,7 +63,6 @@
     zsh-powerlevel10k
 
     # Unstable packages
-    claudeDesktop.claude-desktop
     llmAgents.claude-code
     llmAgents.codex
     llmAgents.copilot-cli
@@ -277,6 +275,20 @@
       ];
       comment = "ChatGPT";
       icon = "chatgpt";
+    };
+
+    claude = {
+      name = "Claude";
+      exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default --app="https://claude.ai/" %U'';
+      terminal = false;
+      type = "Application";
+      categories = [
+        "Network"
+        "WebBrowser"
+        "Utility"
+      ];
+      comment = "Claude";
+      icon = "claude-desktop";
     };
   };
 
