@@ -143,6 +143,9 @@
   # Security
   security.pam.services.sddm.enableGnomeKeyring = true;
 
+  # Chromium SUID sandbox helper (for Brave under Playwright)
+  security.chromiumSuidSandbox.enable = true;
+
   # Passwordless sudo for nix rebuild
   security.sudo.extraRules = [
     {
@@ -150,7 +153,10 @@
       commands = [
         {
           command = "/run/current-system/sw/bin/nixos-rebuild";
-          options = [ "NOPASSWD" "SETENV" ];
+          options = [
+            "NOPASSWD"
+            "SETENV"
+          ];
         }
         {
           command = "/run/current-system/sw/bin/nix";
