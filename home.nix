@@ -292,6 +292,19 @@
       comment = "Claude";
       icon = "claude-desktop";
     };
+
+    discord = {
+      name = "Discord";
+      exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Marco --app="https://discord.com/channels/@me/1474759623209783327" %U'';
+      terminal = false;
+      type = "Application";
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
+      comment = "Discord";
+      icon = "discord";
+    };
   };
 
   home.activation.setupClaudeMcpServers = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
