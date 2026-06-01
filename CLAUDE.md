@@ -1,11 +1,11 @@
 # NixOS Configuration Assistant Guide
 
 ## Important Notes
-- New files must be staged with `git add <file>` before home-manager/nixos-rebuild can recognize them
+- New files must be staged in git before home-manager/nixos-rebuild can recognize them
 - Always follow this workflow:
   1. Stage necessary files with git
   2. Run home-manager/nixos-rebuild to verify changes work
-  3. Only commit to git with `/commit` skill if the build was successful
+  3. Only commit to git if the build was successful
 - This ensures we don't commit broken configurations
 
 ## Build Commands
@@ -81,8 +81,9 @@ Two-tier approach based on file type:
   ```
 
 ## Git Commits
-- ALWAYS use the `/commit` skill
-- Do not use a task to commit to git
+- ALWAYS try to use the `/commit` skill
+- Only commit with git directly _if the `/commit` skill is not available_
+- Use conventional commit convention if interacting with git directly: https://www.conventionalcommits.org/en/v1.0.0/
 
 ## Repository Structure
 - Shared base configuration in root directory
