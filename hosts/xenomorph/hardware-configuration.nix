@@ -15,7 +15,7 @@
   };
 
   fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/bce75386-639c-49d0-b94e-cba2842f11bb";
+    device = "/dev/mapper/nvme0n1p4_crypt";
     fsType = "ext4";
   };
 
