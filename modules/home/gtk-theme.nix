@@ -44,6 +44,8 @@ in
     ];
 
     gtk = {
+      gtk4.theme = config.gtk.theme;
+
       theme = {
         name = if cfg.variant == "dark" then "Materia-dark" else "Materia-light";
         package = pkgs.materia-theme;
