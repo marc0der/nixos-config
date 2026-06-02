@@ -138,12 +138,12 @@ with lib;
           command = "floating enable, resize set 1400 900, move position center";
         }
 
-        # Picture-in-Picture (Brave/Chromium) - floating
+        # Picture-in-Picture (Brave/Chromium) - floating, sticky, top-right
         {
           criteria = {
             title = "^Picture[ -]in[ -][Pp]icture$";
           };
-          command = "floating enable";
+          command = "floating enable, sticky enable, move position 70 ppt 4 ppt";
         }
 
         # Zoom (X11) - floating, sized
