@@ -7,6 +7,7 @@
 
   programs.zsh = {
     enable = true;
+    dotDir = config.home.homeDirectory;
     initContent = ''
       # Source secrets file if it exists
       [[ -f ~/.config/secrets/env ]] && source ~/.config/secrets/env
