@@ -67,6 +67,7 @@
     llmAgents.claude-code
     llmAgents.codex
     llmAgents.copilot-cli
+    llmAgents.pi
 
     # Shared themes
     materia-theme
