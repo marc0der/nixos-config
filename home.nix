@@ -45,7 +45,7 @@
     mpv
     nautilus
     ncdu
-    neofetch
+    fastfetch
     nixfmt-rfc-style
     nodejs
     obsidian
