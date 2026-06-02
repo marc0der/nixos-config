@@ -138,6 +138,14 @@ with lib;
           command = "floating enable, resize set 1400 900, move position center";
         }
 
+        # Picture-in-Picture (Brave/Chromium) - floating
+        {
+          criteria = {
+            title = "^Picture[ -]in[ -][Pp]icture$";
+          };
+          command = "floating enable";
+        }
+
         # Zoom (X11) - floating, sized
         {
           criteria = {
