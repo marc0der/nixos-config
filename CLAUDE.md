@@ -18,7 +18,7 @@ These convenience scripts are on the PATH and handle all necessary flags like `-
 
 ### Automated vs Manual Rebuilds
 - **Home manager changes**: ALWAYS run `nix-rebuild-home` automatically after making changes. Do NOT ask the user - just run it immediately. No sudo required.
-- **System changes**: Ask user to run `nix-rebuild-system` or `nix-rebuild-all` (requires sudo) 
+- **System changes**: Run `nix-rebuild-system` or `nix-rebuild-all` directly (sudo not required). No need to ask the user.
 
 ## Reporting Changes
 - Changes reported automatically during activation
