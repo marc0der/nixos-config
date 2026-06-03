@@ -149,10 +149,17 @@ with lib;
     # Hyprpaper configuration
     services.hyprpaper = {
       settings = {
-        preload = [ "/home/marco/.wallpaper.jpg" ];
         wallpaper = [
-          "eDP-1,/home/marco/.wallpaper.jpg"
-          ",/home/marco/.wallpaper.jpg"
+          {
+            monitor = "eDP-1";
+            path = "/home/marco/.wallpaper.jpg";
+            fit_mode = "cover";
+          }
+          {
+            monitor = "";
+            path = "/home/marco/.wallpaper.jpg";
+            fit_mode = "cover";
+          }
         ];
       };
     };

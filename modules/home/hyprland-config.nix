@@ -26,6 +26,7 @@ with lib;
   config = mkIf config.hyprland-config.enable {
     wayland.windowManager.hyprland = {
       enable = true;
+      configType = "hyprlang";
       settings = {
         # Monitor configuration
         monitor = [
@@ -56,7 +57,7 @@ with lib;
         exec-once = [
           "1password --silent"
           "flatpak run com.borgbase.Vorta --daemonize"
-          "wal -i $(hyprctl hyprpaper listactive | cut -d '=' -f 2 | xargs)"
+          "wal -i $(hyprctl hyprpaper listactive | head -n1 | awk '{print $NF}')"
           "wl-paste --type text --watch cliphist store"
           "wl-paste --type image --watch cliphist store"
         ];
@@ -100,7 +101,6 @@ with lib;
 
         # Dwindle layout
         dwindle = {
-          pseudotile = true;
           preserve_split = true;
         };
 
@@ -236,9 +236,6 @@ with lib;
           "$mainMod, mouse:272, movewindow"
           "$mainMod, mouse:273, resizewindow"
         ];
-
-        # Resize submap
-        submap = [ "resize" ];
       };
 
       # Extra config for pywal colors and resize submap

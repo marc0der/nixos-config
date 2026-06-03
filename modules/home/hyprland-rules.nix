@@ -23,21 +23,21 @@ with lib;
   };
 
   config = mkIf config.hyprland-rules.enable {
-    wayland.windowManager.hyprland.settings.windowrulev2 = [
-      "tile, class:^(Brave-browser)$"
-      "tile, class:^(Chromium)$"
-      "float, class:^(org.pulseaudio.pavucontrol)$"
-      "float, class:^(.blueman-manager-wrapped)$"
-      "float, class:^(nm-connection-editor)$"
-      "float, class:^(org.gnome.Calculator)$"
-      "float, class:^(qalculate-gtk)$"
-      "float, class:^(xdg-desktop-portal-gtk)$"
-      "float, title:^(Picture-in-Picture)$"
-      "pin, title:^(Picture-in-Picture)$"
-      "move 69.5% 4%, title:^(Picture-in-Picture)$"
-      "suppressevent maximize, class:.*"
-      "nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
-      "noinitialfocus, class:^(jetbrains-idea)$, title:^(win.*)$"
+    wayland.windowManager.hyprland.settings.windowrule = [
+      "tile true, match:class ^(Brave-browser)$"
+      "tile true, match:class ^(Chromium)$"
+      "float true, match:class ^(org.pulseaudio.pavucontrol)$"
+      "float true, match:class ^(.blueman-manager-wrapped)$"
+      "float true, match:class ^(nm-connection-editor)$"
+      "float true, match:class ^(org.gnome.Calculator)$"
+      "float true, match:class ^(qalculate-gtk)$"
+      "float true, match:class ^(xdg-desktop-portal-gtk)$"
+      "float true, match:title ^(Picture-in-Picture)$"
+      "pin true, match:title ^(Picture-in-Picture)$"
+      "move 69.5% 4%, match:title ^(Picture-in-Picture)$"
+      "suppress_event maximize, match:class .*"
+      "no_focus true, match:class ^$, match:title ^$, match:xwayland 1, match:float 1, match:fullscreen 0, match:pin 0"
+      "no_initial_focus true, match:class ^(jetbrains-idea)$, match:title ^(win.*)$"
     ];
   };
 }
