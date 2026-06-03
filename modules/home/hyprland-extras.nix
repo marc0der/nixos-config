@@ -149,6 +149,7 @@ with lib;
     # Hyprpaper configuration
     services.hyprpaper = {
       settings = {
+        splash = false;
         wallpaper = [
           {
             monitor = "eDP-1";
