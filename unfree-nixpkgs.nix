@@ -9,7 +9,7 @@
       "vscode"
       "obsidian"
       "idea"
-      "protonvpn-gui"
+      "proton-vpn"
       "transcribe"
     ];
 }

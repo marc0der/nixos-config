@@ -46,12 +46,12 @@
     nautilus
     ncdu
     fastfetch
-    nixfmt-rfc-style
+    nixfmt
     nodejs
     obsidian
     pinentry-gnome3
     polkit_gnome
-    protonvpn-gui
+    proton-vpn
     (python3.withPackages (ps: [ ps.faster-whisper ]))
     pywal
     ripgrep
