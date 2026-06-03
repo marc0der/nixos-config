@@ -1,10 +1,9 @@
-{ lib, ... }:
+{ ... }:
 {
   programs.ghostty = {
     enable = true;
     enableZshIntegration = true;
-    # Defaults via mkDefault so hosts can override any setting in their home.nix
-    settings = lib.mkDefault {
+    settings = {
       font-family = "JetBrains Mono NL Light";
       font-size = 11;
       background-opacity = 0.95;
