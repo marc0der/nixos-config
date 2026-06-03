@@ -31,6 +31,10 @@ in
         source = ./scripts/arrange-workspace1.sh;
         executable = true;
       };
+      "bin/kanshi-mirror" = {
+        source = ./scripts/kanshi-mirror.sh;
+        executable = true;
+      };
     };
   };
 }
