@@ -57,7 +57,7 @@ with lib;
         exec-once = [
           "1password --silent"
           "flatpak run com.borgbase.Vorta --daemonize"
-          "wal -i $(hyprctl hyprpaper listactive | head -n1 | awk '{print $NF}')"
+          "wal -i $(hyprctl hyprpaper listactive | head -n1 | awk '{print $NF}') -b \"##0c0e10\""
           "wl-paste --type text --watch cliphist store"
           "wl-paste --type image --watch cliphist store"
         ];
