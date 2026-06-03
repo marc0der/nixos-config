@@ -26,27 +26,23 @@ with lib;
       ];
 
       # Common SSH configuration
-      matchBlocks = {
+      settings = {
         # GitHub
         "github.com" = {
-          identityFile = "~/.ssh/id_rsa";
-          user = "git";
+          IdentityFile = "~/.ssh/id_rsa";
+          User = "git";
         };
 
         # Default configuration for all hosts
         "*" = {
-          identityFile = "~/.ssh/id_rsa";
-          serverAliveInterval = 60;
-          serverAliveCountMax = 3;
+          IdentityFile = "~/.ssh/id_rsa";
+          ServerAliveInterval = 60;
+          ServerAliveCountMax = 3;
+          AddKeysToAgent = "yes";
+          ForwardX11 = true;
+          ForwardX11Trusted = true;
         };
       };
-
-      # Additional SSH client options
-      extraConfig = ''
-        AddKeysToAgent yes
-        ForwardX11 yes
-        ForwardX11Trusted yes
-      '';
     };
 
     # Force overwrite existing SSH config
