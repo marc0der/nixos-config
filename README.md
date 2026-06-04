@@ -29,6 +29,8 @@ This is a flake-based repository using **NixOS 26.05**.
 ```
 .
 ├── bin/                          # Convenience scripts
+├── claude/                       # Claude Code assets (skills, settings, MCP config, scripts) wired in via home.nix
+├── gnupg/                        # GnuPG config files copied into ~/.gnupg via home.nix
 ├── hosts/                        # Machine-specific configurations
 │   ├── neomorph/
 │   │   ├── configuration.nix     # System configuration for neomorph
@@ -38,11 +40,16 @@ This is a flake-based repository using **NixOS 26.05**.
 │       ├── configuration.nix     # System configuration for xenomorph
 │       ├── hardware-configuration.nix
 │       └── home.nix              # User configuration for xenomorph
+├── icons/                        # PNG icons installed into ~/.local/share/icons via home.nix
+├── kitty/                        # Standalone kitty terminal config (not currently wired into Nix; kept for reference)
 ├── modules/                      # Reusable configuration modules
-│   ├── home/                     # Home Manager modules
+│   ├── home/                     # Home Manager modules (opt-in via `enable` flags)
 │   └── system/                   # NixOS system modules
 ├── profiles/                     # Optional feature profiles
-├── shared/                       # Shared configurations
+├── qt/                           # qt5ct/qt6ct theme configs copied into ~/.config via home.nix
+├── rules/                        # Repository conventions and rules (e.g. nixos-config.md) read by humans and assistants
+├── shared/                       # Home Manager fragments imported unconditionally on every host
+├── specs/                        # Proposed-change specifications (e.g. improvements.md)
 ├── configuration.nix             # Base system configuration
 ├── hardware-configuration.nix    # Base hardware configuration
 ├── home.nix                      # Base home-manager configuration
