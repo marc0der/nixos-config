@@ -109,6 +109,7 @@
             ./modules/home/sway-config.nix
             ./modules/home/sway-rules.nix
             ./modules/home/sway-keybindings.nix
+            ./modules/home/sway-startup.nix
             ./profiles/work.nix
           ];
         };
@@ -121,6 +122,8 @@
             ./modules/home/hyprland-desktop.nix
             ./modules/home/hyprland-config.nix
             ./modules/home/hyprland-rules.nix
+            ./modules/home/hyprland-keybindings.nix
+            ./modules/home/hyprland-startup.nix
             ./modules/home/hyprland-extras.nix
           ];
         };

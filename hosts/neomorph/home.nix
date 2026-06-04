@@ -18,6 +18,7 @@
   sway-config.enable = true;
   sway-rules.enable = true;
   sway-keybindings.enable = true;
+  sway-startup.enable = true;
 
   # Workspace 1 default layout: Slack left, Brave right
   wayland.windowManager.sway.config.startup = [

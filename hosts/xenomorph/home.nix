@@ -22,6 +22,8 @@
   hyprland-desktop.enable = true;
   hyprland-config.enable = true;
   hyprland-rules.enable = true;
+  hyprland-keybindings.enable = true;
+  hyprland-startup.enable = true;
   hyprland-extras.enable = true;
 
   # Profiles
