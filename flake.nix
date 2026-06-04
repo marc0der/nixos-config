@@ -72,6 +72,27 @@
           ;
       };
 
+      # System modules imported by every host. Host-specific modules
+      # (host configuration.nix/hardware-configuration.nix, compositor,
+      # host-only services/profiles) are appended in each
+      # nixosConfigurations entry below.
+      commonSystemModules = [
+        ./configuration.nix
+        ./hardware-configuration.nix
+        ./modules/system/audio-pipewire.nix
+        ./modules/system/disable-ipu6-camera.nix
+        ./modules/system/keyboard-gbx.nix
+        ./modules/system/keychron-udev.nix
+        ./modules/system/locale.nix
+        ./modules/system/networking.nix
+        ./modules/system/nix-settings.nix
+        ./modules/system/onepassword.nix
+        ./modules/system/power-management.nix
+        ./modules/system/printing.nix
+        ./modules/system/users-marco.nix
+        ./modules/system/wayland-common.nix
+      ];
+
     in
     {
       formatter.${system} = pkgs.nixfmt;
@@ -79,23 +100,9 @@
       nixosConfigurations = {
         xenomorph = lib.nixosSystem {
           inherit system;
-          modules = [
-            ./configuration.nix
-            ./hardware-configuration.nix
+          modules = commonSystemModules ++ [
             ./hosts/xenomorph/configuration.nix
             ./hosts/xenomorph/hardware-configuration.nix
-            ./modules/system/audio-pipewire.nix
-            ./modules/system/disable-ipu6-camera.nix
-            ./modules/system/keyboard-gbx.nix
-            ./modules/system/keychron-udev.nix
-            ./modules/system/locale.nix
-            ./modules/system/networking.nix
-            ./modules/system/nix-settings.nix
-            ./modules/system/onepassword.nix
-            ./modules/system/power-management.nix
-            ./modules/system/printing.nix
-            ./modules/system/users-marco.nix
-            ./modules/system/wayland-common.nix
             ./modules/system/hyprland.nix
             ./modules/system/tailscale.nix
             ./profiles/gaming.nix
@@ -103,24 +110,10 @@
         };
         neomorph = lib.nixosSystem {
           inherit system;
-          modules = [
-            ./configuration.nix
-            ./hardware-configuration.nix
+          modules = commonSystemModules ++ [
             ./hosts/neomorph/configuration.nix
             ./hosts/neomorph/hardware-configuration.nix
-            ./modules/system/audio-pipewire.nix
-            ./modules/system/disable-ipu6-camera.nix
-            ./modules/system/keyboard-gbx.nix
-            ./modules/system/keychron-udev.nix
-            ./modules/system/locale.nix
-            ./modules/system/networking.nix
-            ./modules/system/nix-settings.nix
-            ./modules/system/onepassword.nix
-            ./modules/system/power-management.nix
-            ./modules/system/printing.nix
-            ./modules/system/users-marco.nix
             ./modules/system/clamav.nix
-            ./modules/system/wayland-common.nix
             ./modules/system/sway.nix
           ];
         };
