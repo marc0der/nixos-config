@@ -342,6 +342,7 @@
   };
 
   # NixOS release version
+  # Pinned to original install (24.11); deliberately not bumped with channel.
   system.stateVersion = "24.11";
 
 }

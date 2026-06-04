@@ -11,6 +11,7 @@
 
   home.username = "marco";
   home.homeDirectory = "/home/marco";
+  # Pinned to original install (24.11); deliberately not bumped with channel.
   home.stateVersion = "24.11";
 
   desktop-common.enable = true;
