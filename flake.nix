@@ -39,6 +39,34 @@
       rustToolchain = fenix.packages.${system};
       llmAgents = llm-agents.packages.${system};
 
+      # Home-manager modules shared by every host. Host-specific modules
+      # (compositor, xdg-portal, host home.nix, host-only profiles) are
+      # appended in each homeConfigurations entry below.
+      commonHomeModules = [
+        ./home.nix
+        ./shared/git.nix
+        ./shared/report.nix
+        ./shared/tmux.nix
+        ./shared/zsh.nix
+        ./shared/rust.nix
+        ./modules/home/terminal-ghostty.nix
+        ./modules/home/ssh-config.nix
+        ./modules/home/desktop-common.nix
+        ./modules/home/gtk-theme.nix
+        ./modules/home/xdg-mimetypes.nix
+        ./modules/home/session-variables.nix
+        ./modules/home/home-scripts.nix
+        ./profiles/music-production.nix
+      ];
+
+      commonHomeExtraSpecialArgs = {
+        inherit
+          unstable
+          rustToolchain
+          llmAgents
+          ;
+      };
+
     in
     {
       formatter.${system} = pkgs.nixfmt;
@@ -73,67 +101,27 @@
       homeConfigurations = {
         "marco@neomorph" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = {
-            inherit
-              unstable
-              rustToolchain
-              llmAgents
-              ;
-          };
-          modules = [
-            ./home.nix
+          extraSpecialArgs = commonHomeExtraSpecialArgs;
+          modules = commonHomeModules ++ [
             ./hosts/neomorph/home.nix
-            ./shared/git.nix
-            ./shared/report.nix
-            ./shared/tmux.nix
-            ./shared/zsh.nix
-            ./modules/home/terminal-ghostty.nix
-            ./modules/home/ssh-config.nix
-            ./shared/rust.nix
-            ./modules/home/desktop-common.nix
-            ./modules/home/gtk-theme.nix
             ./modules/home/xdg-portal-sway.nix
-            ./modules/home/xdg-mimetypes.nix
             ./modules/home/sway-desktop.nix
             ./modules/home/sway-config.nix
             ./modules/home/sway-rules.nix
             ./modules/home/sway-keybindings.nix
-            ./modules/home/session-variables.nix
-            ./modules/home/home-scripts.nix
-            ./profiles/music-production.nix
             ./profiles/work.nix
           ];
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = {
-            inherit
-              unstable
-              rustToolchain
-              llmAgents
-              ;
-          };
-          modules = [
-            ./home.nix
+          extraSpecialArgs = commonHomeExtraSpecialArgs;
+          modules = commonHomeModules ++ [
             ./hosts/xenomorph/home.nix
-            ./shared/git.nix
-            ./shared/report.nix
-            ./shared/tmux.nix
-            ./shared/zsh.nix
-            ./modules/home/terminal-ghostty.nix
-            ./modules/home/ssh-config.nix
-            ./shared/rust.nix
-            ./modules/home/desktop-common.nix
-            ./modules/home/gtk-theme.nix
             ./modules/home/xdg-portal-hyprland.nix
-            ./modules/home/xdg-mimetypes.nix
             ./modules/home/hyprland-desktop.nix
             ./modules/home/hyprland-config.nix
             ./modules/home/hyprland-rules.nix
             ./modules/home/hyprland-extras.nix
-            ./modules/home/session-variables.nix
-            ./modules/home/home-scripts.nix
-            ./profiles/music-production.nix
           ];
         };
       };
