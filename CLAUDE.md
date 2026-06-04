@@ -26,6 +26,7 @@ These convenience scripts are on the PATH and handle all necessary flags like `-
 ## Reporting Changes
 - Changes reported automatically during activation
 - Manual check: `nvd diff /run/current-system /nix/var/nix/profiles/system`
+- Parity-preserving refactors: compare the build `.drvPath` before and after. Identical hashes prove byte-identical output; a changed hash must be explained by diffing the realized build.
 
 ## Code Style Guidelines
 - Use 2-space indentation in all Nix files
