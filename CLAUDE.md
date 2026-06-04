@@ -92,7 +92,7 @@ Two-tier approach based on file type:
 - Shared base configuration in root directory
 - Machine-specific configs in named subdirectories
 - Desktop entries (.desktop) organized by machine
-- Flake-based repository using NixOS 25.11
+- Flake-based repository using NixOS 26.05
 
 ## Assistant Behavior
 - Always ask for confirmation before renaming, moving, or restructuring directories

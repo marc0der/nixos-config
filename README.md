@@ -24,7 +24,7 @@ These scripts will automatically be added to your `PATH`.
 
 ## Repository Structure
 
-This is a flake-based repository using **NixOS 25.05**.
+This is a flake-based repository using **NixOS 26.05**.
 
 ```
 .
