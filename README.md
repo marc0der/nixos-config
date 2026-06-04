@@ -48,7 +48,7 @@ This is a flake-based repository using **NixOS 26.05**.
 ├── profiles/                     # Optional feature profiles
 ├── qt/                           # qt5ct/qt6ct theme configs copied into ~/.config via home.nix
 ├── rules/                        # Repository conventions and rules (e.g. nixos-config.md) read by humans and assistants
-├── shared/                       # Home Manager fragments imported unconditionally on every host
+├── shared/                       # Home Manager fragments imported unconditionally on every host (no options)
 ├── specs/                        # Proposed-change specifications (e.g. improvements.md)
 ├── configuration.nix             # Base system configuration
 ├── hardware-configuration.nix    # Base hardware configuration
@@ -56,6 +56,15 @@ This is a flake-based repository using **NixOS 26.05**.
 ├── flake.nix                     # Flake entry point
 └── unfree-nixpkgs.nix            # Unfree packages configuration
 ```
+
+### Home Manager Module Policy
+
+Home-manager configuration is split by contract:
+
+- **`shared/`** — imported unconditionally on every host, exposes **no** options. If a piece of home configuration should always be on for every machine, it lives here. The directory is wired into both `homeConfigurations` entries in `flake.nix` via a single shared list.
+- **`modules/home/`** — **opt-in via an `enable` flag** (or equivalent option). Each host turns on what it needs from its own `hosts/<name>/home.nix`. Modules that genuinely vary per host (compositors, portals, host-specific scripts, themes with per-host variants) belong here.
+
+Non-`.nix` assets live beside the module that consumes them (e.g. `shared/powerline/` beside `shared/zsh.nix`, `modules/home/scripts/` beside `modules/home/home-scripts.nix`). The full rule lives next to RULE-102 in [`rules/nixos-config.md`](rules/nixos-config.md).
 
 ### Key Configuration Files
 
