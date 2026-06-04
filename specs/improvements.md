@@ -8,6 +8,22 @@ This document describes _what_ should change and _why_. Implementation choices
 are left to whoever picks up the work, except where a constraint is explicitly
 called out.
 
+## Constraints (from `rules/nixos-config.md`)
+
+Every item below must be carried out within the existing rules. In particular:
+
+- Follow the build/commit workflow on each item: stage new files with `git add`
+  first (RULE-001), rebuild to verify (RULE-002), and only commit after a
+  successful build via the `/commit` skill (RULE-007). "Eval-equivalent" items
+  (§1, §3) must be proven with a rebuild and `nvd diff` before commit.
+- New or relocated modules are registered in `flake.nix`, never pulled in via an
+  inline `imports = [ ... ]` (RULE-003).
+- Items that move, rename, or remove files or directories (§3, §5, §6) require
+  explicit user confirmation before the change is made (RULE-105). Keep changes
+  small and reviewable.
+- This spec must not contradict any rule. Where a rule would need to change to
+  enable an item, the item is out of scope until the rule is amended first.
+
 ---
 
 ## 1. Deduplicate Home Manager module lists in `flake.nix`
@@ -37,7 +53,7 @@ entry in `flake.nix` lists only what is unique to that host.
 ## 2. Shrink the root `configuration.nix` and `home.nix`
 
 ### Current state
-`configuration.nix` (347 lines) and `home.nix` (345 lines) are the two largest
+`configuration.nix` (347 lines) and `home.nix` (346 lines) are the two largest
 files in the repository and dwarf every module. They mix unrelated concerns:
 bootloader, locale, networking, kernel-module blacklists, large package lists,
 shell setup, etc.
@@ -46,7 +62,9 @@ shell setup, etc.
 The root files contain only configuration that is genuinely shared, generic,
 and small enough to read in one sitting. Anything that fits a clear theme moves
 into a named module under `modules/system/` or `modules/home/` and is enabled
-via an option flag in keeping with the existing module style.
+via an option flag in keeping with the existing module style. New modules must
+be registered in the appropriate `flake.nix` module list, never pulled in via an
+inline `imports = [ ... ]` (RULE-003).
 
 ### Advantage
 - Easier to locate a given piece of configuration.
@@ -87,20 +105,23 @@ Exactly one of the following is true:
 
 ---
 
-## 4. Fix the NixOS version stated in `README.md`
+## 4. Fix the NixOS version stated in docs
 
 ### Current state
-`README.md` says "This is a flake-based repository using **NixOS 25.05**".
-`flake.nix` pins `nixos-25.11`.
+Three different release strings disagree:
+- `README.md` says "This is a flake-based repository using **NixOS 25.05**".
+- `CLAUDE.md` says "Flake-based repository using NixOS 25.11".
+- `flake.nix` actually pins `nixos-26.05` (and `home-manager` `release-26.05`).
 
 ### Desired outcome
-The README reflects the actual pinned release.
+Both `README.md` and `CLAUDE.md` reflect the actual pinned release.
 
 ### Advantage
 - Documentation matches reality. Low effort, high signal.
 
 ### Acceptance criteria
-- README states 25.11 (or whatever is currently pinned).
+- `README.md` and `CLAUDE.md` both state 26.05 (or whatever is currently
+  pinned in `flake.nix`).
 
 ---
 
@@ -114,16 +135,24 @@ unconditionally. Some `modules/home/` files (`terminal-ghostty.nix`,
 unconditionally. There is no rule that explains which directory a new module
 should go in.
 
-### Desired outcome
-One of:
-- **Collapse:** `shared/` is merged into `modules/home/`. Every home module
-  lives in one place and is gated by an `enable` option where appropriate.
-- **Split by contract:** `shared/` means "imported by every host, exposes no
-  options". `modules/home/` means "opt-in via an `enable` flag". Modules are
-  moved to the directory that matches the contract they actually fulfil.
+Note: `rules/nixos-config.md` (RULE-102) already defines `shared/` as
+"cross-host home fragments" and `modules/home/` as "home modules". The policy
+below is the one consistent with that existing rule and must not contradict it.
 
-Either choice is acceptable; the project must pick one and apply it
-consistently.
+The policy must also state where non-`.nix` assets live. `shared/` currently
+contains `shared/powerline/` (a p10k asset tree) and `modules/home/` contains
+`modules/home/scripts/` (shell scripts), so "home modules" is not purely `.nix`
+files today.
+
+### Desired outcome
+Split by contract (consistent with RULE-102): `shared/` means "imported by
+every host, exposes no options"; `modules/home/` means "opt-in via an `enable`
+flag". Modules are moved to the directory that matches the contract they
+actually fulfil. This contract is then applied consistently across the repo.
+
+Non-`.nix` assets stay with the module that consumes them (e.g.
+`shared/powerline/` beside the module that references it, `modules/home/scripts/`
+beside the home modules that install them).
 
 ### Advantage
 - New contributors (and the author six months later) know where to put things.
@@ -139,12 +168,18 @@ consistently.
 ## 6. Document or remove unreferenced top-level directories
 
 ### Current state
-The following directories exist at the repository root and are not mentioned in
-`README.md` or referenced from `flake.nix`: `gnupg/`, `icons/`, `kitty/`,
-`qt/`, `claude/`. Their purpose is not discoverable from the repository alone.
+The `kitty/` directory (containing `kitty.conf`) exists at the repository root,
+is not referenced by any `.nix` file, and is not mentioned in `README.md`. Its
+purpose is not discoverable from the repository alone.
+
+For contrast, `gnupg/`, `icons/`, `qt/`, and `claude/` are _also_ absent from
+the `README.md` tree, but each is referenced from `home.nix` via `home.file` /
+`xdg` (so it is at least discoverable by grepping the Nix sources). The newer
+`rules/` and `specs/` directories are likewise missing from the README tree.
 
 ### Desired outcome
-For each directory, exactly one of:
+For each undocumented top-level directory (`kitty/`, plus the README-tree gaps
+for `gnupg/`, `icons/`, `qt/`, `claude/`, `rules/`, `specs/`), exactly one of:
 - It is referenced from a Nix module (e.g. via `home.file` or
   `xdg.configFile`), and that reference is easy to find; **or**
 - It is described in the README's repository-structure section in one line;
@@ -168,8 +203,11 @@ For each directory, exactly one of:
 Sway is split into four home modules: `sway-desktop.nix`, `sway-config.nix`,
 `sway-rules.nix`, `sway-keybindings.nix`. Hyprland is split into four with a
 different shape: `hyprland-desktop.nix`, `hyprland-config.nix`,
-`hyprland-rules.nix`, `hyprland-extras.nix`. `hyprland-config.nix` is 266 lines
-and contains keybindings inline; the equivalent Sway file has them extracted.
+`hyprland-rules.nix`, `hyprland-extras.nix`. `hyprland-config.nix` is 263 lines
+and contains keybindings inline; the equivalent Sway file has them extracted
+into `sway-keybindings.nix`. Note, however, that `sway-config.nix` is still 272
+lines even with keybindings extracted, so Sway is not a clean exemplar of the
+150-line target below.
 
 ### Desired outcome
 The two compositors follow the same decomposition. Specifically, Hyprland gains
@@ -186,14 +224,17 @@ obvious.
 ### Acceptance criteria
 - `modules/home/` contains a `*-keybindings.nix` for both `sway` and
   `hyprland`.
-- No `*-config.nix` for either compositor exceeds roughly 150 lines.
+- No `*-config.nix` for either compositor exceeds roughly 150 lines. This
+  requires further extraction from `sway-config.nix` (272 lines) as well as
+  `hyprland-config.nix`, not just adding `hyprland-keybindings.nix`.
 
 ---
 
 ## 8. Confirm `home.stateVersion`
 
 ### Current state
-`home.nix` sets `home.stateVersion = "24.11";` while the flake tracks 25.11.
+`home.nix` sets `home.stateVersion = "24.11";` (and `configuration.nix` sets
+`system.stateVersion = "24.11";`) while the flake tracks 26.05.
 This is most likely correct — `stateVersion` is a one-time pin, not a tracking
 field — but it is worth a deliberate confirmation rather than a drive-by bump.
 
@@ -232,7 +273,8 @@ The items are independent, but a sensible order minimises risk:
 2. §6 (document or remove stray directories) — purely organisational.
 3. §1 (dedupe flake module lists) — eval-equivalent refactor.
 4. §3 (hardware-configuration cleanup) — small and self-contained.
-5. §5 (shared vs modules/home policy) — decide first, then move files.
+5. §5 (shared vs modules/home policy) — document the split-by-contract policy,
+   then move files to match it.
 6. §2 (shrink root files) — largest diff; do after §5 so destinations are
    clear.
 7. §7 (compositor symmetry) — independent of the rest.
