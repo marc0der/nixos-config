@@ -139,8 +139,6 @@
     "$HOME/.cargo/bin"
   ];
 
-  home.changes-report.enable = true;
-
   programs.home-manager.enable = true;
 
   xdg.enable = true;
