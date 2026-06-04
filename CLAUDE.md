@@ -1,5 +1,8 @@
 # NixOS Configuration Assistant Guide
 
+## Rules
+- Follow the rules in [rules/nixos-config.md](rules/nixos-config.md) when writing or changing any config.
+
 ## Important Notes
 - New files must be staged in git before home-manager/nixos-rebuild can recognize them
 - Always follow this workflow:
