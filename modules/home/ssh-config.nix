@@ -1,9 +1,13 @@
 # SSH Configuration Module
 #
-# Manages SSH client configuration via home-manager.
+# Manages SSH client configuration via home-manager. Sets the global control
+# socket/persist defaults and pulls per-host stanzas from ~/.ssh/config.d/*.
 # Private keys remain in ~/.ssh/ and are managed outside of Nix.
 #
-# Usage:
+# Options:
+#   ssh-config.enable - Enable home-manager SSH client config (default: false)
+#
+# Example usage:
 #   ssh-config.enable = true;
 
 { config, lib, ... }:

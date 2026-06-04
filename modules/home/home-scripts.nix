@@ -1,9 +1,15 @@
 # Home Scripts Module
 #
-# Manages installation of shared utility scripts to ~/bin
+# Installs shared utility shell scripts (volume-helper, workspace-arrange,
+# screenshot, etc.) from `modules/home/scripts/` into ~/bin with the
+# executable bit set. Currently enabled only on hosts that need them
+# (see `hosts/*/home.nix`).
 #
 # Options:
 #   home-scripts.enable - Enable home scripts installation (default: false)
+#
+# Example usage:
+#   home-scripts.enable = true;
 
 {
   config,
