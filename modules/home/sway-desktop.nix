@@ -3,10 +3,10 @@
 # Provides Sway-specific packages and configuration.
 #
 # Options:
-#   sway-desktop.enable - Enable Sway desktop packages
+#   local.sway-desktop.enable - Enable Sway desktop packages
 #
 # Example usage:
-#   sway-desktop.enable = true;
+#   local.sway-desktop.enable = true;
 
 {
   config,
@@ -18,11 +18,11 @@
 with lib;
 
 {
-  options.sway-desktop = {
+  options.local.sway-desktop = {
     enable = mkEnableOption "Sway desktop environment packages";
   };
 
-  config = mkIf config.sway-desktop.enable {
+  config = mkIf config.local.sway-desktop.enable {
     home.packages = with pkgs; [
       dunst
       sway-contrib.grimshot

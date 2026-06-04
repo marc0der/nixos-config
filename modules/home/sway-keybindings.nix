@@ -6,14 +6,14 @@
 # `modules/home/hyprland-keybindings.nix` for the Sway compositor.
 #
 # Options:
-#   sway-keybindings.enable - Enable keybindings (default: false)
-#   sway-keybindings.brightnessStep - Brightness change step percentage (default: "5")
-#   sway-keybindings.volumeStep - Volume change step numeric (default: "5")
-#   sway-keybindings.volumeLimit - Maximum volume percentage numeric (default: "100")
+#   local.sway-keybindings.enable - Enable keybindings (default: false)
+#   local.sway-keybindings.brightnessStep - Brightness change step percentage (default: "5")
+#   local.sway-keybindings.volumeStep - Volume change step numeric (default: "5")
+#   local.sway-keybindings.volumeLimit - Maximum volume percentage numeric (default: "100")
 #
 # Example usage:
-#   sway-keybindings.enable = true;
-#   sway-keybindings.brightnessStep = "10";
+#   local.sway-keybindings.enable = true;
+#   local.sway-keybindings.brightnessStep = "10";
 
 {
   config,
@@ -25,7 +25,7 @@
 with lib;
 
 let
-  cfg = config.sway-keybindings;
+  cfg = config.local.sway-keybindings;
 
   # Brightness notification command (single line for sway config)
   brightnessNotification = ''command -v notify-send >/dev/null && VALUE=$(${pkgs.brightnessctl}/bin/brightnessctl --percentage get) && ${pkgs.libnotify}/bin/notify-send -e -h string:x-canonical-private-synchronous:brightness -h "int:value:$VALUE" -t 800 "Brightness: ''${VALUE}%"'';
@@ -34,7 +34,7 @@ let
   volumeHelper = "/home/marco/bin/volume-helper";
 in
 {
-  options.sway-keybindings = {
+  options.local.sway-keybindings = {
     enable = mkEnableOption "Sway keybindings";
 
     brightnessStep = mkOption {

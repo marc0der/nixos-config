@@ -5,10 +5,10 @@
 # sudo.
 #
 # Options:
-#   keychron-udev.enable - Install Keychron K3 Pro udev rules
+#   local.keychron-udev.enable - Install Keychron K3 Pro udev rules
 #
 # Example usage:
-#   keychron-udev.enable = true;
+#   local.keychron-udev.enable = true;
 {
   config,
   lib,
@@ -16,10 +16,10 @@
 }:
 
 let
-  cfg = config.keychron-udev;
+  cfg = config.local.keychron-udev;
 in
 {
-  options.keychron-udev = {
+  options.local.keychron-udev = {
     enable = lib.mkEnableOption "Keychron K3 Pro udev rules";
   };
 

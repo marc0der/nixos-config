@@ -6,10 +6,10 @@
 # systemd unit tied to graphical-session.target.
 #
 # Options:
-#   keyring-services.enable - Enable keyring + gpg-agent + polkit agent
+#   local.keyring-services.enable - Enable keyring + gpg-agent + polkit agent
 #
 # Example usage:
-#   keyring-services.enable = true;
+#   local.keyring-services.enable = true;
 {
   config,
   lib,
@@ -18,10 +18,10 @@
 }:
 
 let
-  cfg = config.keyring-services;
+  cfg = config.local.keyring-services;
 in
 {
-  options.keyring-services = {
+  options.local.keyring-services = {
     enable = lib.mkEnableOption "gnome-keyring, gpg-agent, and PolKit agent";
   };
 

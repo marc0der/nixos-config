@@ -6,10 +6,10 @@
 # reason Avahi is enabled in this config.
 #
 # Options:
-#   printing.enable - Enable CUPS + Brother driver + Avahi
+#   local.printing.enable - Enable CUPS + Brother driver + Avahi
 #
 # Example usage:
-#   printing.enable = true;
+#   local.printing.enable = true;
 {
   config,
   lib,
@@ -18,10 +18,10 @@
 }:
 
 let
-  cfg = config.printing;
+  cfg = config.local.printing;
 in
 {
-  options.printing = {
+  options.local.printing = {
     enable = lib.mkEnableOption "CUPS printing with Brother driver and Avahi";
   };
 

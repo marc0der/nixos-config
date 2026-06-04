@@ -4,10 +4,10 @@
 # Migrated from ~/.config/sway/config.d/50-rules-*.conf
 #
 # Options:
-#   sway-rules.enable - Enable window rules (default: false)
+#   local.sway-rules.enable - Enable window rules (default: false)
 #
 # Example usage:
-#   sway-rules.enable = true;
+#   local.sway-rules.enable = true;
 
 {
   config,
@@ -19,11 +19,11 @@
 with lib;
 
 {
-  options.sway-rules = {
+  options.local.sway-rules = {
     enable = mkEnableOption "Sway window rules";
   };
 
-  config = mkIf config.sway-rules.enable {
+  config = mkIf config.local.sway-rules.enable {
     wayland.windowManager.sway.config = {
       # Workspace 1 default layout: assign EE Slack PWA there
       assigns = {

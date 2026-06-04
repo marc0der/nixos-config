@@ -10,10 +10,10 @@
 # extraSpecialArgs from flake.nix.
 #
 # Options:
-#   claude-mcp.enable - Register MCP servers with Claude Code on activation
+#   local.claude-mcp.enable - Register MCP servers with Claude Code on activation
 #
 # Example usage:
-#   claude-mcp.enable = true;
+#   local.claude-mcp.enable = true;
 {
   config,
   lib,
@@ -22,10 +22,10 @@
 }:
 
 let
-  cfg = config.claude-mcp;
+  cfg = config.local.claude-mcp;
 in
 {
-  options.claude-mcp = {
+  options.local.claude-mcp = {
     enable = lib.mkEnableOption "Claude Code MCP server registration";
   };
 

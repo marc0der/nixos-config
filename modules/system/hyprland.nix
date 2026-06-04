@@ -4,10 +4,10 @@
 # hyprlock for screen locking and UWSM session management.
 #
 # Options:
-#   programs.hyprland-desktop.enable - Enable Hyprland desktop environment
+#   local.programs.hyprland-desktop.enable - Enable Hyprland desktop environment
 #
 # Example usage:
-#   programs.hyprland-desktop.enable = true;
+#   local.programs.hyprland-desktop.enable = true;
 
 {
   config,
@@ -19,11 +19,11 @@
 with lib;
 
 {
-  options.programs.hyprland-desktop = {
+  options.local.programs.hyprland-desktop = {
     enable = mkEnableOption "Hyprland desktop environment";
   };
 
-  config = mkIf config.programs.hyprland-desktop.enable {
+  config = mkIf config.local.programs.hyprland-desktop.enable {
     programs.hyprland = {
       enable = true;
       withUWSM = true;

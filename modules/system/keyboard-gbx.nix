@@ -6,10 +6,10 @@
 # compose reliably in Wayland terminals like Ghostty.
 #
 # Options:
-#   keyboard-gbx.enable - Enable xserver + gbx layout
+#   local.keyboard-gbx.enable - Enable xserver + gbx layout
 #
 # Example usage:
-#   keyboard-gbx.enable = true;
+#   local.keyboard-gbx.enable = true;
 {
   config,
   lib,
@@ -18,10 +18,10 @@
 }:
 
 let
-  cfg = config.keyboard-gbx;
+  cfg = config.local.keyboard-gbx;
 in
 {
-  options.keyboard-gbx = {
+  options.local.keyboard-gbx = {
     enable = lib.mkEnableOption "xserver with gbx (UK + literal backtick) layout";
   };
 

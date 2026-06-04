@@ -5,10 +5,10 @@
 # and common display manager settings.
 #
 # Options:
-#   wayland.enable - Enable common Wayland configuration (default: false)
+#   local.wayland.enable - Enable common Wayland configuration (default: false)
 #
 # Example usage:
-#   wayland.enable = true;
+#   local.wayland.enable = true;
 
 {
   config,
@@ -20,11 +20,11 @@
 with lib;
 
 {
-  options.wayland = {
+  options.local.wayland = {
     enable = mkEnableOption "common Wayland configuration for compositors";
   };
 
-  config = mkIf config.wayland.enable {
+  config = mkIf config.local.wayland.enable {
     # XDG desktop portal base configuration
     # Note: Compositor-specific portals (hyprland/wlr) are configured in their respective modules
     xdg.portal = {

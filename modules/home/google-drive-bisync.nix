@@ -16,10 +16,10 @@
 # a valid rclone config at ~/.config/rclone/rclone.conf with a `drive:` remote.
 #
 # Options:
-#   google-drive-bisync.enable - Enable the bisync service + 10-min timer
+#   local.google-drive-bisync.enable - Enable the bisync service + 10-min timer
 #
 # Example usage:
-#   google-drive-bisync.enable = true;
+#   local.google-drive-bisync.enable = true;
 {
   config,
   lib,
@@ -29,15 +29,14 @@
 }:
 
 let
-  cfg = config.google-drive-bisync;
+  cfg = config.local.google-drive-bisync;
   isNeomorph = hostName == "neomorph";
   syncSchedule = if isNeomorph then "*:00/10" else "*:05/10";
-  scheduleLogStr =
-    if isNeomorph then ":00,:10,:20,:30,:40,:50" else ":05,:15,:25,:35,:45,:55";
+  scheduleLogStr = if isNeomorph then ":00,:10,:20,:30,:40,:50" else ":05,:15,:25,:35,:45,:55";
   onBoot = if isNeomorph then "2min" else "7min";
 in
 {
-  options.google-drive-bisync = {
+  options.local.google-drive-bisync = {
     enable = lib.mkEnableOption "Google Drive bisync via rclone (10-minute timer)";
   };
 

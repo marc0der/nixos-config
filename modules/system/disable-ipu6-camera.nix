@@ -5,10 +5,10 @@
 # fail to enumerate other webcams.
 #
 # Options:
-#   hardware.disable-ipu6-camera.enable - Blacklist Intel IPU6 camera modules
+#   local.hardware.disable-ipu6-camera.enable - Blacklist Intel IPU6 camera modules
 #
 # Example usage:
-#   hardware.disable-ipu6-camera.enable = true;
+#   local.hardware.disable-ipu6-camera.enable = true;
 {
   config,
   lib,
@@ -16,10 +16,10 @@
 }:
 
 let
-  cfg = config.hardware.disable-ipu6-camera;
+  cfg = config.local.hardware.disable-ipu6-camera;
 in
 {
-  options.hardware.disable-ipu6-camera = {
+  options.local.hardware.disable-ipu6-camera = {
     enable = lib.mkEnableOption "Intel IPU6 camera blacklist";
   };
 

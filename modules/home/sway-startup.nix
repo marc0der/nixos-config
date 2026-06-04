@@ -6,10 +6,10 @@
 # `modules/home/hyprland-startup.nix` for the Sway compositor.
 #
 # Options:
-#   sway-startup.enable - Enable Sway startup programs (default: false)
+#   local.sway-startup.enable - Enable Sway startup programs (default: false)
 #
 # Example usage:
-#   sway-startup.enable = true;
+#   local.sway-startup.enable = true;
 
 {
   config,
@@ -21,11 +21,11 @@
 with lib;
 
 {
-  options.sway-startup = {
+  options.local.sway-startup = {
     enable = mkEnableOption "Sway startup programs";
   };
 
-  config = mkIf config.sway-startup.enable {
+  config = mkIf config.local.sway-startup.enable {
     wayland.windowManager.sway.config.startup = [
       { command = "dunst"; }
       { command = "nm-applet"; }

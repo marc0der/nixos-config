@@ -4,10 +4,10 @@
 # hyprlock (lock screen), and hyprpaper (wallpaper).
 #
 # Options:
-#   hyprland-extras.enable - Enable Hyprland extra services
+#   local.hyprland-extras.enable - Enable Hyprland extra services
 #
 # Example usage:
-#   hyprland-extras.enable = true;
+#   local.hyprland-extras.enable = true;
 
 {
   config,
@@ -19,11 +19,11 @@
 with lib;
 
 {
-  options.hyprland-extras = {
+  options.local.hyprland-extras = {
     enable = mkEnableOption "Hyprland extra services (hypridle, hyprlock, hyprpaper)";
   };
 
-  config = mkIf config.hyprland-extras.enable {
+  config = mkIf config.local.hyprland-extras.enable {
     # Hypridle configuration
     services.hypridle = {
       settings = {

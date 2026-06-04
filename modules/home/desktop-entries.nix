@@ -6,10 +6,10 @@
 # one-place change and home.nix stays focused on top-level configuration.
 #
 # Options:
-#   web-app-launchers.enable - Install the Brave web-app .desktop entries
+#   local.web-app-launchers.enable - Install the Brave web-app .desktop entries
 #
 # Example usage:
-#   web-app-launchers.enable = true;
+#   local.web-app-launchers.enable = true;
 {
   config,
   lib,
@@ -17,10 +17,10 @@
 }:
 
 let
-  cfg = config.web-app-launchers;
+  cfg = config.local.web-app-launchers;
 in
 {
-  options.web-app-launchers = {
+  options.local.web-app-launchers = {
     enable = lib.mkEnableOption "Brave web-app .desktop entries";
   };
 

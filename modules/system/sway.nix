@@ -4,10 +4,10 @@
 # XWayland support and GTK wrapper features.
 #
 # Options:
-#   programs.sway-desktop.enable - Enable Sway desktop environment
+#   local.programs.sway-desktop.enable - Enable Sway desktop environment
 #
 # Example usage:
-#   programs.sway-desktop.enable = true;
+#   local.programs.sway-desktop.enable = true;
 
 {
   config,
@@ -19,11 +19,11 @@
 with lib;
 
 {
-  options.programs.sway-desktop = {
+  options.local.programs.sway-desktop = {
     enable = mkEnableOption "Sway desktop environment";
   };
 
-  config = mkIf config.programs.sway-desktop.enable {
+  config = mkIf config.local.programs.sway-desktop.enable {
     programs.sway = {
       enable = true;
       wrapperFeatures.gtk = true;

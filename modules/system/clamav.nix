@@ -1,10 +1,10 @@
 # ClamAV antivirus module with daily scanning
 #
 # Options:
-#   services.clamav-security.enable - Enable ClamAV antivirus with daily scans
+#   local.services.clamav-security.enable - Enable ClamAV antivirus with daily scans
 #
 # Example usage:
-#   services.clamav-security.enable = true;
+#   local.services.clamav-security.enable = true;
 {
   config,
   lib,
@@ -13,10 +13,10 @@
 }:
 
 let
-  cfg = config.services.clamav-security;
+  cfg = config.local.services.clamav-security;
 in
 {
-  options.services.clamav-security = {
+  options.local.services.clamav-security = {
     enable = lib.mkEnableOption "ClamAV antivirus with daily scanning";
   };
 

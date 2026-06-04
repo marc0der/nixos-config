@@ -5,10 +5,10 @@
 # `modules/home/sway-startup.nix` for the Hyprland compositor.
 #
 # Options:
-#   hyprland-startup.enable - Enable Hyprland startup programs (default: false)
+#   local.hyprland-startup.enable - Enable Hyprland startup programs (default: false)
 #
 # Example usage:
-#   hyprland-startup.enable = true;
+#   local.hyprland-startup.enable = true;
 
 {
   config,
@@ -19,11 +19,11 @@
 with lib;
 
 {
-  options.hyprland-startup = {
+  options.local.hyprland-startup = {
     enable = mkEnableOption "Hyprland startup programs";
   };
 
-  config = mkIf config.hyprland-startup.enable {
+  config = mkIf config.local.hyprland-startup.enable {
     wayland.windowManager.hyprland.settings.exec-once = [
       "1password --silent"
       "flatpak run com.borgbase.Vorta --daemonize"

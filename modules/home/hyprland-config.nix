@@ -7,10 +7,10 @@
 # `hyprland-extras.nix`.
 #
 # Options:
-#   hyprland-config.enable - Enable Hyprland configuration
+#   local.hyprland-config.enable - Enable Hyprland configuration
 #
 # Example usage:
-#   hyprland-config.enable = true;
+#   local.hyprland-config.enable = true;
 
 {
   config,
@@ -21,11 +21,11 @@
 with lib;
 
 {
-  options.hyprland-config = {
+  options.local.hyprland-config = {
     enable = mkEnableOption "Hyprland window manager configuration";
   };
 
-  config = mkIf config.hyprland-config.enable {
+  config = mkIf config.local.hyprland-config.enable {
     wayland.windowManager.hyprland = {
       enable = true;
       configType = "hyprlang";

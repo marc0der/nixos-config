@@ -5,10 +5,10 @@
 # host that wants any of these gets the consistent bundle.
 #
 # Options:
-#   locale-en-gb.enable - Enable en_GB locale + Europe/London + uk console
+#   local.locale-en-gb.enable - Enable en_GB locale + Europe/London + uk console
 #
 # Example usage:
-#   locale-en-gb.enable = true;
+#   local.locale-en-gb.enable = true;
 {
   config,
   lib,
@@ -16,10 +16,10 @@
 }:
 
 let
-  cfg = config.locale-en-gb;
+  cfg = config.local.locale-en-gb;
 in
 {
-  options.locale-en-gb = {
+  options.local.locale-en-gb = {
     enable = lib.mkEnableOption "en_GB locale, Europe/London time zone, uk console";
   };
 

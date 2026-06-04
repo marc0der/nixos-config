@@ -11,14 +11,14 @@
   programs.ghostty.settings.font-size = 13;
 
   # SSH configuration
-  ssh-config.enable = true;
+  local.ssh-config.enable = true;
 
   # Desktop environment
-  sway-desktop.enable = true;
-  sway-config.enable = true;
-  sway-rules.enable = true;
-  sway-keybindings.enable = true;
-  sway-startup.enable = true;
+  local.sway-desktop.enable = true;
+  local.sway-config.enable = true;
+  local.sway-rules.enable = true;
+  local.sway-keybindings.enable = true;
+  local.sway-startup.enable = true;
 
   # Workspace 1 default layout: Slack left, Brave right
   wayland.windowManager.sway.config.startup = [
@@ -26,22 +26,22 @@
   ];
 
   # Profiles
-  profiles.music-production.enable = true;
-  profiles.work.enable = true;
+  local.profiles.music-production.enable = true;
+  local.profiles.work.enable = true;
 
   # GTK theme configuration
-  gtk-theme.variant = "dark";
+  local.gtk-theme.variant = "dark";
 
   # XDG portal configuration
-  xdg-portal-sway.enable = true;
+  local.xdg-portal-sway.enable = true;
 
   # XDG MIME types configuration
-  xdg-mimetypes = {
+  local.xdg-mimetypes = {
     enable = true;
     terminal = "ghostty.desktop";
     textEditor = "gedit.desktop";
   };
 
   # Shared scripts
-  home-scripts.enable = true;
+  local.home-scripts.enable = true;
 }

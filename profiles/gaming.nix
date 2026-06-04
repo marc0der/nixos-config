@@ -10,20 +10,20 @@
 # - Local network game transfers
 #
 # Options:
-#   profiles.gaming.enable - Enable gaming profile (default: false)
+#   local.profiles.gaming.enable - Enable gaming profile (default: false)
 #
 # Example usage:
-#   profiles.gaming.enable = true;
+#   local.profiles.gaming.enable = true;
 
 { config, lib, ... }:
 
 with lib;
 
 let
-  cfg = config.profiles.gaming;
+  cfg = config.local.profiles.gaming;
 in
 {
-  options.profiles.gaming = {
+  options.local.profiles.gaming = {
     enable = mkEnableOption "gaming profile with Steam and related features";
   };
 

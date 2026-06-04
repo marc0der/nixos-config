@@ -5,12 +5,12 @@
 # cursor themes, and other environment-wide settings.
 #
 # Options:
-#   session-variables.enable - Enable common session variables
-#   session-variables.extraVariables - Additional host-specific variables
+#   local.session-variables.enable - Enable common session variables
+#   local.session-variables.extraVariables - Additional host-specific variables
 #
 # Example usage:
-#   session-variables.enable = true;
-#   session-variables.extraVariables = {
+#   local.session-variables.enable = true;
+#   local.session-variables.extraVariables = {
 #     CUSTOM_VAR = "value";
 #   };
 
@@ -22,10 +22,10 @@
 }:
 
 let
-  cfg = config.session-variables;
+  cfg = config.local.session-variables;
 in
 {
-  options.session-variables = {
+  options.local.session-variables = {
     enable = lib.mkEnableOption "common session variables";
 
     extraVariables = lib.mkOption {

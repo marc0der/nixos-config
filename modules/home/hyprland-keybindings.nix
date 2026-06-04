@@ -5,10 +5,10 @@
 # Mirrors `modules/home/sway-keybindings.nix` for the Hyprland compositor.
 #
 # Options:
-#   hyprland-keybindings.enable - Enable Hyprland keybindings (default: false)
+#   local.hyprland-keybindings.enable - Enable Hyprland keybindings (default: false)
 #
 # Example usage:
-#   hyprland-keybindings.enable = true;
+#   local.hyprland-keybindings.enable = true;
 
 {
   config,
@@ -19,11 +19,11 @@
 with lib;
 
 {
-  options.hyprland-keybindings = {
+  options.local.hyprland-keybindings = {
     enable = mkEnableOption "Hyprland keybindings";
   };
 
-  config = mkIf config.hyprland-keybindings.enable {
+  config = mkIf config.local.hyprland-keybindings.enable {
     wayland.windowManager.hyprland.settings = {
       # Program definitions used by keybindings
       "$terminal" = "ghostty";

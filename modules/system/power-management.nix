@@ -6,10 +6,10 @@
 # battery wear on the always-plugged-in machine.
 #
 # Options:
-#   power-management.enable - Enable power-profiles-daemon + battery cap
+#   local.power-management.enable - Enable power-profiles-daemon + battery cap
 #
 # Example usage:
-#   power-management.enable = true;
+#   local.power-management.enable = true;
 {
   config,
   lib,
@@ -18,10 +18,10 @@
 }:
 
 let
-  cfg = config.power-management;
+  cfg = config.local.power-management;
 in
 {
-  options.power-management = {
+  options.local.power-management = {
     enable = lib.mkEnableOption "power-profiles-daemon, logind tweaks, battery cap";
   };
 

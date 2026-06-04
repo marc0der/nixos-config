@@ -5,10 +5,10 @@
 # sandbox group to gid 1000 so it matches the same id across hosts.
 #
 # Options:
-#   users-marco.enable - Create the marco user + sandbox group
+#   local.users-marco.enable - Create the marco user + sandbox group
 #
 # Example usage:
-#   users-marco.enable = true;
+#   local.users-marco.enable = true;
 {
   config,
   lib,
@@ -17,10 +17,10 @@
 }:
 
 let
-  cfg = config.users-marco;
+  cfg = config.local.users-marco;
 in
 {
-  options.users-marco = {
+  options.local.users-marco = {
     enable = lib.mkEnableOption "marco user account and sandbox group";
   };
 

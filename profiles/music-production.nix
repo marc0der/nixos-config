@@ -4,10 +4,10 @@
 # used for music creation, recording, editing, and transcription.
 #
 # Options:
-#   profiles.music-production.enable - Enable music production packages and tools
+#   local.profiles.music-production.enable - Enable music production packages and tools
 #
 # Example usage:
-#   profiles.music-production.enable = true;
+#   local.profiles.music-production.enable = true;
 
 {
   config,
@@ -17,10 +17,10 @@
 }:
 
 let
-  cfg = config.profiles.music-production;
+  cfg = config.local.profiles.music-production;
 in
 {
-  options.profiles.music-production = {
+  options.local.profiles.music-production = {
     enable = lib.mkEnableOption "music production profile";
   };
 

@@ -4,12 +4,12 @@
 # Automatically configures GTK theme, icon theme, and session variables based on the selected variant.
 #
 # Options:
-#   gtk-theme.enable - Enable GTK theming (default: true)
-#   gtk-theme.variant - Theme variant: "dark" or "light" (default: "dark")
+#   local.gtk-theme.enable - Enable GTK theming (default: true)
+#   local.gtk-theme.variant - Theme variant: "dark" or "light" (default: "dark")
 #
 # Example usage:
-#   gtk-theme.variant = "dark";  # For Materia-dark theme with Papirus-Dark icons
-#   gtk-theme.variant = "light"; # For Materia-light theme with Papirus-Light icons
+#   local.gtk-theme.variant = "dark";  # For Materia-dark theme with Papirus-Dark icons
+#   local.gtk-theme.variant = "light"; # For Materia-light theme with Papirus-Light icons
 
 {
   config,
@@ -19,10 +19,10 @@
 }:
 
 let
-  cfg = config.gtk-theme;
+  cfg = config.local.gtk-theme;
 in
 {
-  options.gtk-theme = {
+  options.local.gtk-theme = {
     enable = lib.mkEnableOption "GTK theming configuration" // {
       default = true;
     };

@@ -7,10 +7,10 @@
 # realtime-priority audio threads.
 #
 # Options:
-#   audio-pipewire.enable - Enable PipeWire + tuned Bluetooth audio
+#   local.audio-pipewire.enable - Enable PipeWire + tuned Bluetooth audio
 #
 # Example usage:
-#   audio-pipewire.enable = true;
+#   local.audio-pipewire.enable = true;
 {
   config,
   lib,
@@ -18,10 +18,10 @@
 }:
 
 let
-  cfg = config.audio-pipewire;
+  cfg = config.local.audio-pipewire;
 in
 {
-  options.audio-pipewire = {
+  options.local.audio-pipewire = {
     enable = lib.mkEnableOption "PipeWire audio with Bluetooth codec tuning";
   };
 

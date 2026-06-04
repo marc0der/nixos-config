@@ -4,10 +4,10 @@
 # Hyprland desktop environment, including the compositor, utilities, and system services.
 #
 # Options:
-#   hyprland-desktop.enable - Enable the Hyprland desktop environment packages and services
+#   local.hyprland-desktop.enable - Enable the Hyprland desktop environment packages and services
 #
 # Example usage:
-#   hyprland-desktop.enable = true;
+#   local.hyprland-desktop.enable = true;
 
 {
   config,
@@ -17,10 +17,10 @@
 }:
 
 let
-  cfg = config.hyprland-desktop;
+  cfg = config.local.hyprland-desktop;
 in
 {
-  options.hyprland-desktop = {
+  options.local.hyprland-desktop = {
     enable = lib.mkEnableOption "Hyprland desktop environment packages and services";
   };
 

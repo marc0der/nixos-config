@@ -4,10 +4,10 @@
 # It enables screen capture and screenshot functionality through the Hyprland portal.
 #
 # Options:
-#   xdg-portal-hyprland.enable - Enable XDG portal for Hyprland
+#   local.xdg-portal-hyprland.enable - Enable XDG portal for Hyprland
 #
 # Example usage:
-#   xdg-portal-hyprland.enable = true;
+#   local.xdg-portal-hyprland.enable = true;
 
 {
   config,
@@ -17,10 +17,10 @@
 }:
 
 let
-  cfg = config.xdg-portal-hyprland;
+  cfg = config.local.xdg-portal-hyprland;
 in
 {
-  options.xdg-portal-hyprland = {
+  options.local.xdg-portal-hyprland = {
     enable = lib.mkEnableOption "XDG desktop portal for Hyprland";
   };
 

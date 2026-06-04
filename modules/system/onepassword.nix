@@ -6,10 +6,10 @@
 # Wayland compositors.
 #
 # Options:
-#   onepassword.enable - Enable 1Password GUI + CLI with Wayland override
+#   local.onepassword.enable - Enable 1Password GUI + CLI with Wayland override
 #
 # Example usage:
-#   onepassword.enable = true;
+#   local.onepassword.enable = true;
 {
   config,
   lib,
@@ -17,10 +17,10 @@
 }:
 
 let
-  cfg = config.onepassword;
+  cfg = config.local.onepassword;
 in
 {
-  options.onepassword = {
+  options.local.onepassword = {
     enable = lib.mkEnableOption "1Password with Ozone Wayland wrapping";
   };
 

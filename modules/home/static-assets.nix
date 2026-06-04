@@ -6,10 +6,10 @@
 # so the `source` references work from the flake root.
 #
 # Options:
-#   static-assets.enable - Install gnupg/qt/icons/claude dotfiles
+#   local.static-assets.enable - Install gnupg/qt/icons/claude dotfiles
 #
 # Example usage:
-#   static-assets.enable = true;
+#   local.static-assets.enable = true;
 {
   config,
   lib,
@@ -17,10 +17,10 @@
 }:
 
 let
-  cfg = config.static-assets;
+  cfg = config.local.static-assets;
 in
 {
-  options.static-assets = {
+  options.local.static-assets = {
     enable = lib.mkEnableOption "static dotfile assets (gnupg, qt, icons, claude)";
   };
 

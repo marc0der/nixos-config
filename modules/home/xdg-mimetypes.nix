@@ -4,13 +4,13 @@
 # It provides options to override specific handlers like terminal and text editor.
 #
 # Options:
-#   xdg-mimetypes.enable - Enable XDG MIME type configuration
-#   xdg-mimetypes.terminal - Terminal emulator to use (default: "ghostty.desktop")
-#   xdg-mimetypes.textEditor - Text editor to use (default: "nvim.desktop")
+#   local.xdg-mimetypes.enable - Enable XDG MIME type configuration
+#   local.xdg-mimetypes.terminal - Terminal emulator to use (default: "ghostty.desktop")
+#   local.xdg-mimetypes.textEditor - Text editor to use (default: "nvim.desktop")
 #
 # Example usage:
-#   xdg-mimetypes.enable = true;
-#   xdg-mimetypes.terminal = "ghostty.desktop";
+#   local.xdg-mimetypes.enable = true;
+#   local.xdg-mimetypes.terminal = "ghostty.desktop";
 
 {
   config,
@@ -19,10 +19,10 @@
 }:
 
 let
-  cfg = config.xdg-mimetypes;
+  cfg = config.local.xdg-mimetypes;
 in
 {
-  options.xdg-mimetypes = {
+  options.local.xdg-mimetypes = {
     enable = lib.mkEnableOption "XDG MIME type configuration";
 
     terminal = lib.mkOption {

@@ -3,10 +3,10 @@
 # Enables Tailscale mesh VPN with firewall rules.
 #
 # Options:
-#   services.tailscale-vpn.enable - Enable Tailscale VPN (default: false)
+#   local.services.tailscale-vpn.enable - Enable Tailscale VPN (default: false)
 #
 # Example usage:
-#   services.tailscale-vpn.enable = true;
+#   local.services.tailscale-vpn.enable = true;
 {
   config,
   lib,
@@ -15,10 +15,10 @@
 }:
 
 let
-  cfg = config.services.tailscale-vpn;
+  cfg = config.local.services.tailscale-vpn;
 in
 {
-  options.services.tailscale-vpn = {
+  options.local.services.tailscale-vpn = {
     enable = lib.mkEnableOption "Tailscale VPN";
   };
 

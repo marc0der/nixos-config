@@ -6,10 +6,10 @@
 # (see `hosts/*/home.nix`).
 #
 # Options:
-#   home-scripts.enable - Enable home scripts installation (default: false)
+#   local.home-scripts.enable - Enable home scripts installation (default: false)
 #
 # Example usage:
-#   home-scripts.enable = true;
+#   local.home-scripts.enable = true;
 
 {
   config,
@@ -20,10 +20,10 @@
 with lib;
 
 let
-  cfg = config.home-scripts;
+  cfg = config.local.home-scripts;
 in
 {
-  options.home-scripts = {
+  options.local.home-scripts = {
     enable = mkEnableOption "Home scripts installation";
   };
 

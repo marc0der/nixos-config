@@ -11,25 +11,25 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Disable Intel IPU6 integrated camera (unsupported, breaks Zoom)
-  hardware.disable-ipu6-camera.enable = true;
+  local.hardware.disable-ipu6-camera.enable = true;
 
   # Networking: NetworkManager + firewall
-  networking-stack.enable = true;
+  local.networking-stack.enable = true;
 
   # Locale, time zone, console keymap
-  locale-en-gb.enable = true;
+  local.locale-en-gb.enable = true;
 
   # Nix daemon: flakes + numtide substituter
-  nix-settings.enable = true;
+  local.nix-settings.enable = true;
 
   # User account: marco
-  users-marco.enable = true;
+  local.users-marco.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # Password manager: 1Password (Wayland-native)
-  onepassword.enable = true;
+  local.onepassword.enable = true;
 
   # System packages
   environment.systemPackages = with pkgs; [
@@ -87,7 +87,7 @@
   ];
 
   # Keyboard layout: gbx (UK + literal backtick)
-  keyboard-gbx.enable = true;
+  local.keyboard-gbx.enable = true;
 
   # Display manager: SDDM
   services.displayManager.sddm = {
@@ -99,13 +99,13 @@
   services.accounts-daemon.enable = true;
 
   # Printing: CUPS + Brother driver + Avahi
-  printing.enable = true;
+  local.printing.enable = true;
 
   # Power management: profiles + logind + battery cap
-  power-management.enable = true;
+  local.power-management.enable = true;
 
   # Audio: PipeWire + Bluetooth codec tuning
-  audio-pipewire.enable = true;
+  local.audio-pipewire.enable = true;
 
   # Remote access: OpenSSH with X11 forwarding
   services.openssh = {
@@ -119,7 +119,7 @@
   services.gvfs.enable = true;
 
   # Keychron K3 Pro udev rules
-  keychron-udev.enable = true;
+  local.keychron-udev.enable = true;
 
   # Application platforms
   services.flatpak.enable = true;

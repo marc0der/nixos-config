@@ -9,14 +9,14 @@
   users.users.marco.extraGroups = [ "cdrom" ];
 
   # Wayland desktop
-  wayland.enable = true;
-  programs.hyprland-desktop.enable = true;
+  local.wayland.enable = true;
+  local.programs.hyprland-desktop.enable = true;
 
   # Gaming profile
-  profiles.gaming.enable = true;
+  local.profiles.gaming.enable = true;
 
   # Tailscale VPN
-  services.tailscale-vpn.enable = true;
+  local.services.tailscale-vpn.enable = true;
 
   # Power management: Suspend even when plugged in
   services.logind.settings.Login.HandleLidSwitchExternalPower = "suspend";

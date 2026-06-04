@@ -4,10 +4,10 @@
 # regardless of their specific compositor (Hyprland/Sway).
 #
 # Options:
-#   desktop-common.enable - Enable common desktop packages
+#   local.desktop-common.enable - Enable common desktop packages
 #
 # Example usage:
-#   desktop-common.enable = true;
+#   local.desktop-common.enable = true;
 
 {
   config,
@@ -19,11 +19,11 @@
 with lib;
 
 {
-  options.desktop-common = {
+  options.local.desktop-common = {
     enable = mkEnableOption "common desktop packages";
   };
 
-  config = mkIf config.desktop-common.enable {
+  config = mkIf config.local.desktop-common.enable {
     home.packages = with pkgs; [
       blueman
       brightnessctl

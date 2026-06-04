@@ -4,18 +4,18 @@
 # communication and collaboration tools like Slack and Google Meet.
 #
 # Options:
-#   profiles.work.enable - Enable work-related desktop entries
+#   local.profiles.work.enable - Enable work-related desktop entries
 #
 # Example usage:
-#   profiles.work.enable = true;
+#   local.profiles.work.enable = true;
 
 { config, lib, ... }:
 
 let
-  cfg = config.profiles.work;
+  cfg = config.local.profiles.work;
 in
 {
-  options.profiles.work = {
+  options.local.profiles.work = {
     enable = lib.mkEnableOption "work profile";
   };
 

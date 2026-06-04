@@ -4,10 +4,10 @@
 # positioning, and behavior rules for various applications.
 #
 # Options:
-#   hyprland-rules.enable - Enable Hyprland window rules
+#   local.hyprland-rules.enable - Enable Hyprland window rules
 #
 # Example usage:
-#   hyprland-rules.enable = true;
+#   local.hyprland-rules.enable = true;
 
 {
   config,
@@ -18,11 +18,11 @@
 with lib;
 
 {
-  options.hyprland-rules = {
+  options.local.hyprland-rules = {
     enable = mkEnableOption "Hyprland window rules";
   };
 
-  config = mkIf config.hyprland-rules.enable {
+  config = mkIf config.local.hyprland-rules.enable {
     wayland.windowManager.hyprland.settings.windowrule = [
       "tile true, match:class ^(Brave-browser)$"
       "tile true, match:class ^(Chromium)$"

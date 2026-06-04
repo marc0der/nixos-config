@@ -4,10 +4,10 @@
 # It enables screen capture and screenshot functionality through the wlr portal.
 #
 # Options:
-#   xdg-portal-sway.enable - Enable XDG portal for Sway
+#   local.xdg-portal-sway.enable - Enable XDG portal for Sway
 #
 # Example usage:
-#   xdg-portal-sway.enable = true;
+#   local.xdg-portal-sway.enable = true;
 
 {
   config,
@@ -17,10 +17,10 @@
 }:
 
 let
-  cfg = config.xdg-portal-sway;
+  cfg = config.local.xdg-portal-sway;
 in
 {
-  options.xdg-portal-sway = {
+  options.local.xdg-portal-sway = {
     enable = lib.mkEnableOption "XDG desktop portal for Sway";
   };
 

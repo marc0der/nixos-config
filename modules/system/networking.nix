@@ -5,10 +5,10 @@
 # NetworkManager also needs the firewall configured the same way.
 #
 # Options:
-#   networking-stack.enable - Enable NetworkManager + firewall
+#   local.networking-stack.enable - Enable NetworkManager + firewall
 #
 # Example usage:
-#   networking-stack.enable = true;
+#   local.networking-stack.enable = true;
 {
   config,
   lib,
@@ -17,10 +17,10 @@
 }:
 
 let
-  cfg = config.networking-stack;
+  cfg = config.local.networking-stack;
 in
 {
-  options.networking-stack = {
+  options.local.networking-stack = {
     enable = lib.mkEnableOption "NetworkManager and firewall";
   };
 

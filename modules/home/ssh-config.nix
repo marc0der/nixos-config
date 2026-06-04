@@ -5,21 +5,21 @@
 # Private keys remain in ~/.ssh/ and are managed outside of Nix.
 #
 # Options:
-#   ssh-config.enable - Enable home-manager SSH client config (default: false)
+#   local.ssh-config.enable - Enable home-manager SSH client config (default: false)
 #
 # Example usage:
-#   ssh-config.enable = true;
+#   local.ssh-config.enable = true;
 
 { config, lib, ... }:
 
 with lib;
 
 {
-  options.ssh-config = {
+  options.local.ssh-config = {
     enable = mkEnableOption "SSH client configuration";
   };
 
-  config = mkIf config.ssh-config.enable {
+  config = mkIf config.local.ssh-config.enable {
     programs.ssh = {
       enable = true;
       enableDefaultConfig = false;

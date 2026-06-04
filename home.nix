@@ -11,7 +11,7 @@
   # Pinned to original install (24.11); deliberately not bumped with channel.
   home.stateVersion = "24.11";
 
-  desktop-common.enable = true;
+  local.desktop-common.enable = true;
 
   home.packages = with pkgs; [
     autojump
@@ -90,7 +90,7 @@
   ];
 
   # Static dotfile assets (gnupg, qt, icons, claude)
-  static-assets.enable = true;
+  local.static-assets.enable = true;
 
   fonts.fontconfig.enable = true;
 
@@ -110,7 +110,7 @@
     };
   };
 
-  session-variables.enable = true;
+  local.session-variables.enable = true;
 
   home.sessionPath = [
     "$HOME/bin"
@@ -123,15 +123,15 @@
   xdg.enable = true;
 
   # Keyring, gpg-agent, and PolKit authentication agent
-  keyring-services.enable = true;
+  local.keyring-services.enable = true;
 
   # Google Drive bisync via rclone (staggered 10-minute timer)
-  google-drive-bisync.enable = true;
+  local.google-drive-bisync.enable = true;
 
   # Brave web-app .desktop launchers
-  web-app-launchers.enable = true;
+  local.web-app-launchers.enable = true;
 
   # Claude Code MCP server registration
-  claude-mcp.enable = true;
+  local.claude-mcp.enable = true;
 
 }

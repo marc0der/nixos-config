@@ -5,10 +5,10 @@
 # line, not a hunt through configuration.nix.
 #
 # Options:
-#   nix-settings.enable - Enable flakes + numtide substituter
+#   local.nix-settings.enable - Enable flakes + numtide substituter
 #
 # Example usage:
-#   nix-settings.enable = true;
+#   local.nix-settings.enable = true;
 {
   config,
   lib,
@@ -16,10 +16,10 @@
 }:
 
 let
-  cfg = config.nix-settings;
+  cfg = config.local.nix-settings;
 in
 {
-  options.nix-settings = {
+  options.local.nix-settings = {
     enable = lib.mkEnableOption "flakes + numtide substituter";
   };
 

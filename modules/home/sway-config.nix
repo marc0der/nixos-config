@@ -6,10 +6,10 @@
 # programs live in `sway-startup.nix`.
 #
 # Options:
-#   sway-config.enable - Enable Sway configuration (default: false)
+#   local.sway-config.enable - Enable Sway configuration (default: false)
 #
 # Example usage:
-#   sway-config.enable = true;
+#   local.sway-config.enable = true;
 
 {
   config,
@@ -21,11 +21,11 @@
 with lib;
 
 {
-  options.sway-config = {
+  options.local.sway-config = {
     enable = mkEnableOption "Sway window manager configuration";
   };
 
-  config = mkIf config.sway-config.enable {
+  config = mkIf config.local.sway-config.enable {
     wayland.windowManager.sway = {
       enable = true;
       wrapperFeatures.gtk = true;

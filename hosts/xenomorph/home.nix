@@ -16,27 +16,27 @@
   ];
 
   # SSH configuration
-  ssh-config.enable = true;
+  local.ssh-config.enable = true;
 
   # Desktop environment
-  hyprland-desktop.enable = true;
-  hyprland-config.enable = true;
-  hyprland-rules.enable = true;
-  hyprland-keybindings.enable = true;
-  hyprland-startup.enable = true;
-  hyprland-extras.enable = true;
+  local.hyprland-desktop.enable = true;
+  local.hyprland-config.enable = true;
+  local.hyprland-rules.enable = true;
+  local.hyprland-keybindings.enable = true;
+  local.hyprland-startup.enable = true;
+  local.hyprland-extras.enable = true;
 
   # Profiles
-  profiles.music-production.enable = true;
+  local.profiles.music-production.enable = true;
 
   # GTK theme configuration
-  gtk-theme.variant = "dark";
+  local.gtk-theme.variant = "dark";
 
   # XDG portal configuration
-  xdg-portal-hyprland.enable = true;
+  local.xdg-portal-hyprland.enable = true;
 
   # XDG MIME types configuration
-  xdg-mimetypes = {
+  local.xdg-mimetypes = {
     enable = true;
     terminal = "ghostty.desktop";
   };
