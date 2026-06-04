@@ -76,7 +76,7 @@ in
         name = "Google Meet";
         comment = "Google Meet Video Conferencing";
         genericName = "Google Meet in Brave";
-        exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default --app="https://meet.google.com/beb-yefd-vci"'';
+        exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default --app="https://meet.google.com"'';
         icon = "google-meet";
         type = "Application";
         startupNotify = true;
