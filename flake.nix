@@ -121,7 +121,7 @@
       homeConfigurations = {
         "marco@neomorph" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = commonHomeExtraSpecialArgs;
+          extraSpecialArgs = commonHomeExtraSpecialArgs // { hostName = "neomorph"; };
           modules = commonHomeModules ++ [
             ./hosts/neomorph/home.nix
             ./modules/home/xdg-portal-sway.nix
@@ -135,7 +135,7 @@
         };
         "marco@xenomorph" = home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = commonHomeExtraSpecialArgs;
+          extraSpecialArgs = commonHomeExtraSpecialArgs // { hostName = "xenomorph"; };
           modules = commonHomeModules ++ [
             ./hosts/xenomorph/home.nix
             ./modules/home/xdg-portal-hyprland.nix
