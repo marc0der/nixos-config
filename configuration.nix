@@ -11,99 +11,25 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Disable Intel IPU6 integrated camera (unsupported, breaks Zoom)
-  boot.blacklistedKernelModules = [
-    "intel_ipu6"
-    "intel_ipu6_isys"
-    "intel_ipu6_psys"
-    "ipu_bridge"
-    "ov08x40"
-    "ov01a10"
-    "ov02c10"
-    "hm11b1"
-    "intel_skl_int3472_common"
-    "intel_skl_int3472_discrete"
-    "intel_skl_int3472_tps68470"
-  ];
+  hardware.disable-ipu6-camera.enable = true;
 
-  # Networking
-  networking.networkmanager = {
-    enable = true;
-    plugins = with pkgs; [
-      networkmanager-openvpn
-    ];
-    settings = {
-      connectivity = {
-        uri = "http://nmcheck.gnome.org/check_network_status.txt";
-        interval = 60;
-        enabled = true;
-      };
-    };
-  };
+  # Networking: NetworkManager + firewall
+  networking-stack.enable = true;
 
-  # Time zone
-  time.timeZone = "Europe/London";
+  # Locale, time zone, console keymap
+  locale-en-gb.enable = true;
 
-  # Internationalisation
-  i18n.defaultLocale = "en_GB.UTF-8";
+  # Nix daemon: flakes + numtide substituter
+  nix-settings.enable = true;
 
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_GB.UTF-8";
-    LC_IDENTIFICATION = "en_GB.UTF-8";
-    LC_MEASUREMENT = "en_GB.UTF-8";
-    LC_MONETARY = "en_GB.UTF-8";
-    LC_NAME = "en_GB.UTF-8";
-    LC_NUMERIC = "en_GB.UTF-8";
-    LC_PAPER = "en_GB.UTF-8";
-    LC_TELEPHONE = "en_GB.UTF-8";
-    LC_TIME = "en_GB.UTF-8";
-  };
-
-  # Nix settings
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-  nix.settings.extra-substituters = [ "https://cache.numtide.com" ];
-  nix.settings.extra-trusted-public-keys = [
-    "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
-  ];
-
-  # Console configuration
-  console.keyMap = "uk";
-
-  # User account
-  users.users.marco = {
-    isNormalUser = true;
-    description = "Marco Vermeulen";
-    extraGroups = [
-      "dialout"
-      "docker"
-      "input"
-      "networkmanager"
-      "sandbox"
-      "wheel"
-    ];
-    shell = pkgs.zsh;
-    packages = [ ];
-  };
-
-  # Groups
-  users.groups.sandbox.gid = 1000;
+  # User account: marco
+  users-marco.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Override 1Password to use Wayland natively with Ozone platform
-  nixpkgs.config.packageOverrides = pkgs: {
-    _1password-gui = pkgs._1password-gui.overrideAttrs (oldAttrs: {
-      postFixup = (oldAttrs.postFixup or "") + ''
-        # Wrap the 1password binary to add Ozone Wayland flags
-        wrapProgram $out/bin/1password \
-          --add-flags "--ozone-platform-hint=auto" \
-          --add-flags "--enable-features=WaylandWindowDecorations"
-      '';
-    });
-  };
+  # Password manager: 1Password (Wayland-native)
+  onepassword.enable = true;
 
   # System packages
   environment.systemPackages = with pkgs; [
@@ -135,18 +61,12 @@
   programs.mtr.enable = true;
   programs.gnupg.agent.enable = true;
   programs.zsh.enable = true;
-
   programs.nix-ld.enable = true;
-
   programs.fuse.userAllowOther = true;
 
-  # Security
+  # Security: SDDM keyring, chromium SUID sandbox, passwordless rebuild sudo
   security.pam.services.sddm.enableGnomeKeyring = true;
-
-  # Chromium SUID sandbox helper (for Brave under Playwright)
   security.chromiumSuidSandbox.enable = true;
-
-  # Passwordless sudo for nix rebuild
   security.sudo.extraRules = [
     {
       users = [ "marco" ];
@@ -166,30 +86,10 @@
     }
   ];
 
-  # Display server and manager
-  services.xserver = {
-    enable = true;
-    xkb = {
-      layout = "gbx";
-      extraLayouts.gbx = {
-        description = "English (UK, extended, literal backtick)";
-        languages = [ "eng" ];
-        # Inherits gb(extd) for AltGr accents but restores the literal
-        # backtick on TLDE (extd makes it a dead_grave key, which doesn't
-        # compose reliably in Wayland terminals like Ghostty).
-        symbolsFile = pkgs.writeText "gbx-symbols" ''
-          default partial alphanumeric_keys
-          xkb_symbols "basic" {
-            include "gb(extd)"
-            name[Group1]="English (UK, extended, literal backtick)";
-            key <TLDE> { [ grave, notsign, brokenbar, NoSymbol ] };
-          };
-        '';
-      };
-    };
-  };
+  # Keyboard layout: gbx (UK + literal backtick)
+  keyboard-gbx.enable = true;
 
-  # Display manager (SDDM)
+  # Display manager: SDDM
   services.displayManager.sddm = {
     enable = true;
     theme = "breeze";
@@ -198,83 +98,16 @@
   # User accounts service
   services.accounts-daemon.enable = true;
 
-  # Printing
-  services.printing = {
-    enable = true;
-    drivers = with pkgs; [ cups-brother-hll2350dw ];
-    browsing = false;
-    defaultShared = false;
-    listenAddresses = [ "localhost:631" ];
-    allowFrom = [ "localhost" ];
-    startWhenNeeded = true;
-  };
+  # Printing: CUPS + Brother driver + Avahi
+  printing.enable = true;
 
-  # Network discovery
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-    publish = {
-      enable = true;
-      addresses = true;
-      domain = true;
-      hinfo = true;
-      userServices = true;
-      workstation = true;
-    };
-  };
+  # Power management: profiles + logind + battery cap
+  power-management.enable = true;
 
-  # Power management
-  services.power-profiles-daemon.enable = true;
+  # Audio: PipeWire + Bluetooth codec tuning
+  audio-pipewire.enable = true;
 
-  services.logind = {
-    settings = {
-      Login = {
-        HandleLidSwitch = "suspend";
-        HandleLidSwitchDocked = "ignore";
-        IdleAction = "ignore";
-        HandlePowerKey = "ignore";
-      };
-    };
-  };
-
-  # Audio
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
-
-  services.pipewire.wireplumber.extraConfig."10-bluez" = {
-    "monitor.bluez.properties" = {
-      "bluez5.enable-sbc-xq" = true;
-      "bluez5.enable-msbc" = true;
-      "bluez5.enable-hw-volume" = true;
-      "bluez5.roles" = [
-        "hsp_hs"
-        "hsp_ag"
-        "hfp_hf"
-        "hfp_ag"
-        "a2dp_sink"
-        "a2dp_source"
-      ];
-      "bluez5.codecs" = [
-        "bc"
-        "sbc_xq"
-        "aac"
-        "ldac"
-        "aptx"
-        "aptx_hd"
-        "aptx_ll"
-      ];
-    };
-  };
-
-  # Remote access
+  # Remote access: OpenSSH with X11 forwarding
   services.openssh = {
     enable = true;
     settings = {
@@ -285,61 +118,20 @@
   # Virtual filesystems
   services.gvfs.enable = true;
 
-  # Hardware configuration
-  services.udev.extraRules = ''
-    # Keychron K3 Pro - specific product ID
-    SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0231", MODE="0664", GROUP="dialout"
-    SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0231", MODE="0664", GROUP="dialout"
-    KERNEL=="hidraw*", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0231", MODE="0664", GROUP="dialout"
-  '';
-
-  systemd.services.battery-charge-threshold = {
-    wantedBy = [ "multi-user.target" ];
-    after = [ "multi-user.target" ];
-    startLimitBurst = 0;
-    description = "Sets a battery charge end threshold";
-    serviceConfig = {
-      Type = "oneshot";
-      Restart = "on-failure";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold' ";
-    };
-  };
-
-  # Password manager
-  programs._1password.enable = true;
-  programs._1password-gui = {
-    enable = true;
-    # Certain features, including CLI integration and system authentication support,
-    # require enabling PolKit integration on some desktop environments (e.g. Plasma).
-    polkitPolicyOwners = [ "marco" ];
-  };
+  # Keychron K3 Pro udev rules
+  keychron-udev.enable = true;
 
   # Application platforms
   services.flatpak.enable = true;
 
-  # Virtualization
-  virtualisation.docker = {
-    enable = true;
-  };
+  # Virtualisation: Docker
+  virtualisation.docker.enable = true;
 
-  # System reporting
+  # System reporting: nvd diff on activation
   system.activationScripts.changes-report.text = ''
     export PATH=${pkgs.nix}/bin:$PATH
     ${pkgs.nvd}/bin/nvd diff /run/current-system /nix/var/nix/profiles/system
   '';
-
-  # Firewall configuration
-  networking.firewall = {
-    enable = true;
-    # Allow SSH
-    allowedTCPPorts = [ 22 ];
-    # Allow common local network services
-    allowedUDPPorts = [ ];
-    # Trust local network interfaces (adjust ranges as needed)
-    trustedInterfaces = [ "lo" ];
-    # Allow ping
-    allowPing = true;
-  };
 
   # NixOS release version
   # Pinned to original install (24.11); deliberately not bumped with channel.

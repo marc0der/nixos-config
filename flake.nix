@@ -56,6 +56,11 @@
         ./modules/home/xdg-mimetypes.nix
         ./modules/home/session-variables.nix
         ./modules/home/home-scripts.nix
+        ./modules/home/static-assets.nix
+        ./modules/home/keyring-services.nix
+        ./modules/home/google-drive-bisync.nix
+        ./modules/home/desktop-entries.nix
+        ./modules/home/claude-mcp.nix
         ./profiles/music-production.nix
       ];
 
@@ -79,6 +84,17 @@
             ./hardware-configuration.nix
             ./hosts/xenomorph/configuration.nix
             ./hosts/xenomorph/hardware-configuration.nix
+            ./modules/system/audio-pipewire.nix
+            ./modules/system/disable-ipu6-camera.nix
+            ./modules/system/keyboard-gbx.nix
+            ./modules/system/keychron-udev.nix
+            ./modules/system/locale.nix
+            ./modules/system/networking.nix
+            ./modules/system/nix-settings.nix
+            ./modules/system/onepassword.nix
+            ./modules/system/power-management.nix
+            ./modules/system/printing.nix
+            ./modules/system/users-marco.nix
             ./modules/system/wayland-common.nix
             ./modules/system/hyprland.nix
             ./modules/system/tailscale.nix
@@ -92,6 +108,17 @@
             ./hardware-configuration.nix
             ./hosts/neomorph/configuration.nix
             ./hosts/neomorph/hardware-configuration.nix
+            ./modules/system/audio-pipewire.nix
+            ./modules/system/disable-ipu6-camera.nix
+            ./modules/system/keyboard-gbx.nix
+            ./modules/system/keychron-udev.nix
+            ./modules/system/locale.nix
+            ./modules/system/networking.nix
+            ./modules/system/nix-settings.nix
+            ./modules/system/onepassword.nix
+            ./modules/system/power-management.nix
+            ./modules/system/printing.nix
+            ./modules/system/users-marco.nix
             ./modules/system/clamav.nix
             ./modules/system/wayland-common.nix
             ./modules/system/sway.nix
