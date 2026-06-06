@@ -34,6 +34,7 @@ in
       ".local/share/icons/claude-desktop.png".source = ../../icons/claude-desktop.png;
       ".claude/skills/commit/SKILL.md".source = ../../claude/skills/commit/SKILL.md;
       ".claude/skills/metaprompt/SKILL.md".source = ../../claude/skills/metaprompt/SKILL.md;
+      ".claude/skills/grill-with-docs".source = ../../claude/skills/grill-with-docs;
       ".claude/settings.json".source = ../../claude/settings.json;
       ".claude/meterstick-command.sh" = {
         source = ../../claude/meterstick.sh;
