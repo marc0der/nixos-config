@@ -14,7 +14,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -22,19 +21,6 @@ with lib;
 
 let
   cfg = config.local.home-scripts;
-  # kanshi runs scripts with a minimal PATH; wrap so bash and runtime tools
-  # resolve to absolute store paths.
-  kanshi-mirror = pkgs.writeShellApplication {
-    name = "kanshi-mirror";
-    runtimeInputs = with pkgs; [
-      procps
-      coreutils
-      sway
-      jq
-      wl-mirror
-    ];
-    text = builtins.readFile ./scripts/kanshi-mirror.sh;
-  };
 in
 {
   options.local.home-scripts = {
@@ -51,7 +37,6 @@ in
         source = ./scripts/arrange-workspace1.sh;
         executable = true;
       };
-      "bin/kanshi-mirror".source = "${kanshi-mirror}/bin/kanshi-mirror";
     };
   };
 }

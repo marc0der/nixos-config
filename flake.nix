@@ -132,6 +132,7 @@
             ./modules/home/sway-rules.nix
             ./modules/home/sway-keybindings.nix
             ./modules/home/sway-startup.nix
+            ./modules/home/kanshi.nix
             ./profiles/work.nix
           ];
         };
