@@ -10,6 +10,7 @@
     fenix.inputs.nixpkgs.follows = "nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
     llm-agents.url = "github:numtide/llm-agents.nix";
+    backlog-md.url = "github:MrLesk/Backlog.md";
   };
   outputs =
     inputs@{
@@ -19,6 +20,7 @@
       home-manager,
       fenix,
       llm-agents,
+      backlog-md,
       ...
     }:
     let
@@ -38,6 +40,7 @@
 
       rustToolchain = fenix.packages.${system};
       llmAgents = llm-agents.packages.${system};
+      backlogMd = backlog-md.packages.${system}.default;
 
       # Home-manager modules shared by every host. Host-specific modules
       # (compositor, xdg-portal, host home.nix, host-only profiles) are
@@ -123,6 +126,7 @@
           inherit pkgs;
           extraSpecialArgs = commonHomeExtraSpecialArgs // {
             hostName = "neomorph";
+            inherit backlogMd;
           };
           modules = commonHomeModules ++ [
             ./hosts/neomorph/home.nix

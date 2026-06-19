@@ -1,8 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, backlogMd, ... }:
 
 {
   # Host-specific packages
   home.packages = with pkgs; [
+    backlogMd
     google-chrome
     pnpm
   ];
