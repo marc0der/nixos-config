@@ -41,6 +41,7 @@ _Audience:_ Anyone (human or LLM) editing this NixOS configuration.
 - _RULE-201:_ Use `lib.mkDefault` (priority 1000) for overridable defaults and `lib.mkForce` (priority 50) only when an override genuinely must win.
 - _RULE-202:_ Keep both hosts (xenomorph, neomorph) in sync by hoisting shared config into `shared/` or `modules/` rather than duplicating per host.
 - _RULE-203:_ Pin and reference inputs through `flake.nix` (e.g. `unstable`, `rustToolchain`) via `extraSpecialArgs`; avoid ad-hoc channel references inside modules.
+- _RULE-204:_ Keep `home.packages` / `environment.systemPackages` lists alphabetically ordered. When adding a package, insert it in order rather than appending to the end.
 
 ## Patterns & Anti-Patterns
 
