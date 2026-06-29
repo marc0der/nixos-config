@@ -1,9 +1,19 @@
 { pkgs, backlogMd, ... }:
 
+let
+  # Backlog.md zsh completion (lands on $fpath via profile site-functions)
+  backlogZshCompletion = pkgs.runCommand "backlog-zsh-completion" { } ''
+    mkdir -p "$out/share/zsh/site-functions" home
+    HOME="$PWD/home" ${backlogMd}/bin/backlog completion install --shell zsh
+    install -Dm644 "$PWD/home/.zsh/completions/_backlog" \
+      "$out/share/zsh/site-functions/_backlog"
+  '';
+in
 {
   # Host-specific packages
   home.packages = with pkgs; [
     backlogMd
+    backlogZshCompletion
     google-chrome
     pnpm
   ];
