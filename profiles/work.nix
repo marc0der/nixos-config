@@ -21,6 +21,23 @@ in
 
   config = lib.mkIf cfg.enable {
     xdg.desktopEntries = {
+      slackSiriusXM = {
+        name = "Slack (SiriusXM)";
+        comment = "SiriusXM Slack";
+        genericName = "SiriusXM Slack in Brave";
+        exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=SiriusXM --app="https://app.slack.com/client/ENZ8SEUTX"'';
+        icon = "slack";
+        type = "Application";
+        startupNotify = true;
+        categories = [
+          "GNOME"
+          "GTK"
+          "Network"
+          "InstantMessaging"
+        ];
+        mimeType = [ "x-scheme-handler/slack" ];
+      };
+
       slackDefraDigitalTeam = {
         name = "Slack (DEFRA Digital Team)";
         comment = "DEFRA Digital Team Slack";
