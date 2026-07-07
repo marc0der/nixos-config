@@ -56,7 +56,6 @@
     ripgrep
     speedtest-rs
     uv
-    vscode
     wl-mirror
     wlogout
     yamllint
