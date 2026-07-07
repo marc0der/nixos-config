@@ -20,6 +20,7 @@
     borgbackup
     brave
     bun
+    calibre
     chafa
     cliphist
     devcontainer
