@@ -8,10 +8,14 @@
 # is too small), defined and autostarted declaratively.
 #
 # Options:
-#   local.virtualisation.libvirt.enable - Enable libvirtd + virt-manager (default: false)
+#   local.virtualisation.libvirt.enable      - Enable libvirtd + virt-manager (default: false)
+#   local.virtualisation.libvirt.staticHosts - Static DHCP reservations on the default network (default: [])
 #
 # Example usage:
 #   local.virtualisation.libvirt.enable = true;
+#   local.virtualisation.libvirt.staticHosts = [
+#     { mac = "52:54:00:3f:f3:69"; ip = "192.168.122.96"; }
+#   ];
 {
   config,
   lib,
@@ -27,6 +31,25 @@ in
 {
   options.local.virtualisation.libvirt = {
     enable = lib.mkEnableOption "libvirtd and virt-manager";
+
+    staticHosts = lib.mkOption {
+      type = lib.types.listOf (
+        lib.types.submodule {
+          options = {
+            mac = lib.mkOption {
+              type = lib.types.str;
+              description = "Guest NIC MAC address.";
+            };
+            ip = lib.mkOption {
+              type = lib.types.str;
+              description = "Fixed IPv4 address to reserve on the default network.";
+            };
+          };
+        }
+      );
+      default = [ ];
+      description = "Static DHCP reservations on the libvirt default network.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -60,6 +83,32 @@ in
         $virsh pool-autostart ${poolName}
         $virsh pool-start ${poolName} 2>/dev/null || true
       '';
+    };
+
+    # Pin guest IPs via static DHCP reservations on the default network
+    systemd.services.libvirt-net-reservations = lib.mkIf (cfg.staticHosts != [ ]) {
+      description = "Ensure static DHCP reservations on the libvirt default network";
+      after = [ "libvirtd.service" ];
+      requires = [ "libvirtd.service" ];
+      wantedBy = [ "multi-user.target" ];
+      environment.LIBVIRT_DEFAULT_URI = "qemu:///system";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script =
+        let
+          entries = lib.concatMapStringsSep "\n" (h: ''
+            if ! "$virsh" net-dumpxml default | grep -q "${h.mac}"; then
+              "$virsh" net-update default add ip-dhcp-host "<host mac='${h.mac}' ip='${h.ip}'/>" --live --config
+            fi
+          '') cfg.staticHosts;
+        in
+        ''
+          set -eu
+          virsh=${pkgs.libvirt}/bin/virsh
+          ${entries}
+        '';
     };
   };
 }
