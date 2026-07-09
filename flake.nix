@@ -64,6 +64,7 @@
         ./modules/home/google-drive-bisync.nix
         ./modules/home/desktop-entries.nix
         ./modules/home/claude-mcp.nix
+        ./modules/home/sxm-proxy.nix
         ./profiles/music-production.nix
       ];
 

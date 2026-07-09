@@ -41,6 +41,9 @@ in
   local.profiles.music-production.enable = true;
   local.profiles.work.enable = true;
 
+  # SiriusXM VPN shell proxy (opt-in via `sxm-proxy on`)
+  local.sxm-proxy.enable = true;
+
   # GTK theme configuration
   local.gtk-theme.variant = "dark";
 
