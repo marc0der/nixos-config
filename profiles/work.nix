@@ -25,7 +25,7 @@ in
         name = "Slack (SiriusXM)";
         comment = "SiriusXM Slack";
         genericName = "SiriusXM Slack in Brave";
-        exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=SiriusXM --app="https://app.slack.com/client/ENZ8SEUTX"'';
+        exec = ''${config.home.homeDirectory}/bin/brave-sxm --app="https://app.slack.com/client/ENZ8SEUTX"'';
         icon = "slack";
         type = "Application";
         startupNotify = true;
@@ -39,9 +39,9 @@ in
       };
 
       braveSiriusXM = {
-        name = "Brave (SiriusXM VPN)";
-        comment = "SiriusXM browser routed through the GlobalProtect VM proxy";
-        genericName = "SiriusXM VPN Browser";
+        name = "Brave (SiriusXM)";
+        comment = "SiriusXM Brave profile (proxied via its in-profile extension)";
+        genericName = "SiriusXM Browser";
         exec = "${config.home.homeDirectory}/bin/brave-sxm";
         icon = "brave-browser";
         type = "Application";
