@@ -38,6 +38,21 @@ in
         mimeType = [ "x-scheme-handler/slack" ];
       };
 
+      braveSiriusXM = {
+        name = "Brave (SiriusXM VPN)";
+        comment = "SiriusXM browser routed through the GlobalProtect VM proxy";
+        genericName = "SiriusXM VPN Browser";
+        exec = "${config.home.homeDirectory}/bin/brave-sxm";
+        icon = "brave-browser";
+        type = "Application";
+        startupNotify = true;
+        categories = [
+          "GTK"
+          "Network"
+          "WebBrowser"
+        ];
+      };
+
       slackDefraDigitalTeam = {
         name = "Slack (DEFRA Digital Team)";
         comment = "DEFRA Digital Team Slack";

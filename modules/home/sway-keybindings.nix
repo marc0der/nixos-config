@@ -65,6 +65,7 @@ in
         # Basic bindings
         "${mod}+Return" = "exec ghostty";
         "${mod}+Shift+Return" = "exec brave --enable-features=UseOzonePlatform --ozone-platform=wayland";
+        "${mod}+Shift+s" = "exec ${config.home.homeDirectory}/bin/brave-sxm";
         "${mod}+Shift+n" = "exec nautilus";
         "${mod}+Shift+q" = "kill";
         "${mod}+Space" = "exec rofi -terminal 'ghostty' -show combi -combi-modes drun#run -modes combi";

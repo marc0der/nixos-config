@@ -37,6 +37,10 @@ in
         source = ./scripts/arrange-workspace1.sh;
         executable = true;
       };
+      "bin/brave-sxm" = {
+        source = ./scripts/brave-sxm.sh;
+        executable = true;
+      };
     };
   };
 }
