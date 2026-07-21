@@ -44,6 +44,9 @@ in
   # SiriusXM VPN shell proxy (opt-in via `sxm-proxy on`)
   local.sxm-proxy.enable = true;
 
+  # SiriusXM team drive mounted at ~/SharedDrives/Workspace
+  local.google-drive-mount.enable = true;
+
   # GTK theme configuration
   local.gtk-theme.variant = "dark";
 

@@ -62,6 +62,7 @@
         ./modules/home/static-assets.nix
         ./modules/home/keyring-services.nix
         ./modules/home/google-drive-bisync.nix
+        ./modules/home/google-drive-mount.nix
         ./modules/home/desktop-entries.nix
         ./modules/home/claude-mcp.nix
         ./modules/home/sxm-proxy.nix
