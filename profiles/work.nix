@@ -38,6 +38,22 @@ in
         mimeType = [ "x-scheme-handler/slack" ];
       };
 
+      googleMeetSiriusXM = {
+        name = "Google Meet (SiriusXM)";
+        comment = "SiriusXM Google Meet";
+        genericName = "SiriusXM Google Meet in Brave";
+        exec = ''${config.home.homeDirectory}/bin/brave-sxm --app="https://meet.google.com"'';
+        icon = "google-meet";
+        type = "Application";
+        startupNotify = true;
+        categories = [
+          "GNOME"
+          "GTK"
+          "Network"
+          "VideoConference"
+        ];
+      };
+
       braveSiriusXM = {
         name = "Brave (SiriusXM)";
         comment = "SiriusXM Brave profile (proxied via its in-profile extension)";

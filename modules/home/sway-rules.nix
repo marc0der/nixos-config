@@ -138,6 +138,14 @@ with lib;
           command = "floating enable, resize set 1400 900, move position center";
         }
 
+        # Google Meet (SiriusXM profile) - floating, sized
+        {
+          criteria = {
+            app_id = "brave-meet.google.com__-SiriusXM";
+          };
+          command = "floating enable, resize set 1400 900, move position center";
+        }
+
         # Picture-in-Picture (Brave/Chromium) - floating, sticky, top-right
         {
           criteria = {
