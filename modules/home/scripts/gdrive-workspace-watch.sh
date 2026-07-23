@@ -2,7 +2,7 @@
 # Watch ~/SharedDrives/Workspace and trigger a bisync shortly after local
 # edits settle, so writes push to the team drive within seconds. A short
 # debounce coalesces bursts of edits into a single sync; systemd coalesces
-# overlapping triggers with the 2-minute pull timer.
+# overlapping triggers with the 3-minute pull timer.
 set -euo pipefail
 
 local_dir="$HOME/SharedDrives/Workspace"
