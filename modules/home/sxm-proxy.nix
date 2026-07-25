@@ -12,6 +12,7 @@
 #   sxm-proxy on       # route this shell through the VPN proxy
 #   sxm-proxy off      # revert
 #   sxm-proxy status   # show current state
+#   pi-sxm             # launch Pi on the SiriusXM LiteLLM gateway
 #
 # Example usage:
 #   local.sxm-proxy.enable = true;
@@ -45,12 +46,14 @@ in
             export HTTPS_PROXY="$http_proxy"
             export no_proxy="localhost,127.0.0.1"
             export NO_PROXY="$no_proxy"
+            # Node 24+ fetch honors proxy env only when this is set
+            export NODE_USE_ENV_PROXY=1
             export _SXM_JAVA_OPTS_BAK="''${_SXM_JAVA_OPTS_BAK-$JAVA_OPTS}"
             export JAVA_OPTS="''${_SXM_JAVA_OPTS_BAK:+$_SXM_JAVA_OPTS_BAK }-Dhttp.proxyHost=$vm_ip -Dhttp.proxyPort=$port -Dhttps.proxyHost=$vm_ip -Dhttps.proxyPort=$port"
             echo "SXM proxy ON ($vm_ip:$port)"
             ;;
           off)
-            unset VM_IP http_proxy https_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY
+            unset VM_IP http_proxy https_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY NODE_USE_ENV_PROXY
             if [ -n "''${_SXM_JAVA_OPTS_BAK+x}" ]; then
               export JAVA_OPTS="$_SXM_JAVA_OPTS_BAK"
               unset _SXM_JAVA_OPTS_BAK
@@ -69,6 +72,11 @@ in
             echo "usage: sxm-proxy [on|off|status]"
             ;;
         esac
+      }
+
+      # Launch Pi on the SiriusXM LiteLLM gateway (proxy scoped to the subshell)
+      pi-sxm() {
+        ( sxm-proxy on >/dev/null; exec pi --provider litellm --model claude-opus-4-8 "$@" )
       }
     '';
   };
