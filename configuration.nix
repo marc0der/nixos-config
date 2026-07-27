@@ -64,7 +64,7 @@
   programs.nix-ld.enable = true;
   programs.fuse.userAllowOther = true;
 
-  # Security: SDDM keyring, chromium SUID sandbox, passwordless rebuild sudo
+  # Security: SDDM keyring, chromium SUID sandbox, passwordless rebuild/purge sudo
   security.pam.services.sddm.enableGnomeKeyring = true;
   security.chromiumSuidSandbox.enable = true;
   security.sudo.extraRules = [
@@ -80,6 +80,10 @@
         }
         {
           command = "/run/current-system/sw/bin/nix";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/nix-env";
           options = [ "NOPASSWD" ];
         }
       ];

@@ -1,34 +1,105 @@
 #!/usr/bin/env bash
+#
+# Nix Purge
+#
+# Deletes profile generations older than KEEP_DAYS from the user, home-manager
+# and system profiles, drops stale build symlinks, then collects the store.
+# Unlike `nix-collect-garbage --delete-older-than`, no pre-cutoff generation is
+# kept as a rollback: only generations inside the window survive.
+#
+# Usage:
+#   nix-purge [KEEP_DAYS]   (default: 7)
 
-set -e
+set -euo pipefail
 
-# Default to keeping 7 days of generations
 KEEP_DAYS="${1:-7}"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SYSTEM_PROFILE="/nix/var/nix/profiles/system"
+USER_PROFILE="${XDG_STATE_HOME:-$HOME/.local/state}/nix/profiles/profile"
+
+if ! [[ "$KEEP_DAYS" =~ ^[0-9]+$ ]]; then
+  echo "usage: nix-purge [KEEP_DAYS]" >&2
+  exit 1
+fi
+
+CUTOFF="$(date -d "-${KEEP_DAYS} days" +%s)"
+
+# Fail fast rather than blocking on a password prompt
+for cmd in nix nix-env; do
+  if ! sudo -n "$cmd" --version >/dev/null 2>&1; then
+    echo "error: passwordless sudo for '$cmd' is missing" >&2
+    echo "       add it to security.sudo.extraRules in configuration.nix" >&2
+    exit 1
+  fi
+done
+
+# Echo generation numbers older than the cutoff, skipping the active one
+stale_generations() {
+  local profile="$1" active link gen
+  active="$(basename "$(readlink "$profile" 2>/dev/null || true)")"
+  for link in "$profile"-*-link; do
+    [ -L "$link" ] || continue
+    [ "$(basename "$link")" = "$active" ] && continue
+    [ "$(stat -c %Y "$link")" -ge "$CUTOFF" ] && continue
+    [[ "$link" =~ -([0-9]+)-link$ ]] && printf '%s\n' "${BASH_REMATCH[1]}"
+  done
+}
+
+# Delete stale generations from a profile, optionally via sudo
+purge_profile() {
+  local profile="$1" as_root="$2" gens
+  mapfile -t gens < <(stale_generations "$profile")
+  if [ "${#gens[@]}" -eq 0 ]; then
+    echo "  nothing older than $KEEP_DAYS days"
+    return
+  fi
+  echo "  deleting generations: ${gens[*]}"
+  if [ "$as_root" = root ]; then
+    sudo -n nix-env -p "$profile" --delete-generations "${gens[@]}"
+  else
+    nix-env -p "$profile" --delete-generations "${gens[@]}"
+  fi
+}
 
 echo "=== Nix Purge ==="
 echo "Keeping generations from the last $KEEP_DAYS days"
 echo ""
 
-# Get initial store size
-BEFORE=$(df --output=used /nix | tail -1)
+BEFORE="$(df --output=used /nix | tail -1)"
 
 echo "Cleaning nix-env profile generations..."
-nix-env --delete-generations "+$KEEP_DAYS"
+purge_profile "$USER_PROFILE" user
 
 echo ""
 echo "Cleaning home-manager generations..."
 home-manager expire-generations "-${KEEP_DAYS} days"
 
 echo ""
-echo "Cleaning system generations (requires sudo)..."
-sudo nix-env --delete-generations "+$KEEP_DAYS" -p /nix/var/nix/profiles/system
+echo "Cleaning system generations..."
+purge_profile "$SYSTEM_PROFILE" root
+
+echo ""
+echo "Removing stale build symlinks..."
+find "$REPO" -maxdepth 1 -type l \( -name result -o -name 'result-*' \) -print -delete
 
 echo ""
 echo "Running garbage collection..."
-sudo nix-collect-garbage
+sudo -n nix store gc
 
-# Get final store size
-AFTER=$(df --output=used /nix | tail -1)
+# Roots outside the profiles keep store paths alive regardless of generation age
+echo ""
+echo "Store paths still pinned by other GC roots:"
+for link in /nix/var/nix/gcroots/auto/*; do
+  [ -L "$link" ] || continue
+  target="$(readlink "$link")"
+  case "$target" in
+    /nix/var/nix/profiles/* | */state/nix/profiles/* | */state/home-manager/*) continue ;;
+    *flake-registry.json) continue ;;
+  esac
+  [ -e "$target" ] && echo "  $target"
+done
+
+AFTER="$(df --output=used /nix | tail -1)"
 
 # Calculate freed space in human-readable format
 FREED_KB=$((BEFORE - AFTER))
