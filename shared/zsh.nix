@@ -19,8 +19,10 @@
       export LOCAL_BIN=${config.home.homeDirectory}/.local/bin
       export PYENV_ROOT=${config.home.homeDirectory}/.pyenv
       export PATH=$LOCAL_BIN:$PYENV_ROOT/bin:$PATH
-      eval "$(pyenv init --path)"
-      eval "$(pyenv init -)"
+      if command -v pyenv >/dev/null; then
+        eval "$(pyenv init --path)"
+        eval "$(pyenv init -)"
+      fi
 
       claude-oneshot() {
         if [[ -z "$1" ]]; then
