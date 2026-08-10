@@ -1,7 +1,8 @@
 # Hyprland Extras Module
 #
 # Provides additional Hyprland ecosystem services including hypridle (idle management),
-# hyprlock (lock screen), and hyprpaper (wallpaper).
+# hyprlock (lock screen), and hyprpaper (wallpaper). Also installs the
+# hypridle-control script backing the waybar idle-inhibitor widget.
 #
 # Options:
 #   local.hyprland-extras.enable - Enable Hyprland extra services
@@ -24,6 +25,12 @@ with lib;
   };
 
   config = mkIf config.local.hyprland-extras.enable {
+    # Waybar idle-inhibitor toggle script
+    home.file."bin/hypridle-control" = {
+      source = ./scripts/hypridle-control.sh;
+      executable = true;
+    };
+
     # Hypridle configuration
     services.hypridle = {
       settings = {
