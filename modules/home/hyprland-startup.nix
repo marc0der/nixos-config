@@ -1,7 +1,7 @@
 # Hyprland Startup Programs Module
 #
-# Programs launched once when Hyprland starts (`exec-once`): 1Password, Vorta,
-# pywal colour application, and cliphist clipboard watchers. Mirrors
+# Programs launched once when Hyprland starts (`exec-once`): Waybar, 1Password,
+# Vorta, pywal colour application, and cliphist clipboard watchers. Mirrors
 # `modules/home/sway-startup.nix` for the Hyprland compositor.
 #
 # Options:
@@ -25,6 +25,7 @@ with lib;
 
   config = mkIf config.local.hyprland-startup.enable {
     wayland.windowManager.hyprland.settings.exec-once = [
+      "waybar"
       "1password --silent"
       "flatpak run com.borgbase.Vorta --daemonize"
       "wal -i $(hyprctl hyprpaper listactive | head -n1 | awk '{print $NF}') -b \"##0c0e10\""
