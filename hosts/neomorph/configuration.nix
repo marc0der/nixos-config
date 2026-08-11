@@ -13,7 +13,7 @@
   local.virtualisation.libvirt.enable = true;
   local.virtualisation.libvirt.staticHosts = [
     {
-      mac = "52:54:00:3f:f3:69";
+      mac = "52:54:00:4e:fc:c1";
       ip = "192.168.122.96";
     }
   ];
