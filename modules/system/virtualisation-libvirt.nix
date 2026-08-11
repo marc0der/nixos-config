@@ -1,8 +1,11 @@
 # Libvirt virtualisation module
 #
-# Enables libvirtd + virt-manager for running VMs (e.g. a Linux Mint
+# Enables libvirtd + virt-manager for running VMs (e.g. a Lubuntu
 # guest hosting the corporate GlobalProtect VPN client). Adds the primary
 # user to the libvirtd group so virt-manager works without sudo.
+#
+# The default NAT network is started and autostarted declaratively so guest
+# connectivity survives a reinstall.
 #
 # Disk images are stored in a dedicated pool on /home (the root partition
 # is too small), defined and autostarted declaratively.
@@ -85,11 +88,30 @@ in
       '';
     };
 
+    # Start + autostart the default NAT network
+    systemd.services.libvirt-net-default = {
+      description = "Ensure the libvirt default network is started and autostarted";
+      after = [ "libvirtd.service" ];
+      requires = [ "libvirtd.service" ];
+      wantedBy = [ "multi-user.target" ];
+      environment.LIBVIRT_DEFAULT_URI = "qemu:///system";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
+        set -eu
+        virsh=${pkgs.libvirt}/bin/virsh
+        $virsh net-autostart default
+        $virsh net-start default 2>/dev/null || true
+      '';
+    };
+
     # Pin guest IPs via static DHCP reservations on the default network
     systemd.services.libvirt-net-reservations = lib.mkIf (cfg.staticHosts != [ ]) {
       description = "Ensure static DHCP reservations on the libvirt default network";
-      after = [ "libvirtd.service" ];
-      requires = [ "libvirtd.service" ];
+      after = [ "libvirt-net-default.service" ];
+      requires = [ "libvirt-net-default.service" ];
       wantedBy = [ "multi-user.target" ];
       environment.LIBVIRT_DEFAULT_URI = "qemu:///system";
       serviceConfig = {
@@ -100,13 +122,17 @@ in
         let
           entries = lib.concatMapStringsSep "\n" (h: ''
             if ! "$virsh" net-dumpxml default | grep -q "${h.mac}"; then
-              "$virsh" net-update default add ip-dhcp-host "<host mac='${h.mac}' ip='${h.ip}'/>" --live --config
+              "$virsh" net-update default add ip-dhcp-host "<host mac='${h.mac}' ip='${h.ip}'/>" --config $live
             fi
           '') cfg.staticHosts;
         in
         ''
           set -eu
           virsh=${pkgs.libvirt}/bin/virsh
+          live=""
+          if "$virsh" net-info default | grep -qi '^Active: *yes'; then
+            live="--live"
+          fi
           ${entries}
         '';
     };
