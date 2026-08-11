@@ -14,6 +14,9 @@
 #   sxm-proxy status   # show current state
 #   pi-sxm             # launch Pi on the SiriusXM LiteLLM gateway
 #
+# Also writes ~/.config/sxm/foxyproxy.json for import into FoxyProxy in the
+# Brave SiriusXM profile, so the browser proxy tracks the same IP.
+#
 # Example usage:
 #   local.sxm-proxy.enable = true;
 {
@@ -79,5 +82,36 @@ in
         ( sxm-proxy on >/dev/null; exec pi --provider litellm --model claude-opus-4-8 "$@" )
       }
     '';
+
+    # FoxyProxy import file for the Brave SiriusXM profile
+    xdg.configFile."sxm/foxyproxy.json".text = builtins.toJSON {
+      mode = "${vmIp}:${port}";
+      sync = false;
+      autoBackup = false;
+      passthrough = "localhost, 127.0.0.1, ::1";
+      theme = "";
+      container = { };
+      commands = { };
+      data = [
+        {
+          active = true;
+          title = "SiriusXM VPN";
+          type = "http";
+          hostname = vmIp;
+          inherit port;
+          username = "";
+          password = "";
+          cc = "";
+          city = "";
+          color = "#1f6feb";
+          pac = "";
+          pacString = "";
+          proxyDNS = true;
+          include = [ ];
+          exclude = [ ];
+          tabProxy = [ ];
+        }
+      ];
+    };
   };
 }
