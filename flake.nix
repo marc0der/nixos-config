@@ -11,6 +11,8 @@
     flake-utils.url = "github:numtide/flake-utils";
     llm-agents.url = "github:numtide/llm-agents.nix";
     backlog-md.url = "github:MrLesk/Backlog.md";
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs =
     inputs@{
@@ -110,6 +112,8 @@
             ./hosts/xenomorph/hardware-configuration.nix
             ./modules/system/hyprland.nix
             ./modules/system/tailscale.nix
+            ./modules/system/borg-backup.nix
+            inputs.agenix.nixosModules.default
             ./profiles/gaming.nix
           ];
         };

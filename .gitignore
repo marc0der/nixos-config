@@ -1,7 +1,10 @@
 # Secrets and sensitive files
 # Note: The actual secrets file is at ~/.config/secrets/env (outside this repo)
 # but we exclude these patterns in case any secrets are accidentally created here
-secrets/
+# Exceptions: agenix recipients manifest and *encrypted* .age files are safe to commit
+secrets/*
+!secrets/secrets.nix
+!secrets/*.age
 *.secret
 *.key
 .env
