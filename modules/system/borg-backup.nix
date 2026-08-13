@@ -5,10 +5,12 @@
 # user, so it backs up unattended (login-independent) while reusing marco's
 # SSH key and config. The repo passphrase is provided via agenix.
 #
-# Repo:      ssh://synology/volume1/backups/<hostname>  (repokey, pre-existing)
-# Transport: marco@NAS over SSH (id_rsa); remote borg at /usr/local/bin/borg
+# Repo:      ssh://ds218j.<tailnet>.ts.net/volume1/backups/<hostname>  (repokey)
+# Transport: marco@NAS over SSH (id_rsa) via Tailscale; remote borg at
+#            /usr/local/bin/borg. Direct on the home LAN, relay when away.
 # Schedule:  every 3h, Persistent (catch-up on wake); prune + compact each run
 #            Staggered per host via startAt so hosts don't hit the NAS at once
+# Network:   skips cleanly on metered connections (ExecCondition)
 # Monitor:   Healthchecks.io dead-man's-switch (/start, success, /fail pings)
 # Secrets:   borg-passphrase-<hostname>.age, healthchecks-<hostname>.age
 #
@@ -64,7 +66,8 @@ in
 
     services.borgbackup.jobs.home = {
       paths = "/home/marco";
-      repo = "ssh://synology/volume1/backups/${host}";
+      # Reached over Tailscale (MagicDNS) — direct on the home LAN, relay when away
+      repo = "ssh://ds218j.zonkey-ulmer.ts.net/volume1/backups/${host}";
 
       # Drop to marco: reuse his key/ssh-config, own the source files
       user = "marco";
@@ -174,5 +177,17 @@ in
       '';
     };
     systemd.services."borgbackup-job-home".onFailure = [ "borgbackup-hc-fail.service" ];
+
+    # Skip cleanly (recorded as skipped, not failed) on a metered connection
+    systemd.services."borgbackup-job-home".serviceConfig.ExecCondition =
+      pkgs.writeShellScript "borg-skip-metered" ''
+        raw=$(${pkgs.systemd}/bin/busctl get-property org.freedesktop.NetworkManager \
+          /org/freedesktop/NetworkManager org.freedesktop.NetworkManager Metered 2>/dev/null)
+        # NetworkManager Metered enum: 1=yes 3=guess-yes (skip); 0/2/4 = run
+        case "''${raw##* }" in
+          1|3) echo "metered connection — skipping backup"; exit 1 ;;
+          *) exit 0 ;;
+        esac
+      '';
   };
 }
