@@ -66,7 +66,7 @@ in
 
     services.borgbackup.jobs.home = {
       paths = "/home/marco";
-      # Reached over Tailscale (MagicDNS) — direct on the home LAN, relay when away
+      # Reached over Tailscale MagicDNS: direct on the home LAN, relay when away
       repo = "ssh://ds218j.zonkey-ulmer.ts.net/volume1/backups/${host}";
 
       # Drop to marco: reuse his key/ssh-config, own the source files
@@ -185,7 +185,7 @@ in
           /org/freedesktop/NetworkManager org.freedesktop.NetworkManager Metered 2>/dev/null)
         # NetworkManager Metered enum: 1=yes 3=guess-yes (skip); 0/2/4 = run
         case "''${raw##* }" in
-          1|3) echo "metered connection — skipping backup"; exit 1 ;;
+          1|3) echo "metered connection, skipping backup"; exit 1 ;;
           *) exit 0 ;;
         esac
       '';
