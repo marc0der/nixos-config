@@ -6,6 +6,9 @@
   local.wayland.enable = true;
   local.programs.sway-desktop.enable = true;
 
+  # Alternative desktop: KDE Plasma (selectable at SDDM login)
+  local.programs.plasma-desktop.enable = true;
+
   # Security
   local.services.clamav-security.enable = true;
 
