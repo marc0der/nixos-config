@@ -9,6 +9,9 @@
   # Security
   local.services.clamav-security.enable = true;
 
+  # Tailscale VPN
+  local.services.tailscale-vpn.enable = true;
+
   # Borg backup to NAS: offset 90min from xenomorph's 00/3:00 schedule
   local.services.borg-backup.enable = true;
   local.services.borg-backup.startAt = "*-*-* 01/3:30:00";

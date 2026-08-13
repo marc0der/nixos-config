@@ -124,6 +124,7 @@
             ./hosts/neomorph/hardware-configuration.nix
             ./modules/system/clamav.nix
             ./modules/system/sway.nix
+            ./modules/system/tailscale.nix
             ./modules/system/borg-backup.nix
             ./modules/system/virtualisation-libvirt.nix
             inputs.agenix.nixosModules.default
