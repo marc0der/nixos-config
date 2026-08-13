@@ -2,6 +2,8 @@
 
 ## Rules
 - Follow the rules in [rules/nixos-config.md](rules/nixos-config.md) when writing or changing any config.
+- NEVER run commands with `sudo`. Use the wrapper scripts in [bin/](bin/) for all building; for any other privileged command (e.g. `systemctl start`, `journalctl -u` on system units), give the user the command to run themselves with `! <command>`.
+- ALWAYS build via the `bin/` wrappers, never by calling `nixos-rebuild`, `home-manager`, or `nix build` directly.
 
 ## Important Notes
 - New files must be staged in git before home-manager/nixos-rebuild can recognize them
@@ -17,11 +19,12 @@
 - Rebuild all without upgrade: `nix-rebuild-all` (rebuilds both system and home without updating flake inputs)
 - Update and upgrade all: `nix-upgrade-all` (updates flake inputs and upgrades both system and home)
 
-These convenience scripts are on the PATH and handle all necessary flags like `--impure` and `--no-warn-dirty`.
+These convenience scripts live in [bin/](bin/), are on the PATH, and handle all necessary flags like `--impure` and `--no-warn-dirty`. Always use them instead of raw `nixos-rebuild` / `home-manager` / `nix build` invocations.
 
 ### Automated vs Manual Rebuilds
 - **Home manager changes**: ALWAYS run `nix-rebuild-home` automatically after making changes. Do NOT ask the user - just run it immediately. No sudo required.
-- **System changes**: Run `nix-rebuild-system` or `nix-rebuild-all` directly (sudo not required). No need to ask the user.
+- **System changes**: Run `nix-rebuild-system` or `nix-rebuild-all` directly. No need to ask the user.
+- **Anything else needing privileges**: Do NOT invoke `sudo` yourself - ask the user to run it with `! <command>`.
 
 ## Reporting Changes
 - Changes reported automatically during activation
