@@ -8,13 +8,17 @@
 # Repo:      ssh://synology/volume1/backups/<hostname>  (repokey, pre-existing)
 # Transport: marco@NAS over SSH (id_rsa); remote borg at /usr/local/bin/borg
 # Schedule:  every 3h, Persistent (catch-up on wake); prune + compact each run
+#            Staggered per host via startAt so hosts don't hit the NAS at once
 # Monitor:   Healthchecks.io dead-man's-switch (/start, success, /fail pings)
+# Secrets:   borg-passphrase-<hostname>.age, healthchecks-<hostname>.age
 #
 # Options:
-#   local.services.borg-backup.enable - Enable scheduled Borg backup (default: false)
+#   local.services.borg-backup.enable  - Enable scheduled Borg backup (default: false)
+#   local.services.borg-backup.startAt - Timer schedule (default: "*-*-* 00/3:00:00")
 #
 # Example usage:
 #   local.services.borg-backup.enable = true;
+#   local.services.borg-backup.startAt = "*-*-* 01/3:30:00";
 
 {
   config,
@@ -32,12 +36,19 @@ in
 {
   options.local.services.borg-backup = {
     enable = mkEnableOption "Scheduled Borg backup of /home/marco to the NAS";
+
+    startAt = mkOption {
+      type = types.str;
+      default = "*-*-* 00/3:00:00";
+      example = "*-*-* 01/3:30:00";
+      description = "Timer schedule (OnCalendar). Stagger across hosts so they don't hit the NAS at once.";
+    };
   };
 
   config = mkIf cfg.enable {
     # Repo passphrase, decrypted to a marco-readable file at activation
     age.secrets.borg-passphrase = {
-      file = ../../secrets/borg-passphrase.age;
+      file = ../../secrets/borg-passphrase-${host}.age;
       owner = "marco";
       group = "users";
       mode = "0400";
@@ -45,7 +56,7 @@ in
 
     # Healthchecks.io dead-man's-switch ping URL (capability secret)
     age.secrets.healthchecks-url = {
-      file = ../../secrets/healthchecks-xenomorph.age;
+      file = ../../secrets/healthchecks-${host}.age;
       owner = "marco";
       group = "users";
       mode = "0400";
@@ -78,7 +89,7 @@ in
         ${pkgs.curl}/bin/curl -fsS -m 10 --retry 3 "$(cat ${config.age.secrets.healthchecks-url.path})" || true
       '';
 
-      startAt = "*-*-* 00/3:00:00";
+      startAt = cfg.startAt;
       persistentTimer = true;
 
       # Remote borg lives outside the NAS's non-interactive PATH
@@ -146,6 +157,9 @@ in
         "**/.npm/"
       ];
     };
+
+    # Spread simultaneous catch-up runs across hosts after downtime
+    systemd.timers."borgbackup-job-home".timerConfig.RandomizedDelaySec = "10m";
 
     # Ping Healthchecks /fail when the backup unit fails
     systemd.services.borgbackup-hc-fail = {
