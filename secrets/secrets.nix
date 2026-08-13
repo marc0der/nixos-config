@@ -23,4 +23,5 @@ let
 in
 {
   "borg-passphrase.age".publicKeys = hosts ++ admins;
+  "healthchecks-xenomorph.age".publicKeys = hosts ++ admins;
 }

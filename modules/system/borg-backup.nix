@@ -8,6 +8,7 @@
 # Repo:      ssh://synology/volume1/backups/<hostname>  (repokey, pre-existing)
 # Transport: marco@NAS over SSH (id_rsa); remote borg at /usr/local/bin/borg
 # Schedule:  every 3h, Persistent (catch-up on wake); prune + compact each run
+# Monitor:   Healthchecks.io dead-man's-switch (/start, success, /fail pings)
 #
 # Options:
 #   local.services.borg-backup.enable - Enable scheduled Borg backup (default: false)
@@ -18,6 +19,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -41,6 +43,14 @@ in
       mode = "0400";
     };
 
+    # Healthchecks.io dead-man's-switch ping URL (capability secret)
+    age.secrets.healthchecks-url = {
+      file = ../../secrets/healthchecks-xenomorph.age;
+      owner = "marco";
+      group = "users";
+      mode = "0400";
+    };
+
     services.borgbackup.jobs.home = {
       paths = "/home/marco";
       repo = "ssh://synology/volume1/backups/${host}";
@@ -58,6 +68,15 @@ in
         passCommand = "cat ${config.age.secrets.borg-passphrase.path}";
       };
       compression = "lz4";
+
+      # Healthchecks dead-man's-switch: /start on begin, success on completion
+      # (postHook only runs when the whole job succeeds under `set -e`)
+      preHook = ''
+        ${pkgs.curl}/bin/curl -fsS -m 10 --retry 3 "$(cat ${config.age.secrets.healthchecks-url.path})/start" || true
+      '';
+      postHook = ''
+        ${pkgs.curl}/bin/curl -fsS -m 10 --retry 3 "$(cat ${config.age.secrets.healthchecks-url.path})" || true
+      '';
 
       startAt = "*-*-* 00/3:00:00";
       persistentTimer = true;
@@ -127,5 +146,19 @@ in
         "**/.npm/"
       ];
     };
+
+    # Ping Healthchecks /fail when the backup unit fails
+    systemd.services.borgbackup-hc-fail = {
+      description = "Ping Healthchecks /fail for borg backup";
+      serviceConfig = {
+        Type = "oneshot";
+        User = "marco";
+        Group = "users";
+      };
+      script = ''
+        ${pkgs.curl}/bin/curl -fsS -m 10 --retry 3 "$(cat ${config.age.secrets.healthchecks-url.path})/fail" || true
+      '';
+    };
+    systemd.services."borgbackup-job-home".onFailure = [ "borgbackup-hc-fail.service" ];
   };
 }
