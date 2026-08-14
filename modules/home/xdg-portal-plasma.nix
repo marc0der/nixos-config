@@ -25,14 +25,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; [
-      xdg-desktop-portal-kde
+    home.packages = [
+      pkgs.kdePackages.xdg-desktop-portal-kde
     ];
 
     xdg.portal = {
       enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-kde
+      extraPortals = [
+        pkgs.kdePackages.xdg-desktop-portal-kde
       ];
       config = {
         kde = {
