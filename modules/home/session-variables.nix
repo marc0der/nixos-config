@@ -45,7 +45,6 @@ in
 
       # Qt/Wayland configuration
       QT_QPA_PLATFORM = "wayland;xcb";
-      QT_QPA_PLATFORMTHEME = "qt6ct";
 
       # Cursor configuration
       XCURSOR_SIZE = "24";

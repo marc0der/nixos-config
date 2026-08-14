@@ -32,6 +32,11 @@ with lib;
       checkConfig = false; # Disable validation since we use pywal runtime variables
       xwayland = true; # Enable XWayland for X11 app compatibility
 
+      # Qt theme: qt6ct (kept out of Plasma's session)
+      extraSessionCommands = ''
+        export QT_QPA_PLATFORMTHEME=qt6ct
+      '';
+
       # Load pywal colors FIRST before any config
       extraConfigEarly = ''
         include "$HOME/.cache/wal/colors-sway"
