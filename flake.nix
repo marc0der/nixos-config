@@ -142,6 +142,7 @@
           modules = commonHomeModules ++ [
             ./hosts/neomorph/home.nix
             ./modules/home/xdg-portal-sway.nix
+            ./modules/home/xdg-portal-plasma.nix
             ./modules/home/sway-desktop.nix
             ./modules/home/sway-config.nix
             ./modules/home/sway-rules.nix

@@ -52,6 +52,7 @@ in
 
   # XDG portal configuration
   local.xdg-portal-sway.enable = true;
+  local.xdg-portal-plasma.enable = true;
 
   # XDG MIME types configuration
   local.xdg-mimetypes = {
