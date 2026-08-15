@@ -29,4 +29,5 @@ in
   "borg-passphrase-neomorph.age".publicKeys = [ neomorph ] ++ admins;
   "healthchecks-xenomorph.age".publicKeys = [ xenomorph ] ++ admins;
   "healthchecks-neomorph.age".publicKeys = [ neomorph ] ++ admins;
+  "healthchecks-check-xenomorph.age".publicKeys = [ xenomorph ] ++ admins;
 }

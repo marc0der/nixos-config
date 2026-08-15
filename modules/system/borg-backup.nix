@@ -11,8 +11,11 @@
 # Schedule:  every 3h, Persistent (catch-up on wake); prune + compact each run
 #            Staggered per host via startAt so hosts don't hit the NAS at once
 # Network:   skips cleanly on metered connections (ExecCondition)
+# Check:     monthly `borg check` (consistency) with its own dead-man's-switch,
+#            auto-enabled where healthchecks-check-<hostname>.age exists
 # Monitor:   Healthchecks.io dead-man's-switch (/start, success, /fail pings)
-# Secrets:   borg-passphrase-<hostname>.age, healthchecks-<hostname>.age
+# Secrets:   borg-passphrase-<hostname>.age, healthchecks-<hostname>.age,
+#            healthchecks-check-<hostname>.age
 #
 # Options:
 #   local.services.borg-backup.enable  - Enable scheduled Borg backup (default: false)
@@ -34,6 +37,13 @@ with lib;
 let
   cfg = config.local.services.borg-backup;
   host = config.networking.hostName;
+  # NAS over Tailscale MagicDNS: direct on the home LAN, relay when away
+  repoUrl = "ssh://ds218j.zonkey-ulmer.ts.net/volume1/backups/${host}";
+  remotePath = "/usr/local/bin/borg";
+  borgRsh = "ssh -i /home/marco/.ssh/id_rsa -o BatchMode=yes -o StrictHostKeyChecking=accept-new";
+  # Monthly integrity check auto-enables on hosts that have a check ping secret
+  checkHcSecret = ../../secrets/healthchecks-check-${host}.age;
+  haveCheckHc = builtins.pathExists checkHcSecret;
 in
 {
   options.local.services.borg-backup = {
@@ -47,152 +57,203 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    # Repo passphrase, decrypted to a marco-readable file at activation
-    age.secrets.borg-passphrase = {
-      file = ../../secrets/borg-passphrase-${host}.age;
-      owner = "marco";
-      group = "users";
-      mode = "0400";
-    };
-
-    # Healthchecks.io dead-man's-switch ping URL (capability secret)
-    age.secrets.healthchecks-url = {
-      file = ../../secrets/healthchecks-${host}.age;
-      owner = "marco";
-      group = "users";
-      mode = "0400";
-    };
-
-    services.borgbackup.jobs.home = {
-      paths = "/home/marco";
-      # Reached over Tailscale MagicDNS: direct on the home LAN, relay when away
-      repo = "ssh://ds218j.zonkey-ulmer.ts.net/volume1/backups/${host}";
-
-      # Drop to marco: reuse his key/ssh-config, own the source files
-      user = "marco";
-      group = "users";
-
-      doInit = false;
-      archiveBaseName = host;
-      failOnWarnings = false;
-
-      encryption = {
-        mode = "repokey";
-        passCommand = "cat ${config.age.secrets.borg-passphrase.path}";
-      };
-      compression = "lz4";
-
-      # Healthchecks dead-man's-switch: /start on begin, success on completion
-      # (postHook only runs when the whole job succeeds under `set -e`)
-      preHook = ''
-        ${pkgs.curl}/bin/curl -fsS -m 10 --retry 3 "$(cat ${config.age.secrets.healthchecks-url.path})/start" || true
-      '';
-      postHook = ''
-        ${pkgs.curl}/bin/curl -fsS -m 10 --retry 3 "$(cat ${config.age.secrets.healthchecks-url.path})" || true
-      '';
-
-      startAt = cfg.startAt;
-      persistentTimer = true;
-
-      # Remote borg lives outside the NAS's non-interactive PATH.
-      # --lock-wait: the slow DS218j over Tailscale needs time to release the
-      # lock between create/prune/compact (borg's default is only 1s).
-      extraArgs = [
-        "--remote-path=/usr/local/bin/borg"
-        "--lock-wait=600"
-      ];
-
-      environment = {
-        BORG_RSH = "ssh -i /home/marco/.ssh/id_rsa -o BatchMode=yes -o StrictHostKeyChecking=accept-new";
-        BORG_RELOCATED_REPO_ACCESS_IS_OK = "yes";
+  config = mkIf cfg.enable (mkMerge [
+    {
+      # Repo passphrase, decrypted to a marco-readable file at activation
+      age.secrets.borg-passphrase = {
+        file = ../../secrets/borg-passphrase-${host}.age;
+        owner = "marco";
+        group = "users";
+        mode = "0400";
       };
 
-      prune.keep = {
-        within = "7d";
-        daily = 14;
-        weekly = 8;
-        monthly = 12;
-        yearly = 3;
+      # Healthchecks.io dead-man's-switch ping URL (capability secret)
+      age.secrets.healthchecks-url = {
+        file = ../../secrets/healthchecks-${host}.age;
+        owner = "marco";
+        group = "users";
+        mode = "0400";
       };
 
-      exclude = [
-        # Ported from the previous Vorta profile
-        "**/.cache/"
-        "**/.cargo/"
-        "**/.gradle/"
-        "**/.ivy2/"
-        "**/.java/"
-        "**/.get_iplayer/"
-        "**/.mozilla/"
-        "**/.pyenv/"
-        "**/.sdkman/"
-        "**/target"
-        "**/build"
-        "**/.idea"
-        "**/Videos/"
-        "**/*.iso"
-        "**/.var/app/"
-        "**/Downloads/"
+      services.borgbackup.jobs.home = {
+        paths = "/home/marco";
+        repo = repoUrl;
 
-        # Narrowed .local/share: skip the big/reproducible, keep game saves
-        "/home/marco/.local/share/Trash"
-        "/home/marco/.local/share/Steam/steamapps/common"
-        "/home/marco/.local/share/Steam/steamapps/shadercache"
-        "/home/marco/.local/share/Steam/steamapps/downloading"
-        "/home/marco/.local/share/Steam/steamapps/temp"
-        "/home/marco/.local/share/Steam/appcache"
-        "/home/marco/.local/share/docker"
-        "/home/marco/.local/share/uv"
-        "/home/marco/.local/share/JetBrains"
+        # Drop to marco: reuse his key/ssh-config, own the source files
+        user = "marco";
+        group = "users";
 
-        # Regenerable app/browser/editor caches (Electron/Chromium, any depth)
-        "**/Cache/"
-        "**/Cache_Data/"
-        "**/Code Cache/"
-        "**/GPUCache/"
-        "**/CachedData/"
-        "**/CachedExtensionVSIXs/"
-        "**/CacheStorage/"
-        "**/DawnCache/"
-        "**/DawnGraphiteCache/"
-        "**/DawnWebGPUCache/"
-        "**/GrShaderCache/"
-        "**/ShaderCache/"
-        "**/Crashpad/"
-        "**/blob_storage/"
-        "**/component_crx_cache/"
-        "**/.npm/"
-      ];
-    };
+        doInit = false;
+        archiveBaseName = host;
+        failOnWarnings = false;
 
-    # Spread simultaneous catch-up runs across hosts after downtime
-    systemd.timers."borgbackup-job-home".timerConfig.RandomizedDelaySec = "10m";
+        encryption = {
+          mode = "repokey";
+          passCommand = "cat ${config.age.secrets.borg-passphrase.path}";
+        };
+        compression = "lz4";
 
-    # Ping Healthchecks /fail when the backup unit fails
-    systemd.services.borgbackup-hc-fail = {
-      description = "Ping Healthchecks /fail for borg backup";
-      serviceConfig = {
-        Type = "oneshot";
-        User = "marco";
-        Group = "users";
+        # Healthchecks dead-man's-switch: /start on begin, success on completion
+        # (postHook only runs when the whole job succeeds under `set -e`)
+        preHook = ''
+          ${pkgs.curl}/bin/curl -fsS -m 10 --retry 3 "$(cat ${config.age.secrets.healthchecks-url.path})/start" || true
+        '';
+        postHook = ''
+          ${pkgs.curl}/bin/curl -fsS -m 10 --retry 3 "$(cat ${config.age.secrets.healthchecks-url.path})" || true
+        '';
+
+        startAt = cfg.startAt;
+        persistentTimer = true;
+
+        # Remote borg lives outside the NAS's non-interactive PATH.
+        # --lock-wait: the slow DS218j over Tailscale needs time to release the
+        # lock between create/prune/compact (borg's default is only 1s).
+        extraArgs = [
+          "--remote-path=${remotePath}"
+          "--lock-wait=600"
+        ];
+
+        environment = {
+          BORG_RSH = borgRsh;
+          BORG_RELOCATED_REPO_ACCESS_IS_OK = "yes";
+        };
+
+        prune.keep = {
+          within = "7d";
+          daily = 14;
+          weekly = 8;
+          monthly = 12;
+          yearly = 3;
+        };
+
+        exclude = [
+          # Ported from the previous Vorta profile
+          "**/.cache/"
+          "**/.cargo/"
+          "**/.gradle/"
+          "**/.ivy2/"
+          "**/.java/"
+          "**/.get_iplayer/"
+          "**/.mozilla/"
+          "**/.pyenv/"
+          "**/.sdkman/"
+          "**/target"
+          "**/build"
+          "**/.idea"
+          "**/Videos/"
+          "**/*.iso"
+          "**/.var/app/"
+          "**/Downloads/"
+
+          # Narrowed .local/share: skip the big/reproducible, keep game saves
+          "/home/marco/.local/share/Trash"
+          "/home/marco/.local/share/Steam/steamapps/common"
+          "/home/marco/.local/share/Steam/steamapps/shadercache"
+          "/home/marco/.local/share/Steam/steamapps/downloading"
+          "/home/marco/.local/share/Steam/steamapps/temp"
+          "/home/marco/.local/share/Steam/appcache"
+          "/home/marco/.local/share/docker"
+          "/home/marco/.local/share/uv"
+          "/home/marco/.local/share/JetBrains"
+
+          # Regenerable app/browser/editor caches (Electron/Chromium, any depth)
+          "**/Cache/"
+          "**/Cache_Data/"
+          "**/Code Cache/"
+          "**/GPUCache/"
+          "**/CachedData/"
+          "**/CachedExtensionVSIXs/"
+          "**/CacheStorage/"
+          "**/DawnCache/"
+          "**/DawnGraphiteCache/"
+          "**/DawnWebGPUCache/"
+          "**/GrShaderCache/"
+          "**/ShaderCache/"
+          "**/Crashpad/"
+          "**/blob_storage/"
+          "**/component_crx_cache/"
+          "**/.npm/"
+        ];
       };
-      script = ''
-        ${pkgs.curl}/bin/curl -fsS -m 10 --retry 3 "$(cat ${config.age.secrets.healthchecks-url.path})/fail" || true
-      '';
-    };
-    systemd.services."borgbackup-job-home".onFailure = [ "borgbackup-hc-fail.service" ];
 
-    # Skip cleanly (recorded as skipped, not failed) on a metered connection
-    systemd.services."borgbackup-job-home".serviceConfig.ExecCondition =
-      pkgs.writeShellScript "borg-skip-metered" ''
-        raw=$(${pkgs.systemd}/bin/busctl get-property org.freedesktop.NetworkManager \
-          /org/freedesktop/NetworkManager org.freedesktop.NetworkManager Metered 2>/dev/null)
-        # NetworkManager Metered enum: 1=yes 3=guess-yes (skip); 0/2/4 = run
-        case "''${raw##* }" in
-          1|3) echo "metered connection, skipping backup"; exit 1 ;;
-          *) exit 0 ;;
-        esac
-      '';
-  };
+      # Spread simultaneous catch-up runs across hosts after downtime
+      systemd.timers."borgbackup-job-home".timerConfig.RandomizedDelaySec = "10m";
+
+      # Ping Healthchecks /fail when the backup unit fails
+      systemd.services.borgbackup-hc-fail = {
+        description = "Ping Healthchecks /fail for borg backup";
+        serviceConfig = {
+          Type = "oneshot";
+          User = "marco";
+          Group = "users";
+        };
+        script = ''
+          ${pkgs.curl}/bin/curl -fsS -m 10 --retry 3 "$(cat ${config.age.secrets.healthchecks-url.path})/fail" || true
+        '';
+      };
+      systemd.services."borgbackup-job-home".onFailure = [ "borgbackup-hc-fail.service" ];
+
+      # Skip cleanly (recorded as skipped, not failed) on a metered connection
+      systemd.services."borgbackup-job-home".serviceConfig.ExecCondition =
+        pkgs.writeShellScript "borg-skip-metered" ''
+          raw=$(${pkgs.systemd}/bin/busctl get-property org.freedesktop.NetworkManager \
+            /org/freedesktop/NetworkManager org.freedesktop.NetworkManager Metered 2>/dev/null)
+          # NetworkManager Metered enum: 1=yes 3=guess-yes (skip); 0/2/4 = run
+          case "''${raw##* }" in
+            1|3) echo "metered connection, skipping backup"; exit 1 ;;
+            *) exit 0 ;;
+          esac
+        '';
+    }
+
+    # Monthly repository integrity check (consistency only, not --verify-data),
+    # with its own Healthchecks dead-man's-switch. Auto-enabled where the
+    # per-host check ping secret exists.
+    (mkIf haveCheckHc {
+      age.secrets.healthchecks-check-url = {
+        file = checkHcSecret;
+        owner = "marco";
+        group = "users";
+        mode = "0400";
+      };
+
+      systemd.services.borgbackup-check-home = {
+        description = "Monthly borg integrity check of the NAS repo";
+        serviceConfig = {
+          Type = "oneshot";
+          User = "marco";
+          Group = "users";
+        };
+        path = [
+          pkgs.borgbackup
+          pkgs.openssh
+          pkgs.curl
+        ];
+        environment = {
+          BORG_PASSCOMMAND = "cat ${config.age.secrets.borg-passphrase.path}";
+          BORG_RSH = borgRsh;
+          BORG_RELOCATED_REPO_ACCESS_IS_OK = "yes";
+        };
+        script = ''
+          url="$(cat ${config.age.secrets.healthchecks-check-url.path})"
+          curl -fsS -m 10 --retry 3 "$url/start" || true
+          if borg check --remote-path=${remotePath} --lock-wait=600 ${repoUrl}; then
+            curl -fsS -m 10 --retry 3 "$url" || true
+          else
+            curl -fsS -m 10 --retry 3 "$url/fail" || true
+            exit 1
+          fi
+        '';
+      };
+
+      systemd.timers.borgbackup-check-home = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = "monthly";
+          Persistent = true;
+          RandomizedDelaySec = "1h";
+        };
+      };
+    })
+  ]);
 }
