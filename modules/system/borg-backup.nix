@@ -95,8 +95,13 @@ in
       startAt = cfg.startAt;
       persistentTimer = true;
 
-      # Remote borg lives outside the NAS's non-interactive PATH
-      extraArgs = [ "--remote-path=/usr/local/bin/borg" ];
+      # Remote borg lives outside the NAS's non-interactive PATH.
+      # --lock-wait: the slow DS218j over Tailscale needs time to release the
+      # lock between create/prune/compact (borg's default is only 1s).
+      extraArgs = [
+        "--remote-path=/usr/local/bin/borg"
+        "--lock-wait=600"
+      ];
 
       environment = {
         BORG_RSH = "ssh -i /home/marco/.ssh/id_rsa -o BatchMode=yes -o StrictHostKeyChecking=accept-new";
