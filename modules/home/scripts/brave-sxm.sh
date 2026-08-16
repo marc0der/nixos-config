@@ -8,6 +8,7 @@
 # main Brave process (observed SIGTRAP crashes of the default instance).
 
 exec brave \
+  --new-window \
   --enable-features=UseOzonePlatform \
   --ozone-platform=wayland \
   --profile-directory=SiriusXM \
