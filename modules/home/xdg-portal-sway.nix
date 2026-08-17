@@ -2,6 +2,9 @@
 #
 # This module configures xdg-desktop-portal with Sway/wlroots-specific settings.
 # It enables screen capture and screenshot functionality through the wlr portal.
+# The wlr backend unit is bound to sway-session.target rather than
+# graphical-session.target, so it never starts in a non-wlroots session such as
+# Plasma, where it can only fail to connect to a display.
 #
 # Options:
 #   local.xdg-portal-sway.enable - Enable XDG portal for Sway
@@ -53,7 +56,7 @@ in
     systemd.user.services.xdg-desktop-portal-wlr = {
       Unit = {
         Description = "xdg-desktop-portal-wlr";
-        PartOf = [ "graphical-session.target" ];
+        PartOf = [ "sway-session.target" ];
       };
 
       Service = {
@@ -62,7 +65,7 @@ in
       };
 
       Install = {
-        WantedBy = [ "graphical-session.target" ];
+        WantedBy = [ "sway-session.target" ];
       };
     };
   };
