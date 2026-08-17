@@ -185,20 +185,73 @@ cursor choice for every Wayland and XWayland app.
 This project already fixed one variable of the same kind,
 `QT_QPA_PLATFORMTHEME`, because it caused the same problem for Qt apps.
 
-### Desired outcome
-Under Plasma, GTK apps use Plasma's own theme and cursor choice. Under
-Sway and Hyprland, GTK apps keep using `Materia-dark` and the
-`Bibata-Modern-Ice` cursor, exactly as they do today.
+An investigation while building this spec found that neither variable can
+be fully unset by removing it from `home.sessionVariables` alone, because
+each has a second, independent source. Both open decisions below were
+raised with the user and answered; this revision folds the answers in and
+replaces the single item 5 with two sub-items, 5a and 5b, that carry the
+corrected, resolvable outcome.
 
-### Advantage
-- GTK and Wayland apps match the rest of the Plasma desktop.
-- Sway and Hyprland keep their current look with no visible change.
+### 5a. `GTK_THEME`
 
-### Acceptance criteria
-- Under Plasma, `GTK_THEME` and `XCURSOR_THEME` are not part of the
-  session environment.
-- Under Sway and Hyprland, `GTK_THEME` and `XCURSOR_THEME` still resolve to
-  their current values.
+`home.nix`'s `gtk.enable` option writes `gtk-theme-name=Materia-dark`
+directly into the home-manager-managed `~/.config/gtk-3.0/settings.ini` and
+`~/.config/gtk-4.0/settings.ini`. Those files carry no session scoping, so
+removing the `GTK_THEME` env var does not hand Plasma its Breeze GTK theme;
+GTK apps under Plasma still read `Materia-dark` from `settings.ini`
+regardless.
+
+**Decision:** accept this. Remove `GTK_THEME` from the global session
+variables anyway — it is still correct and low-risk, because it stops the
+env var from overriding any per-app or Plasma-side choice, and
+`Materia-dark` is visually coherent with Breeze Dark. Handing GTK file
+management to `kde-gtk-config` instead (dropping `gtk.enable` theming from
+home-manager) would resolve the colour-leak, `-b backup`, and `GTK_THEME`
+items together, but is a large change that needs its own spec; it is out of
+scope here.
+
+#### Desired outcome
+`GTK_THEME` is no longer a global session variable; it applies only under
+Sway and Hyprland. Under Plasma, GTK apps show `Materia-dark`, read from
+`settings.ini` rather than from the env var.
+
+#### Acceptance criteria
+- Under Plasma, `GTK_THEME` is not part of the session environment.
+- Under Sway and Hyprland, `GTK_THEME` still resolves to `Materia-dark` and
+  GTK apps look unchanged.
+
+### 5b. `XCURSOR_THEME`
+
+`XCURSOR_THEME=Bibata-Modern-Ice` has three independent sources, not one:
+the global session variable itself, `home.pointerCursor`'s own
+`XCURSOR_THEME = mkDefault cfg.name` export (fired whenever
+`home.pointerCursor` is enabled), and `gtk-cursor-theme-name=Bibata-Modern-Ice`
+in the home-manager-managed `~/.config/gtk-3.0/settings.ini`. Removing only
+the session variable leaves the other two in place, so the literal
+acceptance criterion below ("not part of the session environment") cannot
+be met by that change alone.
+
+**Decision:** stop trying to unset `XCURSOR_THEME`. `home.pointerCursor`
+legitimately declares Bibata as the user's cursor for every session;
+instead set Plasma's own cursor theme, through Plasma's system settings, to
+`Bibata-Modern-Ice`, so nothing clashes. This meets the intent of this
+item — one consistent cursor under Plasma — but not the original literal
+wording. Guarding the whole `home.pointerCursor` block per compositor
+instead was considered and rejected: it would also drop the `~/.icons` and
+`~/.local/share/icons` management that option provides, and would widen the
+blast radius onto xenomorph, which is out of scope for this document.
+
+#### Desired outcome
+Under Plasma, the cursor is `Bibata-Modern-Ice`, set through Plasma's own
+cursor-theme setting, so no second source fights it. Under Sway and
+Hyprland, the cursor keeps resolving to `Bibata-Modern-Ice` exactly as it
+does today.
+
+#### Acceptance criteria
+- Under Plasma, the cursor theme is `Bibata-Modern-Ice`, set via Plasma's
+  own setting, with no other source overriding it.
+- Under Sway and Hyprland, the cursor is still `Bibata-Modern-Ice` at size
+  24.
 
 ---
 
