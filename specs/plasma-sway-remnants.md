@@ -71,10 +71,6 @@ Plasma. Under Sway, the GTK portal keeps working exactly as it does today.
 - Removes leftover configuration that matches neither desktop session by
   design, only by coincidence.
 
-**Note:** Item 4 (the Sway screen-capture portal) shows a failure with the
-same wrong display name. Re-check item 4 after you fix this item — the
-failure in item 4 may change or disappear once this override is gone.
-
 ### Acceptance criteria
 - Neither override file exists under `~/.config/systemd/user/`.
 - `xdg-desktop-portal-gtk.service` reaches the `active` state under the
@@ -151,10 +147,11 @@ systemd user service, with no desktop-session guard. Under Plasma, the
 service fails to reach an active state and hits the systemd restart limit.
 The unit stays in a `failed` state for the rest of the desktop session.
 
-The service currently fails with a wrong-display error. Item 1 of this
-document may explain or remove that specific error. The deeper problem
-stays regardless of item 1: this service has no reason to start at all
-under a desktop session that does not use Sway or wlroots.
+The service fails with `wayland: failed to connect to display`. This is
+not a knock-on effect of item 1: the failure was recorded in a session
+where item 1's override files were already gone. The problem is simply
+that this service has no reason to start at all under a desktop session
+that does not use Sway or wlroots.
 
 ### Desired outcome
 `xdg-desktop-portal-wlr` starts only under Sway. It neither starts nor
