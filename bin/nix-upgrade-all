@@ -7,4 +7,4 @@ echo "Upgrading system with impure evaluation..."
 sudo -E nixos-rebuild switch --flake /home/marco/nixos --impure
 
 echo "Upgrading home-manager with impure evaluation..."
-home-manager switch --flake /home/marco/nixos --impure
+home-manager -b backup switch --flake /home/marco/nixos --impure

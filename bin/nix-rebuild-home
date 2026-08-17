@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 echo "Running home-manager with impure evaluation..."
-home-manager switch --flake /home/marco/nixos --impure
+home-manager -b backup switch --flake /home/marco/nixos --impure
