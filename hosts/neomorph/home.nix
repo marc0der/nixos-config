@@ -32,6 +32,9 @@ in
   local.sway-startup.enable = true;
   local.kanshi.enable = true;
 
+  # PolKit agent: Sway session only (Plasma runs its own)
+  local.keyring-services.polkitSessionTarget = "sway-session.target";
+
   # Workspace 1 default layout: Slack left, Brave right
   wayland.windowManager.sway.config.startup = [
     { command = "/home/marco/bin/arrange-workspace1"; }
