@@ -1,11 +1,29 @@
 # Plasma Session: Sway Remnants Specification
 
-Status: in progress. Items 4 and 5 are implemented on this branch and
-await testing. Items 2, 7, and 9 are partially addressed; see each item.
+Status: in progress. Every item except 6b now has an implementation on
+this branch, and all of them await testing. Item 6b needs a manual step in
+Plasma's own settings rather than a code change. Per RULE-106, no item
+counts as fixed until the user confirms it under both the Sway and the
+Plasma desktop session.
 
-The items appear in implementation order. Item 1 comes first: the next
-home-manager rebuild from HEAD breaks kanshi under Sway, so it must land
-before any other item triggers a rebuild.
+Implementing commit per item:
+
+| Item | Commit                                        |
+|------|-----------------------------------------------|
+| 1    | `bdd075f`                                     |
+| 2    | manual cleanup, no commit                     |
+| 3    | `2eb7ab8`                                     |
+| 4    | `e81dc8f`                                     |
+| 5    | `b5bc82b`                                     |
+| 6a   | `59b12a6`                                     |
+| 6b   | none; manual step in Plasma settings          |
+| 7    | `6b2a6f9`                                     |
+| 8    | `add1b29`                                     |
+| 9    | `81cc33a`                                     |
+| 10   | `e653c4a`                                     |
+
+The items appear in implementation order.
+
 Scope: home-manager configuration for the `marco@neomorph` user. No changes
 to `xenomorph` or to the Hyprland setup are in scope.
 
@@ -38,6 +56,13 @@ since the first revision:
   exist in the repository, and the next rebuild from HEAD removes them.
   Do not treat on-disk state as evidence of repository state. Items 7 and
   1 describe the two concrete consequences; item 1 is the serious one.
+
+Later on 2026-08-18 the discarded work was rewritten and committed, and a
+home-manager rebuild from that tree succeeded. Repository state and on-disk
+state agree again, so the warning above no longer applies. The rebuild also
+replaced the orphaned `kanshi.service` symlink with a declared unit, and
+`~/.config/systemd/user/kanshi.service.backup` has since been deleted, which
+closes the last file-state criterion of items 1 and 2.
 
 This revision also renumbered the items into implementation order. Commit
 messages older than this revision use the previous numbering: old item 9
@@ -98,20 +123,15 @@ Three problems with it:
 - The file is unmanaged, so no rebuild can repair or replace it.
 
 The 2026-08-18 review found the on-disk state moved again, and in a way
-that makes this item urgent. A rebuild from since-discarded work displaced
+that made this item urgent. A rebuild from since-discarded work displaced
 the hand-written unit to `~/.config/systemd/user/kanshi.service.backup`
 and installed a home-manager symlink at
-`~/.config/systemd/user/kanshi.service`. The commit that declared that
-unit (`d052885`) was then discarded in the hard reset, and no module at
-HEAD declares any kanshi unit: `modules/home/kanshi.nix` writes only
-`~/.config/kanshi/config`, and no `services.kanshi` option is set anywhere
-in the repository.
+`~/.config/systemd/user/kanshi.service`, whose declaring commit
+(`d052885`) the hard reset then discarded, leaving the symlink orphaned.
 
-The next rebuild from HEAD therefore removes the orphaned symlink and
-leaves no `kanshi.service` at all. The `systemctl --user restart
-kanshi.service` command in `sway-startup.nix` then fails, and kanshi never
-starts under Sway. Implement this item before, or in the same change as,
-the next home-manager rebuild.
+Commit `bdd075f` declares the unit in `modules/home/kanshi.nix`, and the
+rebuild that followed it restored a store-backed `kanshi.service`. The
+`.backup` file was deleted afterwards.
 
 The unit is inactive under a Plasma desktop session, because
 `sway-session.target` is inactive there. That is correct behaviour and
@@ -210,9 +230,7 @@ may also affect the Sway desktop session. This document did not test the
 Sway case.
 
 A commit that implemented this item (`ba82a28`) was discarded in the hard
-reset of 2026-08-18. The repository at HEAD carries no fix. Treat this
-item as open, and do not reuse the discarded implementation without
-review.
+reset of 2026-08-18. Commit `2eb7ab8` reimplemented it after review.
 
 A planning review on 2026-08-18 chose the implementation: remove the
 `secrets` component from `services.gnome-keyring` in
@@ -411,13 +429,10 @@ A separate Sway startup list, in `modules/home/sway-startup.nix`, also
 starts `blueman-applet` directly. A fix to the autostart entry does not
 touch that separate list, so Sway keeps its Bluetooth applet either way.
 
-A fix for this item exists on disk right now, but not in the repository.
-`~/.config/autostart/blueman.desktop` is a home-manager symlink to an
-entry that carries `NotShowIn=KDE;`. Its source came from uncommitted work
-that the 2026-08-18 hard reset and cleanup discarded; no commit at HEAD
-declares it. The next rebuild from HEAD removes the override, and
-`blueman-applet` autostarts under Plasma again. The fix must land in the
-repository to hold.
+The fix was on disk but not in the repository, as a `NotShowIn=KDE;`
+autostart entry left over from uncommitted work that the 2026-08-18 hard
+reset discarded. Commit `6b2a6f9` declares it in
+`modules/home/desktop-common.nix`, so it now survives a rebuild.
 
 ### Desired outcome
 Under Plasma, only `bluedevil` manages Bluetooth pairing and shows a tray
@@ -533,10 +548,9 @@ affects only a sandboxed app, such as a Flatpak app, that asks for a secret
 through the portal. It does not affect a regular desktop app.
 
 A commit that implemented this item (`ff7b0c7`) was discarded in the hard
-reset of 2026-08-18. The repository at HEAD carries no fix. Treat this
-item as open, and do not reuse the discarded implementation without
-review. This item also depends on item 3: the kwallet portal is only
-useful once `ksecretd` owns the secrets service.
+reset of 2026-08-18. Commit `e653c4a` reimplemented it after review. This
+item also depends on item 3: the kwallet portal is only useful once
+`ksecretd` owns the secrets service.
 
 ### Desired outcome
 A sandboxed app can ask for a secret through the portal and reach Plasma's
