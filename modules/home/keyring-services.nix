@@ -1,9 +1,10 @@
 # gnome-keyring, gpg-agent, and PolKit authentication agent
 #
 # Bundles the three secret/auth helpers that every host needs identically:
-# gnome-keyring (pkcs11 + secrets), gpg-agent with a 1-year cache and
-# pinentry-gnome3, and the GNOME PolKit authentication agent as a user
-# systemd unit tied to a configurable session target.
+# gnome-keyring (pkcs11 only, so ksecretd owns the secrets service),
+# gpg-agent with a 1-year cache and pinentry-gnome3, and the GNOME PolKit
+# authentication agent as a user systemd unit tied to a configurable
+# session target.
 #
 # Options:
 #   local.keyring-services.enable - Enable keyring + gpg-agent + polkit agent
@@ -38,10 +39,7 @@ in
   config = lib.mkIf cfg.enable {
     services.gnome-keyring = {
       enable = true;
-      components = [
-        "pkcs11"
-        "secrets"
-      ];
+      components = [ "pkcs11" ];
     };
 
     services.gpg-agent = {
