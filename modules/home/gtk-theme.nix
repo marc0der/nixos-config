@@ -2,6 +2,7 @@
 #
 # Provides GTK theming configuration with support for dark and light variants.
 # Sets the GTK theme and icon theme. The compositor modules export `GTK_THEME`.
+# Also owns the GTK3 `gtk.css` and `colors.css` that `kde-gtk-config` writes.
 #
 # Options:
 #   local.gtk-theme.enable - Enable GTK theming (default: true)
@@ -46,6 +47,9 @@ in
     gtk = {
       gtk4.theme = config.gtk.theme;
 
+      # GTK3 css: own the files kde-gtk-config writes, so Breeze colors cannot leak
+      gtk3.extraCss = "/* managed by home-manager */\n";
+
       theme = {
         name = if cfg.variant == "dark" then "Materia-dark" else "Materia-light";
         package = pkgs.materia-theme;
@@ -56,5 +60,7 @@ in
         package = pkgs.papirus-icon-theme;
       };
     };
+
+    xdg.configFile."gtk-3.0/colors.css".text = "/* managed by home-manager */\n";
   };
 }
