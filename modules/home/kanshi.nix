@@ -1,8 +1,10 @@
 # Kanshi Module
 #
 # Declarative kanshi output configuration with dynamic projector mirroring.
-# Generates ~/.config/kanshi/config and builds the mirror/unmirror helpers so
-# they resolve their tools under kanshi's minimal service PATH.
+# Generates ~/.config/kanshi/config, declares the kanshi user service, and
+# builds the mirror/unmirror helpers so they resolve their tools under kanshi's
+# minimal service PATH. The unit is bound to sway-session.target, so it never
+# starts in a non-wlroots session such as Plasma.
 #
 # Options:
 #   local.kanshi.enable - Enable kanshi config management (default: false)
@@ -76,5 +78,22 @@ in
           exec ${kanshi-mirror}/bin/kanshi-mirror
       }
     '';
+
+    systemd.user.services.kanshi = {
+      Unit = {
+        Description = "kanshi dynamic output configuration";
+        PartOf = [ "sway-session.target" ];
+        After = [ "sway-session.target" ];
+      };
+
+      Service = {
+        ExecStart = "${pkgs.kanshi}/bin/kanshi";
+        Restart = "on-failure";
+      };
+
+      Install = {
+        WantedBy = [ "sway-session.target" ];
+      };
+    };
   };
 }
