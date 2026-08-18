@@ -1,6 +1,11 @@
 # Plasma Session: Sway Remnants Specification
 
-Status: proposed
+Status: in progress. Items 4 and 5 are implemented on this branch and
+await testing. Items 2, 7, and 9 are partially addressed; see each item.
+
+The items appear in implementation order. Item 1 comes first: the next
+home-manager rebuild from HEAD breaks kanshi under Sway, so it must land
+before any other item triggers a rebuild.
 Scope: home-manager configuration for the `marco@neomorph` user. No changes
 to `xenomorph` or to the Hyprland setup are in scope.
 
@@ -15,7 +20,29 @@ fix each issue. Pick the implementation approach at build time.
 An adversarial review checked this document against the repository and
 against the Simplified Technical English rules. The review found two
 causal links between items, one wrong priority order, one missing item, and
-several wording problems. This revision applies all of those corrections.
+several wording problems. An earlier revision applied all of those
+corrections.
+
+A second review (2026-08-18) checked this document against the repository
+at commit `b5bc82b` and against the live home directory. Two things changed
+since the first revision:
+
+- Commits on this branch already implement items 4 (`e81dc8f`) and 5
+  (`b5bc82b`). A build-wrapper change (`81cc33a`) partially addresses
+  item 9. A manual cleanup already deleted the files in item 2.
+- A hard reset then discarded four later commits: a declarative kanshi
+  unit (item 1), a ksecretd handover (item 3), a kwallet portal (item 10),
+  and a docs amendment. The active home-manager generation still reflects
+  that discarded work, plus some uncommitted work that is gone entirely.
+  Several files in `$HOME` are therefore symlinks whose sources no longer
+  exist in the repository, and the next rebuild from HEAD removes them.
+  Do not treat on-disk state as evidence of repository state. Items 7 and
+  1 describe the two concrete consequences; item 1 is the serious one.
+
+This revision also renumbered the items into implementation order. Commit
+messages older than this revision use the previous numbering: old item 9
+became item 1, old items 1 through 8 each moved up by one number, and
+item 10 kept its number.
 
 ## Constraints (from `rules/nixos-config.md`)
 
@@ -35,17 +62,105 @@ Every item below must follow the existing rules. In particular:
 - Do not report an item as fixed until the user tests the change under
   both the Sway and the Plasma desktop session and confirms it (RULE-106).
 
-Item 1 points at files inside `$HOME` that home-manager does not manage.
-Deleting those files is a manual step, not a nix change.
+Items 1 and 2 point at files inside `$HOME` that home-manager does not
+manage. Deleting those files is a manual step, not a nix change.
 
 ---
 
-## 1. Stale systemd overrides force the wrong Wayland display name
+## 1. The kanshi unit needs a nix-managed replacement before cleanup
+
+This item's first revision contained two wrong claims. The corrected
+facts:
+
+- `sway-startup.nix` starts kanshi through the unit, with
+  `systemctl --user restart kanshi.service`, not through a direct command.
+- Because of that, deleting the unit without a nix-managed replacement
+  stops kanshi from starting under Sway and breaks output profile
+  switching on `neomorph`.
 
 ### Current state
-Two files exist under `~/.config/systemd/user/`. Neither file belongs to
-the nix-managed configuration. Both predate this investigation by over a
-year, the same kind of leftover file as `~/.config/environment.d/wayland.conf`,
+The hand-written unit, dated March 2025, contains:
+
+```
+BindsTo=sway-session.target
+ExecStart=/usr/bin/env WAYLAND_DISPLAY=wayland-1 kanshi
+Environment=PATH=%h/.nix-profile/bin:/usr/bin:/bin
+WantedBy=sway-session.target
+```
+
+Three problems with it:
+
+- `WAYLAND_DISPLAY=wayland-1` is hardcoded, the same wrong-display
+  pattern as item 2.
+- `PATH` names `/usr/bin` and `/bin`, which do not exist on NixOS, and
+  resolves `kanshi` through `~/.nix-profile/bin` rather than through the
+  nix store.
+- The file is unmanaged, so no rebuild can repair or replace it.
+
+The 2026-08-18 review found the on-disk state moved again, and in a way
+that makes this item urgent. A rebuild from since-discarded work displaced
+the hand-written unit to `~/.config/systemd/user/kanshi.service.backup`
+and installed a home-manager symlink at
+`~/.config/systemd/user/kanshi.service`. The commit that declared that
+unit (`d052885`) was then discarded in the hard reset, and no module at
+HEAD declares any kanshi unit: `modules/home/kanshi.nix` writes only
+`~/.config/kanshi/config`, and no `services.kanshi` option is set anywhere
+in the repository.
+
+The next rebuild from HEAD therefore removes the orphaned symlink and
+leaves no `kanshi.service` at all. The `systemctl --user restart
+kanshi.service` command in `sway-startup.nix` then fails, and kanshi never
+starts under Sway. Implement this item before, or in the same change as,
+the next home-manager rebuild.
+
+The unit is inactive under a Plasma desktop session, because
+`sway-session.target` is inactive there. That is correct behaviour and
+must be kept.
+
+### Desired outcome
+`kanshi` starts under Sway through a nix-managed systemd user unit. The
+unit resolves the kanshi binary from the nix store, inherits
+`WAYLAND_DISPLAY` from the session rather than hardcoding it, and stays
+bound to `sway-session.target` so it never starts under Plasma. No
+unmanaged kanshi unit file remains on disk, including
+`kanshi.service.backup`. Deleting the `.backup` file is a manual step
+outside the nix-managed tree; ask first, per the constraints above.
+
+### Advantage
+- Keeps output profile switching working under Sway after the next
+  rebuild, which the current HEAD breaks.
+- Removes the last hardcoded `wayland-1` value from the user's systemd
+  tree.
+- Puts kanshi on the same declarative footing as every other user service
+  in this repository.
+- Keeps `sway-startup.nix` working unchanged: the same
+  `systemctl --user restart kanshi.service` command drives the new unit.
+
+### Acceptance criteria
+- `~/.config/systemd/user/kanshi.service` is a symlink into the nix
+  store, not a hand-written file.
+- The unit's `ExecStart` names a `/nix/store` path for the kanshi binary.
+- The unit sets no `WAYLAND_DISPLAY` value.
+- Under Sway, `systemctl --user is-active kanshi.service` reports
+  `active`, and kanshi applies its output profile on startup and on
+  monitor hotplug.
+- Under Plasma, `kanshi.service` is inactive and does not appear as
+  failed.
+- `modules/home/sway-startup.nix` needs no change.
+- `~/.config/systemd/user/kanshi.service.backup` does not exist.
+
+---
+
+## 2. Stale systemd overrides force the wrong Wayland display name
+
+### Current state
+Partially done: a manual cleanup on 2026-08-17 already deleted both files
+and their directories. What remains is the verification in the acceptance
+criteria below.
+
+Two files existed under `~/.config/systemd/user/`. Neither file belonged
+to the nix-managed configuration. Both predated this investigation by over
+a year, the same kind of leftover file as `~/.config/environment.d/wayland.conf`,
 which this project already removed:
 
 - `xdg-desktop-portal-gtk.service.d/override.conf`
@@ -80,7 +195,7 @@ Plasma. Under Sway, the GTK portal keeps working exactly as it does today.
 
 ---
 
-## 2. The Sway keyring daemon blocks secret-unlock prompts
+## 3. The Sway keyring daemon blocks secret-unlock prompts
 
 ### Current state
 `modules/home/keyring-services.nix` starts `gnome-keyring-daemon` with no
@@ -93,6 +208,11 @@ Plasma, an app that asks for a secret gets no unlock prompt.
 The missing prompt helper is not tied to Plasma. The same missing prompt
 may also affect the Sway desktop session. This document did not test the
 Sway case.
+
+A commit that implemented this item (`ba82a28`) was discarded in the hard
+reset of 2026-08-18. The repository at HEAD carries no fix. Treat this
+item as open, and do not reuse the discarded implementation without
+review.
 
 ### Desired outcome
 Under Plasma, `ksecretd` owns the secrets service, and unlock prompts
@@ -112,15 +232,22 @@ turns out to share this problem.
 
 ---
 
-## 3. The Sway polkit agent fights Plasma's own agent
+## 4. The Sway polkit agent fights Plasma's own agent
 
 ### Current state
-`modules/home/keyring-services.nix` starts
+Implemented on this branch, awaiting test. Commit `e81dc8f` added a
+`polkitSessionTarget` option to `modules/home/keyring-services.nix`
+(default `graphical-session.target`), and `hosts/neomorph/home.nix` sets
+it to `sway-session.target`. Under Plasma, the agent unit no longer has an
+active trigger. Per RULE-106, do not report this item as fixed until the
+user confirms the acceptance criteria under both desktop sessions.
+
+The original problem: `modules/home/keyring-services.nix` started
 `polkit-gnome-authentication-agent-1` as a systemd user service, with no
-desktop-session guard. It also starts under Plasma. Plasma already runs its
-own polkit agent. Only one agent can register per desktop session. The Sway
-agent's registration fails, and systemd restarts it every 3 seconds, for
-the whole length of the Plasma desktop session.
+desktop-session guard. It also started under Plasma. Plasma already runs
+its own polkit agent. Only one agent can register per desktop session. The
+Sway agent's registration failed, and systemd restarted it every 3
+seconds, for the whole length of the Plasma desktop session.
 
 ### Desired outcome
 Under Plasma, only Plasma's own polkit agent runs. Under Sway, the Sway
@@ -139,17 +266,23 @@ polkit agent still starts once and stays up, exactly as it does today.
 
 ---
 
-## 4. The Sway screen-capture portal starts under Plasma and fails
+## 5. The Sway screen-capture portal starts under Plasma and fails
 
 ### Current state
-`modules/home/xdg-portal-sway.nix` starts `xdg-desktop-portal-wlr` as a
-systemd user service, with no desktop-session guard. Under Plasma, the
-service fails to reach an active state and hits the systemd restart limit.
-The unit stays in a `failed` state for the rest of the desktop session.
+Implemented on this branch, awaiting test. Commit `b5bc82b` binds the
+`xdg-desktop-portal-wlr` unit in `modules/home/xdg-portal-sway.nix` to
+`sway-session.target` through `PartOf` and `WantedBy`, so it no longer
+starts under Plasma. Per RULE-106, do not report this item as fixed until
+the user confirms the acceptance criteria under both desktop sessions.
 
-The service fails with `wayland: failed to connect to display`. This is
-not a knock-on effect of item 1: the failure was recorded in a session
-where item 1's override files were already gone. The problem is simply
+The original problem: the module started `xdg-desktop-portal-wlr` as a
+systemd user service, with no desktop-session guard. Under Plasma, the
+service failed to reach an active state and hit the systemd restart limit.
+The unit stayed in a `failed` state for the rest of the desktop session.
+
+The service failed with `wayland: failed to connect to display`. This is
+not a knock-on effect of item 2: the failure was recorded in a session
+where item 2's override files were already gone. The problem is simply
 that this service has no reason to start at all under a desktop session
 that does not use Sway or wlroots.
 
@@ -169,7 +302,7 @@ fails under Plasma.
 
 ---
 
-## 5. Global GTK and cursor theme variables override Plasma's own theme
+## 6. Global GTK and cursor theme variables override Plasma's own theme
 
 ### Current state
 `modules/home/gtk-theme.nix` sets `GTK_THEME=Materia-dark` as a global
@@ -186,21 +319,25 @@ An investigation while building this spec found that neither variable can
 be fully unset by removing it from `home.sessionVariables` alone, because
 each has a second, independent source. Both open decisions below were
 raised with the user and answered; this revision folds the answers in and
-replaces the single item 5 with two sub-items, 5a and 5b, that carry the
+replaces the single item 6 with two sub-items, 6a and 6b, that carry the
 corrected, resolvable outcome.
 
-### 5a. `GTK_THEME`
+### 6a. `GTK_THEME`
 
-`home.nix`'s `gtk.enable` option writes `gtk-theme-name=Materia-dark`
-directly into the home-manager-managed `~/.config/gtk-3.0/settings.ini` and
-`~/.config/gtk-4.0/settings.ini`. Those files carry no session scoping, so
+The `gtk.enable` option in `home.nix`, with the theme name that
+`modules/home/gtk-theme.nix` sets through `gtk.theme.name`, writes
+`gtk-theme-name=Materia-dark` directly into the home-manager-managed
+`~/.config/gtk-3.0/settings.ini` and `~/.config/gtk-4.0/settings.ini`. The
+`GTK_THEME` session variable itself also comes from
+`modules/home/gtk-theme.nix`, not from `home.nix`. The `settings.ini`
+files carry no session scoping, so
 removing the `GTK_THEME` env var does not hand Plasma its Breeze GTK theme;
 GTK apps under Plasma still read `Materia-dark` from `settings.ini`
 regardless.
 
 **Decision:** accept this. Remove `GTK_THEME` from the global session
-variables anyway — it is still correct and low-risk, because it stops the
-env var from overriding any per-app or Plasma-side choice, and
+variables anyway. That change is still correct and low-risk, because it
+stops the env var from overriding any per-app or Plasma-side choice, and
 `Materia-dark` is visually coherent with Breeze Dark. Handing GTK file
 management to `kde-gtk-config` instead (dropping `gtk.enable` theming from
 home-manager) would resolve the colour-leak, `-b backup`, and `GTK_THEME`
@@ -217,7 +354,7 @@ Sway and Hyprland. Under Plasma, GTK apps show `Materia-dark`, read from
 - Under Sway and Hyprland, `GTK_THEME` still resolves to `Materia-dark` and
   GTK apps look unchanged.
 
-### 5b. `XCURSOR_THEME`
+### 6b. `XCURSOR_THEME`
 
 `XCURSOR_THEME=Bibata-Modern-Ice` has three independent sources, not one:
 the global session variable itself, `home.pointerCursor`'s own
@@ -232,7 +369,7 @@ be met by that change alone.
 legitimately declares Bibata as the user's cursor for every session;
 instead set Plasma's own cursor theme, through Plasma's system settings, to
 `Bibata-Modern-Ice`, so nothing clashes. This meets the intent of this
-item — one consistent cursor under Plasma — but not the original literal
+item, one consistent cursor under Plasma, but not the original literal
 wording. Guarding the whole `home.pointerCursor` block per compositor
 instead was considered and rejected: it would also drop the `~/.icons` and
 `~/.local/share/icons` management that option provides, and would widen the
@@ -252,7 +389,7 @@ does today.
 
 ---
 
-## 6. Two Bluetooth tray applets start at the same time under Plasma
+## 7. Two Bluetooth tray applets start at the same time under Plasma
 
 ### Current state
 `modules/home/desktop-common.nix` installs the `blueman` package. The
@@ -265,6 +402,14 @@ pairing dialog for the same device.
 A separate Sway startup list, in `modules/home/sway-startup.nix`, also
 starts `blueman-applet` directly. A fix to the autostart entry does not
 touch that separate list, so Sway keeps its Bluetooth applet either way.
+
+A fix for this item exists on disk right now, but not in the repository.
+`~/.config/autostart/blueman.desktop` is a home-manager symlink to an
+entry that carries `NotShowIn=KDE;`. Its source came from uncommitted work
+that the 2026-08-18 hard reset and cleanup discarded; no commit at HEAD
+declares it. The next rebuild from HEAD removes the override, and
+`blueman-applet` autostarts under Plasma again. The fix must land in the
+repository to hold.
 
 ### Desired outcome
 Under Plasma, only `bluedevil` manages Bluetooth pairing and shows a tray
@@ -281,15 +426,18 @@ icon. Under Sway, `blueman-applet` still starts, exactly as it does today.
 
 ---
 
-## 7. Plasma's GTK-theme sync already leaked Breeze colors into Sway
+## 8. Plasma's GTK-theme sync already leaked Breeze colors into Sway
 
 ### Current state
-Plasma's GTK-theme sync tool, `kde-gtk-config`, wrote two files that
-home-manager does not manage: `~/.config/gtk-3.0/gtk.css` and
-`~/.config/gtk-4.0/colors.css`. The GTK3 file imports a Breeze color file.
-Every GTK3 app that reads this file gets Breeze colors instead of the
-`Materia-dark` color set, and this already happens under the Sway desktop
-session too, because the file is not tied to either session.
+Plasma's GTK-theme sync tool, `kde-gtk-config`, wrote three files that
+home-manager does not manage: `~/.config/gtk-3.0/gtk.css`,
+`~/.config/gtk-3.0/colors.css`, and `~/.config/gtk-4.0/colors.css`. The
+GTK3 `gtk.css` contains only `@import 'colors.css';`, and both `colors.css`
+files carry Breeze colors. Every GTK3 app that reads these files gets
+Breeze colors instead of the `Materia-dark` color set, and this already
+happens under the Sway desktop session too, because the files are not tied
+to either session. Plasma rewrote all three files on 2026-08-17, so the
+leak is current, not historical.
 
 ### Desired outcome
 A GTK3 app under Sway uses the `Materia-dark` color set, not a Breeze
@@ -305,10 +453,12 @@ color set picked up from an unmanaged file.
 - Under Sway, a GTK3 app shows the `Materia-dark` color set.
 - `~/.config/gtk-3.0/gtk.css` either does not exist or does not import a
   Breeze color file.
+- `~/.config/gtk-3.0/colors.css` either does not exist or does not carry
+  Breeze colors.
 
 ---
 
-## 8. Plasma settings pages can overwrite home-manager-managed theme files
+## 9. Plasma settings pages can overwrite home-manager-managed theme files
 
 ### Current state
 Home-manager's `gtk.enable` option, set in `home.nix`, manages four files.
@@ -330,6 +480,21 @@ may write to the same file path when the user changes the cursor theme
 through Plasma. This document did not test that case, so treat it as an
 open risk, not a confirmed one.
 
+Two updates from the 2026-08-18 review:
+
+- The `.gtkrc-2.0` failure is live again: Plasma rewrote
+  `~/.gtkrc-2.0` as a plain file on 2026-08-17, so it is not a
+  home-manager symlink right now.
+- Commit `81cc33a` changed the `bin/` build wrappers to back up a
+  displaced file and continue, instead of failing the build. The
+  `kanshi.service.backup` file under `~/.config/systemd/user/` shows this
+  mechanism working. This likely meets both acceptance criteria already,
+  awaiting test. Note the trade-off it locks in: a rebuild displaces
+  Plasma's version to a `.backup` file and restores the home-manager
+  symlink, so a theme change made through Plasma silently reverts on the
+  next rebuild. That is consistent with a declarative setup; this item
+  needs no further work unless the user rejects that trade-off.
+
 ### Desired outcome
 A theme or cursor change made through a Plasma settings page does not
 block the next home-manager build, for any of the five files above.
@@ -347,38 +512,6 @@ block the next home-manager build, for any of the five files above.
 
 ---
 
-## 9. A stale, hand-written kanshi unit hardcodes the wrong display name
-
-### Current state
-`~/.config/systemd/user/kanshi.service` is a hand-written file, not a
-home-manager symlink, dated to the same era as the files in item 1. It
-hardcodes `WAYLAND_DISPLAY=wayland-1` and a `PATH` value that does not
-match this repository's nix-managed `PATH`. The unit targets
-`sway-session.target` and stays inactive today, because `sway-startup.nix`
-starts `kanshi` through a direct command instead of through this unit.
-
-This unit causes no failure today, under either desktop session, because
-it never runs. It stays a fragile piece of leftover configuration: a
-future change that activates `sway-session.target`-linked units would hit
-the same wrong-display problem as item 1.
-
-### Desired outcome
-No unmanaged, hand-written kanshi unit exists on disk. `kanshi` keeps
-starting the way it starts today, through the direct command in
-`sway-startup.nix`.
-
-### Advantage
-- Removes a leftover file that could cause a wrong-display failure if a
-  future change ever activates it.
-- Leaves one clear, nix-managed path for starting `kanshi`.
-
-### Acceptance criteria
-- `~/.config/systemd/user/kanshi.service` does not exist as a hand-written
-  file.
-- Under Sway, `kanshi` still applies its output profile on startup.
-
----
-
 ## 10. The secret-storage portal stays hidden from sandboxed apps
 
 ### Current state
@@ -390,6 +523,12 @@ pairs with Plasma's `ksecretd` secret service. Because
 `xdg-desktop-portal` cannot see the kwallet portal implementation. This
 affects only a sandboxed app, such as a Flatpak app, that asks for a secret
 through the portal. It does not affect a regular desktop app.
+
+A commit that implemented this item (`ff7b0c7`) was discarded in the hard
+reset of 2026-08-18. The repository at HEAD carries no fix. Treat this
+item as open, and do not reuse the discarded implementation without
+review. This item also depends on item 3: the kwallet portal is only
+useful once `ksecretd` owns the secrets service.
 
 ### Desired outcome
 A sandboxed app can ask for a secret through the portal and reach Plasma's
