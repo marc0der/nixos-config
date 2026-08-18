@@ -64,6 +64,8 @@ in
           "--resilient"
           "--create-empty-src-dirs"
           "--conflict-resolve=newer"
+          "--exclude"
+          ".Trash-1000/**"
           "--log-file"
           "/tmp/rclone-bisync.log"
           "--log-level"
