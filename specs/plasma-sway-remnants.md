@@ -214,6 +214,14 @@ reset of 2026-08-18. The repository at HEAD carries no fix. Treat this
 item as open, and do not reuse the discarded implementation without
 review.
 
+A planning review on 2026-08-18 chose the implementation: remove the
+`secrets` component from `services.gnome-keyring` in
+`modules/home/keyring-services.nix`, and keep the `pkcs11` component.
+`ksecretd` then owns `org.freedesktop.secrets` in every session, and
+kwallet supplies the unlock prompt. The active home-manager generation
+already runs with the `secrets` component off, from the discarded work,
+and no Sway secret regression was reported since that rebuild.
+
 ### Desired outcome
 Under Plasma, `ksecretd` owns the secrets service, and unlock prompts
 appear for apps that need one. Under Sway, the keyring setup keeps working
