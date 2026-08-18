@@ -1,7 +1,8 @@
 # Common Desktop Packages Module
 #
 # This module provides common desktop environment packages used by both hosts
-# regardless of their specific compositor (Hyprland/Sway).
+# regardless of their specific compositor (Hyprland/Sway). It also overrides the
+# blueman autostart entry so Plasma uses bluedevil instead.
 #
 # Options:
 #   local.desktop-common.enable - Enable common desktop packages
@@ -37,5 +38,9 @@ with lib;
       xdg-desktop-portal
       xdg-desktop-portal-gtk
     ];
+
+    # Blueman autostart: skip Plasma, which runs bluedevil
+    xdg.configFile."autostart/blueman.desktop".text =
+      builtins.readFile "${pkgs.blueman}/etc/xdg/autostart/blueman.desktop" + "NotShowIn=KDE;\n";
   };
 }
