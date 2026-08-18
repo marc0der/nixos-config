@@ -47,6 +47,7 @@ with lib;
           "XCURSOR_SIZE,24"
           "HYPRCURSOR_SIZE,24"
           "QT_QPA_PLATFORMTHEME,qt6ct"
+          "GTK_THEME,${config.gtk.theme.name}"
         ];
 
         # General settings

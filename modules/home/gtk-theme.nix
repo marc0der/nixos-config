@@ -1,7 +1,7 @@
 # GTK Theme Module
 #
 # Provides GTK theming configuration with support for dark and light variants.
-# Automatically configures GTK theme, icon theme, and session variables based on the selected variant.
+# Sets the GTK theme and icon theme. The compositor modules export `GTK_THEME`.
 #
 # Options:
 #   local.gtk-theme.enable - Enable GTK theming (default: true)
@@ -55,10 +55,6 @@ in
         name = if cfg.variant == "dark" then "Papirus-Dark" else "Papirus-Light";
         package = pkgs.papirus-icon-theme;
       };
-    };
-
-    home.sessionVariables = {
-      GTK_THEME = if cfg.variant == "dark" then "Materia-dark" else "Materia-light";
     };
   };
 }
