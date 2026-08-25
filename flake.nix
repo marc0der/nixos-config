@@ -96,6 +96,7 @@
         ./modules/system/onepassword.nix
         ./modules/system/power-management.nix
         ./modules/system/printing.nix
+        ./modules/system/topping-udev.nix
         ./modules/system/users-marco.nix
         ./modules/system/wayland-common.nix
       ];

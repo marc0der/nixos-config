@@ -125,6 +125,9 @@
   # Keychron K3 Pro udev rules
   local.keychron-udev.enable = true;
 
+  # Topping DX1 II udev rules
+  local.topping-udev.enable = true;
+
   # Application platforms
   services.flatpak.enable = true;
 
