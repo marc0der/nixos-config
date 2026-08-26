@@ -78,6 +78,9 @@ in
 
         # Terminal
         "x-scheme-handler/terminal" = [ cfg.terminal ];
+
+        # Claude Code deep links
+        "x-scheme-handler/claude-cli" = [ "claude-code-url-handler.desktop" ];
       };
     };
   };
