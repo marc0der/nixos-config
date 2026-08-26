@@ -15,7 +15,27 @@ set -euo pipefail
 KEEP_DAYS="${1:-7}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SYSTEM_PROFILE="/nix/var/nix/profiles/system"
-USER_PROFILE="${XDG_STATE_HOME:-$HOME/.local/state}/nix/profiles/profile"
+XDG_USER_PROFILE="${XDG_STATE_HOME:-$HOME/.local/state}/nix/profiles/profile"
+
+# ~/.nix-profile may be a chain of symlinks ending profile -> generation ->
+# store path; the profile is the last link before the generation link
+resolve_profile() {
+  local link="$1" prev="$1" target
+  while [ -L "$link" ]; do
+    target="$(readlink "$link")"
+    [[ "$target" == /* ]] || target="$(dirname "$link")/$target"
+    [ -L "$target" ] || break
+    prev="$link"
+    link="$target"
+  done
+  printf '%s\n' "$prev"
+}
+
+if [ -L "$HOME/.nix-profile" ]; then
+  USER_PROFILE="$(resolve_profile "$HOME/.nix-profile")"
+else
+  USER_PROFILE="$XDG_USER_PROFILE"
+fi
 
 if ! [[ "$KEEP_DAYS" =~ ^[0-9]+$ ]]; then
   echo "usage: nix-purge [KEEP_DAYS]" >&2
@@ -94,6 +114,7 @@ for link in /nix/var/nix/gcroots/auto/*; do
   target="$(readlink "$link")"
   case "$target" in
     /nix/var/nix/profiles/* | */state/nix/profiles/* | */state/home-manager/*) continue ;;
+    "$USER_PROFILE"-*-link) continue ;;
     *flake-registry.json) continue ;;
   esac
   [ -e "$target" ] && echo "  $target"
