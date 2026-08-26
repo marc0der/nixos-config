@@ -1,10 +1,17 @@
 # Plasma Session: Sway Remnants Specification
 
-Status: in progress. Every item except 6b now has an implementation on
-this branch, and all of them await testing. Item 6b needs a manual step in
-Plasma's own settings rather than a code change. Per RULE-106, no item
-counts as fixed until the user confirms it under both the Sway and the
-Plasma desktop session.
+Status: the Plasma side is verified. A Plasma Wayland session on
+2026-08-19 passed the Plasma-side runtime check for every item, with zero
+failed user or system units and zero hits for any of the original failure
+signatures. Item 6b is done: `kcminputrc` carries
+`cursorTheme=Bibata-Modern-Ice`.
+
+What remains is the Sway side. Every fix works by scoping a unit or a
+variable away from Plasma, so a Sway login is still needed to confirm that
+nothing regressed there. Per RULE-106 no item counts as fixed until that
+happens. Two criteria also need a deliberate action rather than a login:
+item 9 needs a theme change through Plasma's settings followed by a
+rebuild, and item 10 needs a real sandboxed app requesting a secret.
 
 Implementing commit per item:
 
@@ -18,7 +25,7 @@ Implementing commit per item:
 | 6a   | `59b12a6`                                     |
 | 6b   | none; manual step in Plasma settings          |
 | 7    | `6b2a6f9`                                     |
-| 8    | `add1b29`                                     |
+| 8    | `add1b29`, plus a GTK4 follow-up              |
 | 9    | `81cc33a`                                     |
 | 10   | `e653c4a`                                     |
 
@@ -462,6 +469,15 @@ happens under the Sway desktop session too, because the files are not tied
 to either session. Plasma rewrote all three files on 2026-08-17, so the
 leak is current, not historical.
 
+Commit `add1b29` took ownership of the two GTK3 files, writing a
+`/* managed by home-manager */` stub over each. The 2026-08-19 verification
+found it had left `~/.config/gtk-4.0/colors.css` unmanaged and still full of
+Breeze colors. That file was inert, because the managed
+`~/.config/gtk-4.0/gtk.css` imports the Materia stylesheet directly and
+never imports `colors.css`, and GTK4 loads no other file on its own. It was
+still a trap, since `kde-gtk-config` rewrites it on every theme sync. A
+follow-up commit manages it the same way as the GTK3 pair.
+
 ### Desired outcome
 A GTK3 app under Sway uses the `Materia-dark` color set, not a Breeze
 color set picked up from an unmanaged file.
@@ -477,6 +493,8 @@ color set picked up from an unmanaged file.
 - `~/.config/gtk-3.0/gtk.css` either does not exist or does not import a
   Breeze color file.
 - `~/.config/gtk-3.0/colors.css` either does not exist or does not carry
+  Breeze colors.
+- `~/.config/gtk-4.0/colors.css` either does not exist or does not carry
   Breeze colors.
 
 ---
@@ -517,6 +535,24 @@ Two updates from the 2026-08-18 review:
   symlink, so a theme change made through Plasma silently reverts on the
   next rebuild. That is consistent with a declarative setup; this item
   needs no further work unless the user rejects that trade-off.
+
+The 2026-08-19 verification found a second failure mode of that mechanism,
+and it is worse than the revert trade-off. Backup names do not rotate, so a
+stale `.backup` blocks activation outright: home-manager refuses with
+`would be clobbered by backing up`, and no links are created at all. It
+surfaced on `~/.config/mimeapps.list`, not on a theme file, against a
+`.backup` left from 2025-06-02. The unblock was manual, renaming the stale
+backup. Two consequences worth noting:
+
+- The file class is wider than the five theme files listed above. Any
+  unmanaged file that home-manager later takes ownership of can collide,
+  and `mimeapps.list` is rewritten by Plasma's default-applications page
+  and by any app that registers a URL scheme.
+- The abort happens in `checkLinkTargets`, before any link is written, so
+  every file in `$HOME` stays exactly as it was. The profile pointer can
+  still advance to the new generation, so the pointer and the links
+  disagree until a later rebuild succeeds. Judge the outcome by the links,
+  not by the generation number.
 
 ### Desired outcome
 A theme or cursor change made through a Plasma settings page does not
