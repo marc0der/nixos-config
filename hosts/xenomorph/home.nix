@@ -8,7 +8,7 @@
     doctl
     ffmpeg
     libplacebo
-    makemkv
+    # makemkv: temporarily disabled, upstream tarball returns HTTP 525
     mkvtoolnix
     tesseract
     video2x
