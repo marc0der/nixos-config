@@ -30,4 +30,5 @@ in
   "healthchecks-xenomorph.age".publicKeys = [ xenomorph ] ++ admins;
   "healthchecks-neomorph.age".publicKeys = [ neomorph ] ++ admins;
   "healthchecks-check-xenomorph.age".publicKeys = [ xenomorph ] ++ admins;
+  "healthchecks-check-neomorph.age".publicKeys = [ neomorph ] ++ admins;
 }
