@@ -2,12 +2,6 @@
   # Host name
   networking.hostName = "xenomorph";
 
-  # Kernel modules: SCSI generic support
-  boot.kernelModules = [ "sg" ];
-
-  # User groups: optical drive access
-  users.users.marco.extraGroups = [ "cdrom" ];
-
   # Wayland desktop
   local.wayland.enable = true;
   local.programs.hyprland-desktop.enable = true;
