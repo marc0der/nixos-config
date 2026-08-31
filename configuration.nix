@@ -111,11 +111,11 @@
   # Audio: PipeWire + Bluetooth codec tuning
   local.audio-pipewire.enable = true;
 
-  # Remote access: OpenSSH with X11 forwarding
+  # Remote access: OpenSSH
   services.openssh = {
     enable = true;
     settings = {
-      X11Forwarding = true;
+      X11Forwarding = false;
     };
   };
 
