@@ -5,11 +5,18 @@
 # ChatGPT, Claude, Discord. Bundled here so adding/removing an entry is a
 # one-place change and home.nix stays focused on top-level configuration.
 #
+# Discord tracks the personal profile, which lives in a different directory per
+# machine. Claude stays pinned to Brave's Default profile: personal on
+# xenomorph, Equal Experts on neomorph.
+#
 # Options:
 #   local.web-app-launchers.enable - Install the Brave web-app .desktop entries
+#   local.web-app-launchers.personalProfile - Brave profile directory holding the
+#     personal profile; differs per machine (default: "Default")
 #
 # Example usage:
 #   local.web-app-launchers.enable = true;
+#   local.web-app-launchers.personalProfile = "Marco";
 {
   config,
   lib,
@@ -22,6 +29,12 @@ in
 {
   options.local.web-app-launchers = {
     enable = lib.mkEnableOption "Brave web-app .desktop entries";
+
+    personalProfile = lib.mkOption {
+      type = lib.types.str;
+      default = "Default";
+      description = "Brave profile directory holding the personal profile";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -82,7 +95,7 @@ in
 
       discord = {
         name = "Discord";
-        exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Marco --app="https://discord.com/channels/@me/1474759623209783327" %U'';
+        exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=${cfg.personalProfile} --app="https://discord.com/channels/@me/1474759623209783327" %U'';
         terminal = false;
         type = "Application";
         categories = [

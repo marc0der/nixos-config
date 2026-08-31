@@ -24,6 +24,9 @@ in
   # SSH configuration
   local.ssh-config.enable = true;
 
+  # Brave: personal profile lives in its own directory on this host
+  local.web-app-launchers.personalProfile = "Marco";
+
   # Desktop environment
   local.sway-desktop.enable = true;
   local.sway-config.enable = true;
