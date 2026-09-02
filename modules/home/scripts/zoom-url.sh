@@ -14,10 +14,6 @@
 
 set -euo pipefail
 
-# Dispatch log, for diagnosing browser-to-client handoff failures
-log="${XDG_CACHE_HOME:-$HOME/.cache}/zoom-url.log"
-printf '%s  argv: %s\n' "$(date -Is)" "$*" >>"$log" 2>/dev/null || true
-
 zoom=$(command -v zoom 2>/dev/null || true)
 [ -n "$zoom" ] || zoom="$HOME/.nix-profile/bin/zoom"
 
