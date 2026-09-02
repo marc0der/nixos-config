@@ -11,5 +11,6 @@
       "idea"
       "proton-vpn"
       "transcribe"
+      "zoom"
     ];
 }

@@ -150,6 +150,7 @@
             ./modules/home/sway-keybindings.nix
             ./modules/home/sway-startup.nix
             ./modules/home/kanshi.nix
+            ./modules/home/zoom.nix
             ./profiles/work.nix
           ];
         };
