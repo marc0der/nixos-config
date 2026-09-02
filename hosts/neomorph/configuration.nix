@@ -9,6 +9,9 @@
   # Alternative desktop: KDE Plasma (selectable at SDDM login)
   local.programs.plasma-desktop.enable = true;
 
+  # Brave: let Zoom links launch the desktop client without a prompt
+  local.brave-policies.enable = true;
+
   # Security
   local.services.clamav-security.enable = true;
 

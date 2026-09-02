@@ -123,6 +123,7 @@
           modules = commonSystemModules ++ [
             ./hosts/neomorph/configuration.nix
             ./hosts/neomorph/hardware-configuration.nix
+            ./modules/system/brave-policies.nix
             ./modules/system/clamav.nix
             ./modules/system/sway.nix
             ./modules/system/plasma.nix
