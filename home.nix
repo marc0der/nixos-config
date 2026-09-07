@@ -40,6 +40,7 @@
     jq
     kanshi
     lazygit
+    libsecret
     meld
     mpv
     nautilus
@@ -124,6 +125,7 @@
 
   # Keyring, gpg-agent, and PolKit authentication agent
   local.keyring-services.enable = true;
+  local.keyring-services.gpgKeygrip = "B7108ED21D2D31BBA0036C6E7D5D9DCF0DBBA5A6";
 
   # Google Drive bisync via rclone (staggered 10-minute timer)
   local.google-drive-bisync.enable = true;
