@@ -17,6 +17,9 @@
 # Also writes ~/.config/sxm/foxyproxy.json for import into FoxyProxy in the
 # Brave SiriusXM profile, so the browser proxy tracks the same IP.
 #
+# ARTIFACTORY_USER and ARTIFACTORY_TOKEN are sourced at runtime from
+# ~/.config/sxm/artifactory-credentials, kept out of the world-readable store.
+#
 # Example usage:
 #   local.sxm-proxy.enable = true;
 {
@@ -29,6 +32,8 @@ let
   cfg = config.local.sxm-proxy;
   vmIp = "192.168.122.96";
   port = "8888";
+  artifactoryHost = "cpartifactory.corp.siriusxm.com";
+  credentialsFile = "${config.xdg.configHome}/sxm/artifactory-credentials";
 in
 {
   options.local.sxm-proxy = {
@@ -53,10 +58,19 @@ in
             export NODE_USE_ENV_PROXY=1
             export _SXM_JAVA_OPTS_BAK="''${_SXM_JAVA_OPTS_BAK-$JAVA_OPTS}"
             export JAVA_OPTS="''${_SXM_JAVA_OPTS_BAK:+$_SXM_JAVA_OPTS_BAK }-Dhttp.proxyHost=$vm_ip -Dhttp.proxyPort=$port -Dhttps.proxyHost=$vm_ip -Dhttps.proxyPort=$port"
+            # Artifactory location for mill/coursier
+            export ARTIFACTORY_HOST=${artifactoryHost}
+            export ARTIFACTORY_URL="https://${artifactoryHost}/artifactory"
+            if [ -r ${credentialsFile} ]; then
+              source ${credentialsFile}
+            else
+              echo "sxm-proxy: no ${credentialsFile}, ARTIFACTORY_USER/ARTIFACTORY_TOKEN unset" >&2
+            fi
             echo "SXM proxy ON ($vm_ip:$port)"
             ;;
           off)
             unset VM_IP http_proxy https_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY NODE_USE_ENV_PROXY
+            unset ARTIFACTORY_HOST ARTIFACTORY_URL ARTIFACTORY_USER ARTIFACTORY_TOKEN
             if [ -n "''${_SXM_JAVA_OPTS_BAK+x}" ]; then
               export JAVA_OPTS="$_SXM_JAVA_OPTS_BAK"
               unset _SXM_JAVA_OPTS_BAK
