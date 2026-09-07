@@ -61,7 +61,28 @@ in
       };
     };
 
-    xdg.configFile."gtk-3.0/colors.css".text = "/* managed by home-manager */\n";
-    xdg.configFile."gtk-4.0/colors.css".text = "/* managed by home-manager */\n";
+    # kde-gtk-config rewrites these behind our back; overwrite instead of
+    # backing up, since a leftover .backup aborts the whole activation
+    home.file.${config.gtk.gtk2.configLocation}.force = lib.mkForce true;
+
+    xdg.configFile = lib.mkMerge [
+      {
+        "gtk-3.0/colors.css".text = "/* managed by home-manager */\n";
+        "gtk-4.0/colors.css".text = "/* managed by home-manager */\n";
+      }
+      (lib.genAttrs
+        [
+          "gtk-3.0/settings.ini"
+          "gtk-3.0/colors.css"
+          "gtk-3.0/gtk.css"
+          "gtk-4.0/settings.ini"
+          "gtk-4.0/colors.css"
+          "gtk-4.0/gtk.css"
+        ]
+        (_: {
+          force = lib.mkForce true;
+        })
+      )
+    ];
   };
 }
