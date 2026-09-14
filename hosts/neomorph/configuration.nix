@@ -13,7 +13,7 @@
   local.brave-policies.enable = true;
 
   # Security
-  local.services.clamav-security.enable = true;
+  local.services.clamav-security.enable = false;
 
   # Tailscale VPN
   local.services.tailscale-vpn.enable = true;
