@@ -18,7 +18,7 @@
       "Bash(nix-rebuild-all *)",
       "Bash(nix-upgrade-all *)"
     ],
-    "defaultMode": "default"
+    "defaultMode": "auto"
   },
   "promptSuggestionEnabled": false,
   "enableAllProjectMcpServers": false,
