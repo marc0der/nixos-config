@@ -1,4 +1,5 @@
 {
+  "model": "opus",
   "spinnerVerbs": {
     "mode": "replace",
     "verbs": ["Working"]
