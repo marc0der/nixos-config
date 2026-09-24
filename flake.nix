@@ -102,7 +102,9 @@
 
     in
     {
-      formatter.${system} = pkgs.nixfmt;
+      # nixfmt-tree, not bare nixfmt: `nix fmt` passes no paths, and plain
+      # nixfmt then reads stdin and hangs forever. Wraps the same nixfmt 1.x.
+      formatter.${system} = pkgs.nixfmt-tree;
 
       nixosConfigurations = {
         xenomorph = lib.nixosSystem {
