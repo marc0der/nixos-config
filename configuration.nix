@@ -10,8 +10,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # Disable Intel IPU6 integrated camera (unsupported, breaks Zoom)
-  local.hardware.disable-ipu6-camera.enable = true;
+  # Intel IPU6 integrated camera via libcamera
+  local.hardware.ipu6-camera.enable = true;
 
   # Networking: NetworkManager + firewall
   local.networking-stack.enable = true;

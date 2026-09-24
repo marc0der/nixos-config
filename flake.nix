@@ -86,7 +86,7 @@
         ./configuration.nix
         ./hardware-configuration.nix
         ./modules/system/audio-pipewire.nix
-        ./modules/system/disable-ipu6-camera.nix
+        ./modules/system/ipu6-camera.nix
         ./modules/system/keyboard-gbx.nix
         ./modules/system/keychron-udev.nix
         ./modules/system/locale.nix
