@@ -109,6 +109,7 @@
       nixosConfigurations = {
         xenomorph = lib.nixosSystem {
           inherit system;
+          specialArgs = { inherit unstable; };
           modules = commonSystemModules ++ [
             ./hosts/xenomorph/configuration.nix
             ./hosts/xenomorph/hardware-configuration.nix
@@ -121,6 +122,7 @@
         };
         neomorph = lib.nixosSystem {
           inherit system;
+          specialArgs = { inherit unstable; };
           modules = commonSystemModules ++ [
             ./hosts/neomorph/configuration.nix
             ./hosts/neomorph/hardware-configuration.nix

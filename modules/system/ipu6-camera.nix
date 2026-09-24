@@ -19,11 +19,27 @@
   config,
   lib,
   pkgs,
+  unstable,
   ...
 }:
 
 let
   cfg = config.local.hardware.ipu6-camera;
+
+  # 0.7.2 registers the ov08x40 sensor helper, giving the softisp this
+  # sensor's analogue gain model. Without it AGC mismeters and overexposes.
+  #
+  # Built from unstable's recipe against *stable's* package set, rather than
+  # taking unstable's built package: that one links gstreamer 1.28 while
+  # v4l2-relayd loads plugins from stable's 1.26, and the mismatch stops
+  # libcamerasrc from being created at all. callPackage resolves every
+  # dependency from stable, so the 0.7.x dependency delta is handled for us.
+  #
+  # Scoped here rather than an overlay: overriding libcamera globally changes
+  # pipewire's hash and rebuilds ~250 derivations, most of Plasma among them.
+  # The raw ISYS nodes are root-only, so pipewire never opens the camera --
+  # only this relay does, and it loads libcamera through GST_PLUGIN_PATH.
+  libcamera = pkgs.callPackage "${unstable.path}/pkgs/by-name/li/libcamera/package.nix" { };
 
   # Numbered 72- deliberately: systemd's 70-uaccess.rules tags every
   # video4linux and media device with uaccess, and 73-seat-late.rules turns
@@ -58,7 +74,7 @@ in
 
   config = lib.mkIf cfg.enable {
     # `cam` for enumerating and test-capturing (needs root: see udev rules)
-    environment.systemPackages = [ pkgs.libcamera ];
+    environment.systemPackages = [ libcamera ];
 
     # Hide the raw ISYS nodes from every application, not just PipeWire ones
     services.udev.packages = [ rawNodeRules ];
@@ -77,7 +93,7 @@ in
     services.v4l2-relayd.instances.ipu6 = {
       enable = true;
       cardLabel = "Integrated Camera";
-      extraPackages = [ pkgs.libcamera ];
+      extraPackages = [ libcamera ];
       input = {
         pipeline = "libcamerasrc ! video/x-raw,width=1280,height=720 ! videoconvert";
         format = "YUY2";
