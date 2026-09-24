@@ -41,6 +41,10 @@ let
   # only this relay does, and it loads libcamera through GST_PLUGIN_PATH.
   libcamera = pkgs.callPackage "${unstable.path}/pkgs/by-name/li/libcamera/package.nix" { };
 
+  # libcamera ships no tuning for this sensor, so the softisp falls back to
+  # uncalibrated.yaml, which leaves the Ccm block disabled.
+  tuningFile = pkgs.writeText "ov08x40.yaml" (builtins.readFile ./ipu6-ov08x40-tuning.yaml);
+
   # Numbered 72- deliberately: systemd's 70-uaccess.rules tags every
   # video4linux and media device with uaccess, and 73-seat-late.rules turns
   # that tag into the ACL grant. The removal has to sit between the two.
@@ -103,6 +107,9 @@ in
       };
       output.format = "YUY2";
     };
+
+    # LIBCAMERA_<IPA>_TUNING_FILE overrides the per-sensor tuning lookup
+    systemd.services.v4l2-relayd-ipu6.environment.LIBCAMERA_SIMPLE_TUNING_FILE = "${tuningFile}";
 
     # Pin the loopback node number; exit 17 (EEXIST) means it already exists
     systemd.services.v4l2-relayd-ipu6.preStart = lib.mkForce ''

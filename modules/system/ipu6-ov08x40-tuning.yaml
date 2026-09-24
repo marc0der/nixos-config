@@ -1,0 +1,26 @@
+# libcamera softisp tuning for the OV08X40 (ThinkPad X1 Carbon Gen 12).
+#
+# Same algorithm list as libcamera's uncalibrated.yaml, with the Ccm block
+# enabled. Without a CCM the sensor's raw channel response goes out untouched
+# and skin tones come out pale and flat.
+#
+# The matrix is practical tuning against a UVC reference camera, not a lab
+# calibration: a 1.6x saturation matrix composed with a small white balance
+# correction (R x1.10, B x0.98) for this sensor's green bias. Measured on the
+# reference scene it takes skin chroma 21.3 -> 36.3 (reference 36.5) and
+# neutral R/G 0.952 -> 0.991 (reference 1.026).
+%YAML 1.1
+---
+version: 1
+algorithms:
+  - BlackLevel:
+  - Awb:
+  - Ccm:
+      ccms:
+        - ct: 6500
+          ccm: [  1.6197, -0.4291, -0.0425,
+                 -0.1403,  1.1709, -0.0425,
+                 -0.1403, -0.4291,  1.5255 ]
+  - Adjust:
+  - Agc:
+...
