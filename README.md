@@ -55,8 +55,17 @@ since there is nothing to retain. The next switch creates one.
 Repository-scoped skills live in `.claude/skills/` and are versioned with the
 config. They orchestrate the `bin/` scripts rather than reimplementing them.
 
+**Start with `/start`.** It is the entry point for any maintenance session: it
+runs the read-only checks (`nix-doctor`, plus `nix-changed-layers` in both its
+forms), reports whether the host is healthy, which layers are edited or
+committed-but-not-live, how stale the inputs are and what is uncommitted, then
+recommends exactly one next skill and hands off to it. It activates nothing, so
+it is always safe to run first. Reach for it when you do not know which of the
+skills below applies, or when you want to know what this repo needs.
+
 | Skill | Purpose |
 | --- | --- |
+| `/start` | Report the state of repo and host, then route to the right skill below |
 | `/rebuild` | Apply your own config edits: infer layers, build, diff, switch |
 | `/upgrade` | Update inputs, show what moved, build and diff, switch only on approval |
 | `/rollback` | List generations and activate an earlier one |
