@@ -12,7 +12,7 @@ to undo a rollback is to rebuild.
 ## 1. Show what is available
 
 ```bash
-bin/nix-generations
+nix-generations
 ```
 
 Present the candidates with their dates and NixOS versions.
@@ -39,14 +39,14 @@ acting.
 The home layer needs no privileges, so run it directly:
 
 ```bash
-bin/nix-rollback home <generation>
+nix-rollback home <generation>
 ```
 
 The system layer needs root. Per CLAUDE.md, do not invoke `sudo` yourself. Give
 the user the command to run:
 
 ```
-! bin/nix-rollback system <generation>
+! nix-rollback system <generation>
 ```
 
 The script validates that the generation exists, prints the target store path

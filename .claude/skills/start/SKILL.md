@@ -19,9 +19,9 @@ Three questions, three commands. Run all of them before saying anything, because
 the recommendation depends on the combination, not on any one answer.
 
 ```bash
-bin/nix-doctor                                # is the host healthy?
-bin/nix-changed-layers --explain              # edited but not built
-bin/nix-changed-layers --unapplied --explain  # committed but not live
+nix-doctor                                # is the host healthy?
+nix-changed-layers --explain              # edited but not built
+nix-changed-layers --unapplied --explain  # committed but not live
 ```
 
 Then, for work that exists but is unrecorded:

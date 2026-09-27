@@ -8,38 +8,38 @@ The following convenience scripts are available in the `bin/` directory:
 
 ```bash
 # Apply home-manager changes
-bin/nix-rebuild-home
+nix-rebuild-home
 
 # Apply system-level changes
-bin/nix-rebuild-system
+nix-rebuild-system
 
 # Apply system and home-manager changes without updating flake inputs
-bin/nix-rebuild-all
+nix-rebuild-all
 
 # Update flake inputs and upgrade both system and home-manager
-bin/nix-upgrade-all
+nix-upgrade-all
 
 # Build system and/or home WITHOUT activating, then nvd diff against what is live
-bin/nix-build-check [system|home|both]
+nix-build-check [system|home|both]
 
 # List system and home-manager generations with dates and versions
-bin/nix-generations [system|home]
+nix-generations [system|home]
 
 # Activate an earlier generation
-bin/nix-rollback <system|home> <generation>
+nix-rollback <system|home> <generation>
 
 # Read-only health check: untracked files, fmt drift, failed units, stale inputs
-bin/nix-doctor
+nix-doctor
 
 # Report config duplicated across both hosts (RULE-202)
-bin/nix-host-parity
+nix-host-parity
 
 # Print which layers need rebuilding (edited, committed but not live, or
 # with --verify, whether the working tree is what is live)
-bin/nix-changed-layers [--unapplied|--verify] [--explain]
+nix-changed-layers [--unapplied|--verify] [--explain]
 
 # Delete old generations and collect the store (preview with --dry-run)
-bin/nix-purge [KEEP_DAYS] [--dry-run]
+nix-purge [KEEP_DAYS] [--dry-run]
 ```
 
 These scripts will automatically be added to your `PATH`.
@@ -112,7 +112,7 @@ in a way that is invisible afterwards. A clean working tree also does not mean
 there is nothing to apply, so check for commits that were never switched:
 
 ```bash
-bin/nix-changed-layers --unapplied --explain
+nix-changed-layers --unapplied --explain
 ```
 
 ### Week to week, for newer packages

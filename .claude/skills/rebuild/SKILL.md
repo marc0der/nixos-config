@@ -26,8 +26,8 @@ order, and never apply home "while we wait" for the system switch.
 Two different questions, and a `both` run needs both answers:
 
 ```bash
-bin/nix-changed-layers --explain              # edited but not built
-bin/nix-changed-layers --unapplied --explain  # committed but not live
+nix-changed-layers --explain              # edited but not built
+nix-changed-layers --unapplied --explain  # committed but not live
 ```
 
 The first compares the working tree to HEAD. The second compares HEAD to the
@@ -46,7 +46,7 @@ git status --porcelain
 
 Flakes only see tracked files, so an untracked module is invisible to the build
 and the user ends up debugging a file that was never evaluated (RULE-001). Stage
-any new `.nix` file with `git add` before building. `bin/nix-doctor` flags this.
+any new `.nix` file with `git add` before building. `nix-doctor` flags this.
 
 ## 3. Format
 
@@ -59,7 +59,7 @@ Required before commit by RULE-006, and cheaper now than after the build.
 ## 4. Build and diff both layers before switching anything
 
 ```bash
-bin/nix-build-check <layer>
+nix-build-check <layer>
 ```
 
 Activates nothing. If it exits non-zero, report the error and stop; do not
@@ -101,7 +101,7 @@ the system switch failed, which is the same half-applied trap.
 ## 6. Verify consistency, then let the user confirm
 
 ```bash
-bin/nix-changed-layers --verify
+nix-changed-layers --verify
 ```
 
 This compares the working tree, not HEAD, to what is live, since nothing is

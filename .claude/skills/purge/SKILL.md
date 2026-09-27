@@ -17,7 +17,7 @@ oldest still has none.
 ## 1. Preview
 
 ```bash
-bin/nix-purge "${ARGUMENTS:-7}" --dry-run
+nix-purge --dry-run "${ARGUMENTS:-7}"
 ```
 
 The dry run needs no privileges and deletes nothing. It prints, per profile,
@@ -37,7 +37,7 @@ Generations are often not the reason `/nix` is large. The dry run ends with
 regardless of generation age, so if that list is long, deleting generations will
 free less than the user expects. Say so before they run it.
 
-`bin/nix-doctor` also reports `/nix` usage and any stale `result` symlinks in the
+`nix-doctor` also reports `/nix` usage and any stale `result` symlinks in the
 repo root, which are a common accidental pin.
 
 ## 3. Confirm, then run
@@ -46,7 +46,7 @@ Ask before deleting. Deletion is irreversible and `nix store gc` needs root, so
 per CLAUDE.md hand the user the command rather than running it:
 
 ```
-! bin/nix-purge <keep-days>
+! nix-purge <keep-days>
 ```
 
 Without `--dry-run` it requires passwordless sudo for `nix` and `nix-env`; the
@@ -58,7 +58,7 @@ a password prompt.
 The script prints the space freed. Confirm the rollback targets survived:
 
 ```bash
-bin/nix-generations
+nix-generations
 ```
 
 ## Choosing keep-days

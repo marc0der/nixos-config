@@ -16,7 +16,7 @@ until the user has seen the diff.
 ## 1. Pre-flight
 
 ```bash
-bin/nix-doctor
+nix-doctor
 ```
 
 If it reports untracked `.nix` or `bin/` files, stop and `git add` them first
@@ -27,7 +27,7 @@ tells them whether a bad switch can be undone.
 Record the starting point so it can be named later:
 
 ```bash
-bin/nix-generations
+nix-generations
 ```
 
 ## 2. Update the inputs
@@ -46,7 +46,7 @@ here, since there is nothing to build.
 ## 3. Build without switching
 
 ```bash
-bin/nix-build-check "$ARGUMENTS"
+nix-build-check "$ARGUMENTS"
 ```
 
 Defaults to `both`. This builds the system and home configurations and runs
@@ -68,8 +68,8 @@ Ask before switching. On approval, run the two layers separately so a failed
 system switch cannot fall through into the home switch:
 
 ```bash
-bin/nix-rebuild-system   # skip if ARGUMENTS was "home"
-bin/nix-rebuild-home     # skip if ARGUMENTS was "system"
+nix-rebuild-system   # skip if ARGUMENTS was "home"
+nix-rebuild-home     # skip if ARGUMENTS was "system"
 ```
 
 Check each exit code before running the next. Do not use `nix-rebuild-all` or
@@ -82,8 +82,8 @@ State what was upgraded, whether a reboot is needed, and the rollback command
 if something looks wrong:
 
 ```bash
-bin/nix-generations
-bin/nix-rollback system <previous-generation>
+nix-generations
+nix-rollback system <previous-generation>
 ```
 
 Per RULE-106, do not call the upgrade good. Ask the user to test and report

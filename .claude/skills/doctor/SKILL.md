@@ -6,7 +6,7 @@ description: Health-check this NixOS configuration. Reports untracked files invi
 # Configuration health check
 
 ```bash
-bin/nix-doctor
+nix-doctor
 ```
 
 Read-only and unprivileged. Exits non-zero if any critical check failed.
@@ -48,4 +48,4 @@ generations are actually bootable. If the user needs that, give them:
 
 It also does not run `nix flake check` or build anything, so it is fast and safe
 to run at any time. To find out whether the config actually builds, use
-`bin/nix-build-check` or the `/upgrade` skill.
+`nix-build-check` or the `/upgrade` skill.

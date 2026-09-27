@@ -12,7 +12,7 @@ one machine and forgotten on the other.
 ## 1. Find the drift
 
 ```bash
-bin/nix-host-parity
+nix-host-parity
 ```
 
 Exits non-zero when a module appears in every host's list but not in the
@@ -53,11 +53,5 @@ byte-identical output. A changed hash means the hoist was not neutral, so diff
 the realised build with `nvd diff` and explain the difference before going any
 further.
 
-Then follow the normal workflow: `git add`, `bin/nix-build-check`, and only
+Then follow the normal workflow: `git add`, `nix-build-check`, and only
 commit via `/commit` once the user has confirmed (RULE-002, RULE-106).
-
-## Related
-
-`specs/improvements.md` §1 proposed deduplicating the home module lists and that
-is already done, which is why the home layer is usually clean. The system layer
-was not part of that work.
