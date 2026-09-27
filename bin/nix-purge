@@ -4,9 +4,10 @@
 #
 # Deletes profile generations older than KEEP_DAYS from the user, home-manager
 # and system profiles, drops stale build symlinks, then collects the store.
-# The newest inactive generation of each profile is always retained as a rollback
-# target, even when it is older than KEEP_DAYS, so a purge never leaves the
-# active generation with nothing to fall back to.
+# The newest generation older than the active one is always retained as a
+# rollback target, even when it is older than KEEP_DAYS, so a purge never leaves
+# the active generation with nothing to fall back to. Generations newer than the
+# active one, such as the one a rollback fled from, age out like any other.
 #
 # Usage:
 #   nix-purge [KEEP_DAYS] [--dry-run]   (default: 7)
@@ -80,9 +81,20 @@ inactive_generations() {
   return 0
 }
 
-# Echo the generation kept as a rollback target: the newest inactive one
+# Echo the generation kept as a rollback target: the newest one older than the
+# active generation
 rollback_target() {
-  inactive_generations "$1" | head -1
+  local profile="$1" active num
+  [[ "$(readlink "$profile" 2>/dev/null || true)" =~ -([0-9]+)-link$ ]] || return 0
+  active="${BASH_REMATCH[1]}"
+  while read -r num; do
+    [ -n "$num" ] || continue
+    if [ "$num" -lt "$active" ]; then
+      printf '%s\n' "$num"
+      break
+    fi
+  done < <(inactive_generations "$profile")
+  return 0
 }
 
 # Echo generation numbers older than the cutoff, skipping the active one and
@@ -120,24 +132,28 @@ purge_profile() {
   if [ -n "$keep" ]; then
     echo "  retaining generation $keep as a rollback target"
   else
-    echo "  no inactive generation exists, so there is no rollback target"
+    echo "  no generation older than the active one, so there is no rollback target"
   fi
 }
 
-# Delete stale home-manager generations, retaining the newest inactive one.
+# Delete stale home-manager generations, retaining the newest one older than
+# the current generation.
 # `home-manager expire-generations` keeps only the current generation, so the
 # ids are selected here instead.
 purge_home() {
-  local line date_str id ts keep="" stale=()
+  local line date_str id ts keep="" seen_current=no stale=()
   # home-manager generations lists newest first
   while IFS= read -r line; do
-    case "$line" in
-      *"(current)"*) continue ;;
-    esac
     [[ "$line" =~ ^([0-9]{4}-[0-9]{2}-[0-9]{2}\ [0-9]{2}:[0-9]{2})\ :\ id\ ([0-9]+) ]] || continue
     date_str="${BASH_REMATCH[1]}"
     id="${BASH_REMATCH[2]}"
-    if [ -z "$keep" ]; then
+    case "$line" in
+      *"(current)"*)
+        seen_current=yes
+        continue
+        ;;
+    esac
+    if [ "$seen_current" = yes ] && [ -z "$keep" ]; then
       keep="$id"
       continue
     fi
@@ -159,14 +175,14 @@ purge_home() {
   if [ -n "$keep" ]; then
     echo "  retaining generation $keep as a rollback target"
   else
-    echo "  no inactive generation exists, so there is no rollback target"
+    echo "  no generation older than the active one, so there is no rollback target"
   fi
 }
 
 echo "=== Nix Purge ==="
 [ "$DRY_RUN" = yes ] && echo "DRY RUN: nothing will be deleted"
 echo "Keeping generations from the last $KEEP_DAYS days,"
-echo "plus the newest inactive generation of each profile as a rollback target"
+echo "plus the newest generation older than the active one as a rollback target"
 echo ""
 
 BEFORE="$(df --output=used /nix | tail -1)"

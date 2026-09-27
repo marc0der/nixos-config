@@ -44,9 +44,11 @@ bin/nix-purge [KEEP_DAYS] [--dry-run]
 
 These scripts will automatically be added to your `PATH`.
 
-`nix-purge` retains the newest inactive generation of each profile as a rollback
-target, even when it is older than `KEEP_DAYS`, so a purge never leaves a profile
-with nothing to fall back to. Preview any purge with `--dry-run` first.
+`nix-purge` retains the newest generation older than the active one in each
+profile as a rollback target, even when it is older than `KEEP_DAYS`, so a purge
+never leaves a profile with nothing to fall back to. After a rollback, the newer
+generation you fled from ages out like any other. Preview any purge with
+`--dry-run` first.
 
 A profile that has only ever had one generation still has no rollback target,
 since there is nothing to retain. The next switch creates one.

@@ -1,6 +1,6 @@
 ---
 name: purge
-description: Reclaim disk space by deleting old NixOS, home-manager and nix-env generations, then collecting the store. Always previews what would go first, and retains the newest inactive generation of each profile so a rollback target survives. Use when /nix is filling up or the user asks to clean up generations.
+description: Reclaim disk space by deleting old NixOS, home-manager and nix-env generations, then collecting the store. Always previews what would go first, and retains the newest generation older than the active one in each profile so a rollback target survives. Use when /nix is filling up or the user asks to clean up generations.
 argument-hint: "[keep-days] (default 7)"
 ---
 
@@ -9,9 +9,10 @@ argument-hint: "[keep-days] (default 7)"
 Deleting generations is irreversible: once a generation is gone, the switch it
 represents cannot be rolled back to. So preview first, always.
 
-`nix-purge` retains the newest inactive generation of each profile even when it
-is older than the cutoff, so a purge leaves a rollback target behind. It does not
-invent one: a profile that never had a second generation still has none.
+`nix-purge` retains the newest generation older than the active one in each
+profile, even when it is older than the cutoff, so a purge leaves a rollback
+target behind. It does not invent one: a profile whose active generation is its
+oldest still has none.
 
 ## 1. Preview
 
@@ -26,8 +27,8 @@ Report to the user:
 
 - how many generations would be deleted per profile
 - which generation each profile keeps as its rollback target
-- any profile reporting no inactive generation, which means no rollback target
-  exists there yet
+- any profile reporting no generation older than the active one, which means no
+  rollback target exists there yet
 
 ## 2. Check what is actually pinning the store
 

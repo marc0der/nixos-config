@@ -30,7 +30,7 @@ These convenience scripts live in [bin/](bin/), are on the PATH, and handle all 
 - Which layers the working tree touches: `nix-changed-layers [--explain]`
 - Which layers are committed but not live: `nix-changed-layers --unapplied`
 - Whether the last switch landed (working tree vs live): `nix-changed-layers --verify`
-- Delete old generations and collect the store: `nix-purge [KEEP_DAYS] [--dry-run]` (retains the newest inactive generation of each profile as a rollback target)
+- Delete old generations and collect the store: `nix-purge [KEEP_DAYS] [--dry-run]` (retains the newest generation older than the active one in each profile as a rollback target)
 
 Prefer `nix-build-check` over a blind switch. `nix-rebuild-all` and `nix-upgrade-all` do not set `set -e`, so they run the home switch even after the system switch has failed; call `nix-rebuild-system` and `nix-rebuild-home` separately when you need to stop on failure.
 

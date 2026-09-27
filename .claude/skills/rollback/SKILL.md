@@ -19,8 +19,8 @@ Present the candidates with their dates and NixOS versions.
 
 If only one system generation exists, **there is nothing to roll back to**. Say
 so plainly rather than offering a command that will fail. `nix-purge` retains the
-newest inactive generation, so this state means the profile has not been switched
-often enough to have one, not that a purge discarded it. In that case the options
+newest generation older than the active one, so this state means the profile has
+not been switched often enough to have one, not that a purge discarded it. In that case the options
 are:
 
 - roll back the home layer only, if the breakage is in home-manager

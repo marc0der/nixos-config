@@ -28,8 +28,8 @@ Privileged journals are the user's to run, so hand them the command:
 `! journalctl -u <unit> -n 50`. Do not run `sudo journalctl` yourself.
 
 **One system generation.** A bad switch has no way back. `nix-purge` retains the
-newest inactive generation, so this means the profile has not been switched often
-enough to have accumulated one. The next switch creates a rollback target. Until
+newest generation older than the active one, so this means the profile has not
+been switched often enough to have accumulated one. The next switch creates a rollback target. Until
 then the mitigation is `/upgrade`, which builds and diffs before switching rather
 than switching blind.
 
