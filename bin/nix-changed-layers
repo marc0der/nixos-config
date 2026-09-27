@@ -4,7 +4,8 @@
 #
 # Prints which configuration layers need a rebuild: `system`, `home`, both, or
 # nothing. Files are attributed by looking up where flake.nix lists them, so
-# mixed directories such as profiles/ resolve correctly.
+# mixed directories such as profiles/ resolve correctly. Non-.nix assets are
+# attributed to the layer of whichever module references them.
 #
 # Two different questions:
 #   (default)     what have I edited but not built?   working tree vs HEAD
@@ -53,12 +54,13 @@ SYSTEM_BUILT="$(stat -c %Y /nix/var/nix/profiles/system 2>/dev/null || echo 0)"
 HOME_BUILT="$(date -d "$(home-manager generations 2>/dev/null | head -1 | cut -d: -f1-2)" +%s 2>/dev/null || echo 0)"
 
 python3 - "$REPO/flake.nix" "$EXPLAIN" "$CHANGED_FILE" "$UNAPPLIED" "$SYSTEM_BUILT" "$HOME_BUILT" <<'PY'
-import re, sys
+import os, re, sys
 
 flake_path, explain, changed_path = sys.argv[1], sys.argv[2] == "yes", sys.argv[3]
 unapplied = sys.argv[4] == "yes"
 built = {"system": int(sys.argv[5]), "home": int(sys.argv[6])}
 src = open(flake_path).read()
+repo = os.path.dirname(flake_path)
 
 
 def lists_after(anchor):
@@ -86,6 +88,50 @@ home_entries = set(lists_after("commonHomeModules = [")) | set(
 )
 
 
+def module_layer(rel):
+    """Layer a .nix module belongs to, or None when it is not a module."""
+    ref = "./" + rel
+    if ref in system_entries:
+        return "system"
+    if ref in home_entries:
+        return "home"
+    if rel == "configuration.nix":
+        return "system"
+    if rel == "home.nix":
+        return "home"
+    if rel.startswith("modules/system/"):
+        return "system"
+    if rel.startswith(("modules/home/", "shared/")):
+        return "home"
+    if rel.startswith("hosts/"):
+        return "home" if rel.endswith("home.nix") else "system"
+    return None
+
+
+def asset_refs():
+    """Non-.nix paths each module pulls in, mapped to that module's layers."""
+    refs = {}
+    for root, dirs, files in os.walk(repo):
+        dirs[:] = [d for d in dirs if d != ".git"]
+        for name in files:
+            if not name.endswith(".nix"):
+                continue
+            full = os.path.join(root, name)
+            layer = module_layer(os.path.relpath(full, repo))
+            if layer is None:
+                continue
+            for literal in re.findall(r"\.{1,2}/[A-Za-z0-9_./+-]+", open(full).read()):
+                resolved = os.path.normpath(os.path.join(os.path.dirname(full), literal))
+                target = os.path.relpath(resolved, repo)
+                if target.startswith("..") or target.endswith(".nix"):
+                    continue
+                refs.setdefault(target, set()).add(layer)
+    return refs
+
+
+assets = asset_refs()
+
+
 def classify(path):
     ref = "./" + path
     if path == "flake.nix":
@@ -102,6 +148,10 @@ def classify(path):
         return "home"
     if path.startswith("hosts/"):
         return "system"
+    # non-.nix assets: attribute to whichever module references them
+    for target, owners in assets.items():
+        if path == target or path.startswith(target + "/"):
+            return "both" if len(owners) > 1 else next(iter(owners))
     return "none"
 
 
