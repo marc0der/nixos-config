@@ -52,11 +52,15 @@ else
 fi
 
 echo ""
-echo "Formatting (nixfmt via nix fmt):"
-if fmt_out="$(cd "$REPO" && nix fmt -- --fail-on-change </dev/null 2>&1)"; then
-  ok "$(printf '%s' "$fmt_out" | grep -o '[0-9]* changed' | head -1 || echo 'no drift')"
+echo "Formatting (nixfmt --check, writes nothing):"
+if ! command -v nixfmt >/dev/null; then
+  warn "nixfmt is not on PATH, formatting not checked"
+elif fmt_out="$(cd "$REPO" && git ls-files -z '*.nix' | xargs -0 nixfmt --check 2>&1)"; then
+  ok "all tracked .nix files are formatted"
 else
-  fail "nix fmt reports unformatted files, run 'nix fmt' before committing"
+  while IFS= read -r line; do
+    fail "${line%: not formatted} is unformatted, run 'nix fmt' before committing"
+  done <<< "$fmt_out"
 fi
 
 echo ""
