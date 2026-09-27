@@ -19,10 +19,37 @@
 - Rebuild all without upgrade: `nix-rebuild-all` (rebuilds both system and home without updating flake inputs)
 - Update and upgrade all: `nix-upgrade-all` (updates flake inputs and upgrades both system and home)
 
-These convenience scripts live in [bin/](bin/), are on the PATH, and handle all necessary flags like `--impure` and `--no-warn-dirty`. Always use them instead of raw `nixos-rebuild` / `home-manager` / `nix build` invocations.
+These convenience scripts live in [bin/](bin/), are on the PATH, and handle all necessary flags like `--impure`. Note that both `nixos-rebuild` (argparse-based rewrite) and `home-manager` reject `--no-warn-dirty` outright, so do not add it to any wrapper. It is a `nix` flag, not a flag either of those accept. Always use them instead of raw `nixos-rebuild` / `home-manager` / `nix build` invocations.
+
+### Inspection and Recovery
+- Build without activating, then diff: `nix-build-check [system|home|both]`
+- List generations: `nix-generations [system|home]`
+- Activate an earlier generation: `nix-rollback <system|home> <generation>`
+- Health check (read-only, exits non-zero on problems): `nix-doctor`
+- Config duplicated across both hosts: `nix-host-parity`
+- Which layers the working tree touches: `nix-changed-layers [--explain]`
+- Which layers are committed but not live: `nix-changed-layers --unapplied`
+- Delete old generations and collect the store: `nix-purge [KEEP_DAYS] [--dry-run]` (retains the newest inactive generation of each profile as a rollback target)
+
+Prefer `nix-build-check` over a blind switch. `nix-rebuild-all` and `nix-upgrade-all` do not set `set -e`, so they run the home switch even after the system switch has failed; call `nix-rebuild-system` and `nix-rebuild-home` separately when you need to stop on failure.
+
+### Skills
+Repository-scoped skills in [.claude/skills/](.claude/skills/) wrap these scripts. Prefer them over calling the scripts ad hoc.
+
+**Route by intent:**
+- User edited `.nix` files and wants them applied: `/rebuild` (does NOT touch `flake.lock`)
+- User wants newer packages / updated inputs: `/upgrade` (DOES update `flake.lock`)
+- Something broke after a switch: `/rollback`
+- Something feels off, or a new file seems ignored by the build: `/doctor`
+- `/nix` is filling up: `/purge`
+- Checking drift between the two hosts: `/host-parity`
+
+Never combine a config change and an input update in one switch: if it breaks, the cause is unattributable.
+
+**Never half-apply a rebuild.** Switch the system layer before home, and if the system switch does not complete, stop without touching home so the machine stays consistent. A clean working tree does not mean nothing needs applying: check `nix-changed-layers --unapplied` for commits that were never switched.
 
 ### Automated vs Manual Rebuilds
-- **Home manager changes**: ALWAYS run `nix-rebuild-home` automatically after making changes. Do NOT ask the user - just run it immediately. No sudo required.
+- **Home manager changes**: ALWAYS run `nix-rebuild-home` automatically after making changes. Do NOT ask the user - just run it immediately. No sudo required. (`/rebuild` encodes this, plus the build-and-diff step.)
 - **System changes**: Run `nix-rebuild-system` or `nix-rebuild-all` directly. No need to ask the user.
 - **Anything else needing privileges**: Do NOT invoke `sudo` yourself - ask the user to run it with `! <command>`.
 

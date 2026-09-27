@@ -18,9 +18,126 @@ bin/nix-rebuild-all
 
 # Update flake inputs and upgrade both system and home-manager
 bin/nix-upgrade-all
+
+# Build system and/or home WITHOUT activating, then nvd diff against what is live
+bin/nix-build-check [system|home|both]
+
+# List system and home-manager generations with dates and versions
+bin/nix-generations [system|home]
+
+# Activate an earlier generation
+bin/nix-rollback <system|home> <generation>
+
+# Read-only health check: untracked files, fmt drift, failed units, stale inputs
+bin/nix-doctor
+
+# Report config duplicated across both hosts (RULE-202)
+bin/nix-host-parity
+
+# Print which layers need rebuilding (edited, or committed but not live)
+bin/nix-changed-layers [--unapplied] [--explain]
+
+# Delete old generations and collect the store (preview with --dry-run)
+bin/nix-purge [KEEP_DAYS] [--dry-run]
 ```
 
 These scripts will automatically be added to your `PATH`.
+
+`nix-purge` retains the newest inactive generation of each profile as a rollback
+target, even when it is older than `KEEP_DAYS`, so a purge never leaves a profile
+with nothing to fall back to. Preview any purge with `--dry-run` first.
+
+A profile that has only ever had one generation still has no rollback target,
+since there is nothing to retain. The next switch creates one.
+
+## Claude Code Skills
+
+Repository-scoped skills live in `.claude/skills/` and are versioned with the
+config. They orchestrate the `bin/` scripts rather than reimplementing them.
+
+| Skill | Purpose |
+| --- | --- |
+| `/rebuild` | Apply your own config edits: infer layers, build, diff, switch |
+| `/upgrade` | Update inputs, show what moved, build and diff, switch only on approval |
+| `/rollback` | List generations and activate an earlier one |
+| `/doctor` | Health check and interpretation of the findings |
+| `/host-parity` | Report and judge drift between xenomorph and neomorph |
+| `/purge` | Preview and delete old generations, keeping a rollback target |
+| `/wallpaper` | Repoint the wallpaper, regenerate the pywal palette, reload hyprpaper |
+
+Cross-project skills live in `claude/skills/` instead and are installed to
+`~/.claude/skills` by `modules/home/static-assets.nix`.
+
+## Day-to-day Workflows
+
+### The distinction that matters
+
+Two jobs are easy to confuse, and keeping them apart is what makes a breakage
+attributable:
+
+| Job | Use | Touches `flake.lock`? |
+| --- | --- | --- |
+| Apply config edits you just made | `/rebuild` | No |
+| Get newer packages (week to week) | `/upgrade` | **Yes** |
+
+Never do both at once. If a config change and an input bump land in the same
+switch and something breaks, there is no way to tell which one caused it.
+
+### After editing any `.nix` file
+
+Run `/rebuild`. It works out which layers your edits touched via
+`nix-changed-layers`, stages new files, formats, builds **without activating**,
+shows an `nvd diff`, and only then switches the layers that actually changed.
+
+Staging first is not optional: flakes only see tracked files, so an untracked
+module is invisible to the build and you end up debugging a file that was never
+evaluated.
+
+A `both` rebuild switches the system layer first and only then home. If the
+system switch cannot complete, it stops without touching home, because a machine
+with home rebuilt from HEAD and the system on an older generation is inconsistent
+in a way that is invisible afterwards. A clean working tree also does not mean
+there is nothing to apply, so check for commits that were never switched:
+
+```bash
+bin/nix-changed-layers --unapplied --explain
+```
+
+### Week to week, for newer packages
+
+Run `/upgrade`. It health-checks, updates the inputs, reports which ones moved,
+builds without activating, diffs, and asks before switching. It replaces
+`nix-upgrade-all`, which updated and switched in one step so that the first sign
+of a bad upgrade was a broken system.
+
+`/upgrade` runs the health check itself, so there is no need to run `/doctor`
+first.
+
+### When something breaks
+
+`/rollback` lists generations and activates an earlier one. Check that a
+rollback target exists before relying on it: a profile that has only ever had
+one generation has nothing to fall back to. That is the reason both `/rebuild`
+and `/upgrade` build and diff before they switch.
+
+### Housekeeping
+
+| Skill | When |
+| --- | --- |
+| `/doctor` | Not on a schedule. When something feels off, or when a new file seems to be ignored by the build. Read-only and takes seconds. |
+| `/purge` | When `/nix` grows. Always previews first; retains a rollback target per profile. |
+| `/host-parity` | Every month or two, or after adding a system module to one host. Drift accumulates slowly. |
+
+### Safety model
+
+Nothing is ever activated before it has been built and diffed. `nix-build-check`
+builds into a temporary directory and runs `nvd diff` against what is live, so a
+broken configuration fails before it can touch the running system.
+
+`nix-rebuild-all` and `nix-upgrade-all` do not set `set -e`: they run the
+home-manager switch even after `nixos-rebuild` has failed. The skills call
+`nix-rebuild-system` and `nix-rebuild-home` separately and check each exit code
+for that reason.
 
 ## Repository Structure
 
@@ -29,6 +146,7 @@ This is a flake-based repository using **NixOS 26.05**.
 ```
 .
 ├── bin/                          # Convenience scripts
+├── .claude/skills/               # Repository-scoped Claude Code skills
 ├── claude/                       # Claude Code assets (skills, settings, MCP config, scripts) wired in via home.nix
 ├── gnupg/                        # GnuPG config files copied into ~/.gnupg via home.nix
 ├── hosts/                        # Machine-specific configurations
@@ -48,6 +166,7 @@ This is a flake-based repository using **NixOS 26.05**.
 ├── profiles/                     # Optional feature profiles
 ├── qt/                           # qt5ct/qt6ct theme configs copied into ~/.config via home.nix
 ├── rules/                        # Repository conventions and rules (e.g. nixos-config.md) read by humans and assistants
+├── secrets/                      # agenix-encrypted secrets (.age) consumed by modules/system/borg-backup.nix
 ├── shared/                       # Home Manager fragments imported unconditionally on every host (no options)
 ├── specs/                        # Proposed-change specifications (e.g. improvements.md)
 ├── configuration.nix             # Base system configuration
