@@ -16,7 +16,7 @@ set -euo pipefail
 WHICH="${1:-both}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 HOST="$(hostname)"
-HM_CURRENT="${XDG_STATE_HOME:-$HOME/.local/state}/home-manager/gcroots/current-home"
+HM_CURRENT="${XDG_STATE_HOME:-$HOME/.local/state}/nix/profiles/home-manager"
 
 case "$WHICH" in
   system | home | both) ;;
@@ -53,7 +53,7 @@ check_home() {
   if [ -L "$HM_CURRENT" ]; then
     nvd diff "$(readlink -f "$HM_CURRENT")" "$out"
   else
-    echo "  no current-home gcroot, skipping diff"
+    echo "  no home-manager profile, skipping diff"
   fi
 }
 
