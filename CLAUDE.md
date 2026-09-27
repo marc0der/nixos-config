@@ -29,6 +29,7 @@ These convenience scripts live in [bin/](bin/), are on the PATH, and handle all 
 - Config duplicated across both hosts: `nix-host-parity`
 - Which layers the working tree touches: `nix-changed-layers [--explain]`
 - Which layers are committed but not live: `nix-changed-layers --unapplied`
+- Whether the last switch landed (working tree vs live): `nix-changed-layers --verify`
 - Delete old generations and collect the store: `nix-purge [KEEP_DAYS] [--dry-run]` (retains the newest inactive generation of each profile as a rollback target)
 
 Prefer `nix-build-check` over a blind switch. `nix-rebuild-all` and `nix-upgrade-all` do not set `set -e`, so they run the home switch even after the system switch has failed; call `nix-rebuild-system` and `nix-rebuild-home` separately when you need to stop on failure.
@@ -46,7 +47,7 @@ Repository-scoped skills in [.claude/skills/](.claude/skills/) wrap these script
 
 Never combine a config change and an input update in one switch: if it breaks, the cause is unattributable.
 
-**Never half-apply a rebuild.** Switch the system layer before home, and if the system switch does not complete, stop without touching home so the machine stays consistent. A clean working tree does not mean nothing needs applying: check `nix-changed-layers --unapplied` for commits that were never switched.
+**Never half-apply a rebuild.** Switch the system layer before home, and if the system switch does not complete, stop without touching home so the machine stays consistent. A clean working tree does not mean nothing needs applying: check `nix-changed-layers --unapplied` for commits that were never switched. After switching, `nix-changed-layers --verify` must print nothing.
 
 ### Automated vs Manual Rebuilds
 - **Home manager changes**: ALWAYS run `nix-rebuild-home` automatically after making changes. Do NOT ask the user - just run it immediately. No sudo required. (`/rebuild` encodes this, plus the build-and-diff step.)

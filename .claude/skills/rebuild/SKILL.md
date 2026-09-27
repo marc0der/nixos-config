@@ -101,12 +101,13 @@ the system switch failed, which is the same half-applied trap.
 ## 6. Verify consistency, then let the user confirm
 
 ```bash
-bin/nix-changed-layers --unapplied
+bin/nix-changed-layers --verify
 ```
 
-This must print nothing. If it still names a layer, the rebuild did not finish
-and the machine is in a split state: say so explicitly rather than reporting
-success.
+This compares the working tree, not HEAD, to what is live, since nothing is
+committed until the user confirms. It must print nothing. If it still names a
+layer, the rebuild did not finish and the machine is in a split state: say so
+explicitly rather than reporting success.
 
 Then report what was applied and whether a reboot is needed. Per RULE-106 do not
 declare it working; ask the user to test, and only commit via `/commit` once they

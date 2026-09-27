@@ -4,28 +4,37 @@
 #
 # Prints which configuration layers need a rebuild: `system`, `home`, both, or
 # nothing. Files are attributed by looking up where flake.nix lists them, so
-# mixed directories such as profiles/ resolve correctly. Non-.nix assets are
-# attributed to the layer of whichever module references them.
+# mixed directories such as profiles/ resolve correctly. Anything else, assets
+# and helper .nix files alike, takes the layer of whatever references it.
 #
-# Two different questions:
-#   (default)     what have I edited but not built?   working tree vs HEAD
-#   --unapplied   what is committed but not live?     HEAD vs running generation
+# Three different questions, answered by different means:
+#   (default)     what have I edited but not built?   working tree vs HEAD,
+#                                                     attributed per file
+#   --unapplied   what is committed but not live?     the derivation HEAD
+#                                                     evaluates to vs the one
+#                                                     that built the live
+#                                                     generation
+#   --verify      did the last switch land?           the derivation the
+#                                                     working tree evaluates
+#                                                     to vs the live one
 #
 # Usage:
 #   nix-changed-layers [--explain]
 #   nix-changed-layers --unapplied [--explain]
+#   nix-changed-layers --verify [--explain]
 
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 EXPLAIN=no
-UNAPPLIED=no
+MODE=edited
 for arg in "$@"; do
   case "$arg" in
     --explain) EXPLAIN=yes ;;
-    --unapplied) UNAPPLIED=yes ;;
+    --unapplied) MODE=unapplied ;;
+    --verify) MODE=verify ;;
     *)
-      echo "usage: nix-changed-layers [--unapplied] [--explain]" >&2
+      echo "usage: nix-changed-layers [--unapplied|--verify] [--explain]" >&2
       exit 1
       ;;
   esac
@@ -33,32 +42,75 @@ done
 
 cd "$REPO"
 
-CHANGED_FILE="$(mktemp)"
-trap 'rm -f "$CHANGED_FILE"' EXIT
+# Compare the derivation a flake ref evaluates to against the one that produced
+# the live generation. Timestamps cannot answer this, because committing after a
+# switch makes an already-applied generation look stale.
+if [ "$MODE" != edited ]; then
+  HOST="$(hostname)"
+  # a plain git+file:// ref evaluates the working tree; ?ref=HEAD pins the
+  # comparison to what is actually committed
+  if [ "$MODE" = unapplied ]; then
+    FLAKE_REF="git+file://$REPO?ref=HEAD"
+    SOURCE=HEAD
+  else
+    FLAKE_REF="git+file://$REPO"
+    SOURCE="the working tree"
+  fi
+  HOME_PROFILE="${XDG_STATE_HOME:-$HOME/.local/state}/nix/profiles/home-manager"
 
-if [ "$UNAPPLIED" = yes ]; then
-  # newest commit touching each file, so the caller can compare against the
-  # build time of the live generation
-  git log --format='COMMIT %ct' --name-only -n 500 > "$CHANGED_FILE"
-else
-  # staged, unstaged and untracked, rename targets included
-  git status --porcelain | sed 's/^...//' | sed 's/.* -> //' > "$CHANGED_FILE"
-fi
+  # Unknowable state fails towards "needs applying": a spurious rebuild is a
+  # no-op, whereas missing a real change is the bug this check exists to catch.
+  layer_differs() {
+    local layer="$1" attr="$2" live="$3" ref_drv live_drv
+    if ! ref_drv="$(nix eval --raw --impure "$FLAKE_REF#$attr" 2>/dev/null)"; then
+      echo "warning: cannot evaluate the $layer layer at $SOURCE" >&2
+      return 0
+    fi
+    if [ ! -e "$live" ]; then
+      echo "warning: no live $layer generation to compare against" >&2
+      return 0
+    fi
+    live_drv="$(nix-store --query --deriver "$(readlink -f "$live")" 2>/dev/null || true)"
+    if [ -z "$live_drv" ] || [ "$live_drv" = unknown-deriver ]; then
+      echo "warning: deriver of the live $layer generation is unknown" >&2
+      return 0
+    fi
+    [ "$ref_drv" != "$live_drv" ]
+  }
 
-if [ ! -s "$CHANGED_FILE" ]; then
-  [ "$EXPLAIN" = yes ] && echo "nothing to inspect" >&2
+  SYSTEM_ATTR="nixosConfigurations.$HOST.config.system.build.toplevel.drvPath"
+  HOME_ATTR="homeConfigurations.\"$(id -un)@$HOST\".activationPackage.drvPath"
+
+  for spec in "system|$SYSTEM_ATTR|/run/current-system" "home|$HOME_ATTR|$HOME_PROFILE"; do
+    IFS='|' read -r layer attr live <<<"$spec"
+    if layer_differs "$layer" "$attr" "$live"; then
+      if [ "$EXPLAIN" = yes ]; then
+        printf '  %-7s %s\n' "$layer" \
+          "$SOURCE evaluates to a different derivation than the live generation" >&2
+      fi
+      echo "$layer"
+    elif [ "$EXPLAIN" = yes ]; then
+      printf '  %-7s %s\n' none "$layer layer is up to date with $SOURCE" >&2
+    fi
+  done
   exit 0
 fi
 
-SYSTEM_BUILT="$(stat -c %Y /nix/var/nix/profiles/system 2>/dev/null || echo 0)"
-HOME_BUILT="$(date -d "$(home-manager generations 2>/dev/null | head -1 | cut -d: -f1-2)" +%s 2>/dev/null || echo 0)"
+CHANGED_FILE="$(mktemp)"
+trap 'rm -f "$CHANGED_FILE"' EXIT
 
-python3 - "$REPO/flake.nix" "$EXPLAIN" "$CHANGED_FILE" "$UNAPPLIED" "$SYSTEM_BUILT" "$HOME_BUILT" <<'PY'
+# staged, unstaged and untracked, rename targets included
+git status --porcelain | sed 's/^...//' | sed 's/.* -> //' > "$CHANGED_FILE"
+
+if [ ! -s "$CHANGED_FILE" ]; then
+  if [ "$EXPLAIN" = yes ]; then echo "nothing to inspect" >&2; fi
+  exit 0
+fi
+
+python3 - "$REPO/flake.nix" "$EXPLAIN" "$CHANGED_FILE" <<'PY'
 import os, re, sys
 
 flake_path, explain, changed_path = sys.argv[1], sys.argv[2] == "yes", sys.argv[3]
-unapplied = sys.argv[4] == "yes"
-built = {"system": int(sys.argv[5]), "home": int(sys.argv[6])}
 src = open(flake_path).read()
 repo = os.path.dirname(flake_path)
 
@@ -109,23 +161,42 @@ def module_layer(rel):
 
 
 def asset_refs():
-    """Non-.nix paths each module pulls in, mapped to that module's layers."""
-    refs = {}
+    """Non-module paths pulled in by flake.nix or a module, mapped to layers.
+
+    flake.nix counts as both layers, and a helper .nix file passes its layers on
+    to whatever it references in turn.
+    """
+    edges = {}
     for root, dirs, files in os.walk(repo):
         dirs[:] = [d for d in dirs if d != ".git"]
         for name in files:
             if not name.endswith(".nix"):
                 continue
             full = os.path.join(root, name)
-            layer = module_layer(os.path.relpath(full, repo))
-            if layer is None:
-                continue
+            targets = set()
             for literal in re.findall(r"\.{1,2}/[A-Za-z0-9_./+-]+", open(full).read()):
                 resolved = os.path.normpath(os.path.join(os.path.dirname(full), literal))
                 target = os.path.relpath(resolved, repo)
-                if target.startswith("..") or target.endswith(".nix"):
+                if target.startswith("..") or module_layer(target) is not None:
                     continue
-                refs.setdefault(target, set()).add(layer)
+                targets.add(target)
+            edges[os.path.relpath(full, repo)] = targets
+
+    def owner_layers(rel):
+        if rel == "flake.nix":
+            return {"system", "home"}
+        layer = module_layer(rel)
+        return {layer} if layer else refs.get(rel, set())
+
+    refs, changed = {}, True
+    while changed:
+        changed = False
+        for importer, targets in edges.items():
+            layers = owner_layers(importer)
+            for target in targets:
+                if not layers <= refs.get(target, set()):
+                    refs.setdefault(target, set()).update(layers)
+                    changed = True
     return refs
 
 
@@ -134,7 +205,7 @@ assets = asset_refs()
 
 def classify(path):
     ref = "./" + path
-    if path == "flake.nix":
+    if path in ("flake.nix", "flake.lock"):
         return "both"
     if ref in system_entries:
         return "system"
@@ -148,7 +219,7 @@ def classify(path):
         return "home"
     if path.startswith("hosts/"):
         return "system"
-    # non-.nix assets: attribute to whichever module references them
+    # everything else: attribute to whatever references it
     for target, owners in assets.items():
         if path == target or path.startswith(target + "/"):
             return "both" if len(owners) > 1 else next(iter(owners))
@@ -157,40 +228,16 @@ def classify(path):
 
 layers, reasons = set(), []
 
-if unapplied:
-    # walk the log, attributing each file to a layer and keeping the newest
-    # commit time per layer; a layer is unapplied if that beats its build time
-    newest = {"system": 0, "home": 0}
-    stamp = 0
-    for line in open(changed_path):
-        line = line.rstrip("\n")
-        if line.startswith("COMMIT "):
-            stamp = int(line.split()[1])
-            continue
-        path = line.strip()
-        if not path:
-            continue
-        layer = classify(path)
-        for target in (("system", "home") if layer == "both" else (layer,)):
-            if target in newest and stamp > newest[target]:
-                newest[target] = stamp
-    for target in ("system", "home"):
-        if newest[target] > built[target]:
-            layers.add(target)
-            reasons.append((f"newest {target} commit is after the live generation", target))
-        else:
-            reasons.append((f"{target} layer is up to date with HEAD", "none"))
-else:
-    for line in open(changed_path):
-        path = line.strip()
-        if not path:
-            continue
-        layer = classify(path)
-        reasons.append((path, layer))
-        if layer == "both":
-            layers |= {"system", "home"}
-        elif layer != "none":
-            layers.add(layer)
+for line in open(changed_path):
+    path = line.strip()
+    if not path:
+        continue
+    layer = classify(path)
+    reasons.append((path, layer))
+    if layer == "both":
+        layers |= {"system", "home"}
+    elif layer != "none":
+        layers.add(layer)
 
 if explain:
     for path, layer in sorted(reasons):

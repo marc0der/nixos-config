@@ -34,8 +34,9 @@ bin/nix-doctor
 # Report config duplicated across both hosts (RULE-202)
 bin/nix-host-parity
 
-# Print which layers need rebuilding (edited, or committed but not live)
-bin/nix-changed-layers [--unapplied] [--explain]
+# Print which layers need rebuilding (edited, committed but not live, or
+# with --verify, whether the working tree is what is live)
+bin/nix-changed-layers [--unapplied|--verify] [--explain]
 
 # Delete old generations and collect the store (preview with --dry-run)
 bin/nix-purge [KEEP_DAYS] [--dry-run]
