@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+#
+# Nix Rollback
+#
+# Activates an earlier NixOS system or home-manager generation. List candidates
+# with `nix-generations` first. The system profile needs root, so that path goes
+# through sudo the same way nix-rebuild-system does.
+#
+# Nothing in the repo changes, so a rollback is undone by rebuilding.
+#
+# Usage:
+#   nix-rollback system <generation> [--yes]
+#   nix-rollback home <generation> [--yes]
+
+set -euo pipefail
+
+LAYER="${1:-}"
+GEN="${2:-}"
+ASSUME_YES="${3:-}"
+SYSTEM_PROFILE="/nix/var/nix/profiles/system"
+
+if [ "$LAYER" != system ] && [ "$LAYER" != home ]; then
+  echo "usage: nix-rollback <system|home> <generation> [--yes]" >&2
+  exit 1
+fi
+
+if ! [[ "$GEN" =~ ^[0-9]+$ ]]; then
+  echo "error: generation must be a number, got '${GEN}'" >&2
+  echo "       run nix-generations to list them" >&2
+  exit 1
+fi
+
+confirm() {
+  [ "$ASSUME_YES" = --yes ] && return 0
+  printf 'Activate %s generation %s? [y/N] ' "$LAYER" "$GEN"
+  read -r reply
+  case "$reply" in
+    y | Y | yes) return 0 ;;
+    *)
+      echo "aborted"
+      exit 1
+      ;;
+  esac
+}
+
+rollback_system() {
+  local link="$SYSTEM_PROFILE-$GEN-link"
+  if [ ! -L "$link" ]; then
+    echo "error: system generation $GEN does not exist" >&2
+    echo "       run nix-generations system to list them" >&2
+    exit 1
+  fi
+  echo "Target: $(readlink -f "$link")"
+  echo "Version: $(cat "$(readlink -f "$link")/nixos-version" 2>/dev/null || echo unknown)"
+  confirm
+  sudo nix-env -p "$SYSTEM_PROFILE" --switch-generation "$GEN"
+  sudo "$SYSTEM_PROFILE"/bin/switch-to-configuration switch
+  echo ""
+  echo "Rolled back to system generation $GEN"
+}
+
+rollback_home() {
+  local target
+  target="$(home-manager generations | sed -nE "s/^.* : id ${GEN} -> (.*)$/\1/p" | head -1)"
+  if [ -z "$target" ]; then
+    echo "error: home generation $GEN does not exist" >&2
+    echo "       run nix-generations home to list them" >&2
+    exit 1
+  fi
+  echo "Target: $target"
+  confirm
+  "$target/activate"
+  echo ""
+  echo "Rolled back to home generation $GEN"
+}
+
+if [ "$LAYER" = system ]; then
+  rollback_system
+else
+  rollback_home
+fi

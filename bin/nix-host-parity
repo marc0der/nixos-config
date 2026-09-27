@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+#
+# Nix Host Parity
+#
+# Reports configuration duplicated across both hosts in flake.nix. Anything
+# listed in every host's module list belongs in commonSystemModules or
+# commonHomeModules instead (RULE-202).
+#
+# Advisory and read-only. Judgement about what to hoist stays with the caller.
+#
+# Usage:
+#   nix-host-parity
+
+set -euo pipefail
+
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+python3 - "$REPO/flake.nix" <<'PY'
+import re, sys
+
+src = open(sys.argv[1]).read()
+
+def common(anchor):
+    start = src.index(anchor) + len(anchor)
+    depth, end = 1, start
+    while depth:
+        if src[end] == "[":
+            depth += 1
+        elif src[end] == "]":
+            depth -= 1
+        end += 1
+    return [m.strip() for m in re.findall(r"^\s*(\S+)\s*$", src[start:end - 1], re.M)]
+
+hosts = {
+    "system": {
+        "xenomorph": "xenomorph = lib.nixosSystem",
+        "neomorph": "neomorph = lib.nixosSystem",
+    },
+    "home": {
+        "xenomorph": '"marco@xenomorph" = home-manager.lib.homeManagerConfiguration',
+        "neomorph": '"marco@neomorph" = home-manager.lib.homeManagerConfiguration',
+    },
+}
+
+commons = {
+    "system": set(common("commonSystemModules = [")),
+    "home": set(common("commonHomeModules = [")),
+}
+
+exit_code = 0
+for layer, entries in hosts.items():
+    lists = {}
+    for host, anchor in entries.items():
+        idx = src.index(anchor)
+        rel = src.index("modules =", idx)
+        open_bracket = src.index("[", rel)
+        sub = src[open_bracket + 1:]
+        depth, end = 1, 0
+        while depth:
+            if sub[end] == "[":
+                depth += 1
+            elif sub[end] == "]":
+                depth -= 1
+            end += 1
+        lists[host] = set(re.findall(r"^\s*(\S+)\s*$", sub[:end - 1], re.M))
+
+    shared = set.intersection(*lists.values()) - commons[layer]
+    listname = "commonSystemModules" if layer == "system" else "commonHomeModules"
+    print(f"=== {layer.capitalize()} layer ===")
+    if shared:
+        exit_code = 1
+        print(f"  Duplicated in every host, hoist into {listname}:")
+        for entry in sorted(shared):
+            print(f"    {entry}")
+    else:
+        print(f"  ok: no module duplicated across all hosts")
+
+    for host, mods in lists.items():
+        only = sorted(mods - set.intersection(*lists.values()))
+        print(f"  {host} only ({len(only)}):")
+        for entry in only:
+            print(f"    {entry}")
+    print()
+
+sys.exit(exit_code)
+PY

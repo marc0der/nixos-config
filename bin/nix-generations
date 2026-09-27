@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#
+# Nix Generations
+#
+# Lists NixOS system and home-manager generations with dates and versions,
+# marking the active one. Reads the profile symlinks directly so it needs no
+# privileges, unlike `nix-env --list-generations` on the system profile.
+#
+# Usage:
+#   nix-generations [system|home]   (default: both)
+
+set -euo pipefail
+
+WHICH="${1:-both}"
+SYSTEM_PROFILE="/nix/var/nix/profiles/system"
+
+case "$WHICH" in
+  system | home | both) ;;
+  *)
+    echo "usage: nix-generations [system|home]" >&2
+    exit 1
+    ;;
+esac
+
+list_system() {
+  local active link num date target version count=0
+  active="$(basename "$(readlink "$SYSTEM_PROFILE")")"
+  echo "=== System generations ==="
+  for link in "$SYSTEM_PROFILE"-*-link; do
+    [ -L "$link" ] || continue
+    num="$(basename "$link" | sed -E 's/^system-([0-9]+)-link$/\1/')"
+    date="$(stat -c %y "$link" | cut -d. -f1)"
+    target="$(readlink -f "$link")"
+    version="$(cat "$target/nixos-version" 2>/dev/null || echo unknown)"
+    if [ "$(basename "$link")" = "$active" ]; then
+      printf '  %-6s %s  %s  (current)\n' "$num" "$date" "$version"
+    else
+      printf '  %-6s %s  %s\n' "$num" "$date" "$version"
+    fi
+    count=$((count + 1))
+  done
+  if [ "$count" -le 1 ]; then
+    echo ""
+    echo "  WARNING: $count generation present, so there is nothing to roll back to."
+    echo "           The next switch creates one, which nix-purge then retains."
+  fi
+}
+
+list_home() {
+  echo "=== Home-manager generations ==="
+  home-manager generations | sed 's/^/  /'
+}
+
+case "$WHICH" in
+  system) list_system ;;
+  home) list_home ;;
+  both)
+    list_system
+    echo ""
+    list_home
+    ;;
+esac

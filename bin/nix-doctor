@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+#
+# Nix Doctor
+#
+# Read-only health check for this configuration. Reports problems and exits
+# non-zero if any critical check failed, so it can gate a rebuild.
+#
+# Checks: untracked files invisible to the flake, formatting drift, failed
+# systemd units, rollback availability, store usage and flake input staleness.
+#
+# Usage:
+#   nix-doctor
+
+set -euo pipefail
+
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SYSTEM_PROFILE="/nix/var/nix/profiles/system"
+STALE_DAYS=30
+PROBLEMS=0
+WARNINGS=0
+
+fail() {
+  echo "  FAIL: $1"
+  PROBLEMS=$((PROBLEMS + 1))
+}
+
+warn() {
+  echo "  WARN: $1"
+  WARNINGS=$((WARNINGS + 1))
+}
+
+ok() {
+  echo "  ok: $1"
+}
+
+echo "=== Nix Doctor ==="
+echo "Repo: $REPO"
+echo ""
+
+# RULE-001: flakes only see tracked files, so an untracked module never builds
+echo "Untracked files the flake cannot see:"
+untracked="$(cd "$REPO" && git ls-files --others --exclude-standard)"
+if [ -z "$untracked" ]; then
+  ok "working tree has no untracked files"
+else
+  while IFS= read -r f; do
+    case "$f" in
+      *.nix | *.sh | bin/*) fail "$f is untracked, git add it before rebuilding" ;;
+      *) warn "$f is untracked" ;;
+    esac
+  done <<< "$untracked"
+fi
+
+echo ""
+echo "Formatting (nixfmt via nix fmt):"
+if fmt_out="$(cd "$REPO" && nix fmt -- --fail-on-change </dev/null 2>&1)"; then
+  ok "$(printf '%s' "$fmt_out" | grep -o '[0-9]* changed' | head -1 || echo 'no drift')"
+else
+  fail "nix fmt reports unformatted files, run 'nix fmt' before committing"
+fi
+
+echo ""
+echo "Failed systemd units:"
+sys_failed="$(systemctl --failed --no-legend --plain 2>/dev/null | awk '{print $1}' || true)"
+usr_failed="$(systemctl --user --failed --no-legend --plain 2>/dev/null | awk '{print $1}' || true)"
+if [ -z "$sys_failed" ] && [ -z "$usr_failed" ]; then
+  ok "no failed units"
+else
+  for u in $sys_failed; do fail "system unit $u failed (journalctl -u $u)"; done
+  for u in $usr_failed; do fail "user unit $u failed (journalctl --user -u $u)"; done
+fi
+
+echo ""
+echo "Rollback availability:"
+sys_gens="$(ls -1d "$SYSTEM_PROFILE"-*-link 2>/dev/null | wc -l)"
+hm_gens="$(home-manager generations 2>/dev/null | wc -l)"
+if [ "$sys_gens" -le 1 ]; then
+  fail "$sys_gens system generation, so a bad switch has no way back (the next switch creates one)"
+else
+  ok "$sys_gens system generations available"
+fi
+if [ "$hm_gens" -le 1 ]; then
+  warn "$hm_gens home generation, no home rollback available"
+else
+  ok "$hm_gens home generations available"
+fi
+
+echo ""
+echo "Running system matches the profile head:"
+if [ "$(readlink -f /run/current-system)" = "$(readlink -f "$SYSTEM_PROFILE")" ]; then
+  ok "current-system is the profile head"
+else
+  warn "running system differs from the profile head, a reboot or switch is pending"
+fi
+
+echo ""
+echo "Store usage:"
+echo "  /nix uses $(df -h --output=used /nix | tail -1 | tr -d ' '), $(df -h --output=avail /nix | tail -1 | tr -d ' ') free"
+stale_links="$(find "$REPO" -maxdepth 1 -type l \( -name result -o -name 'result-*' \) | wc -l)"
+if [ "$stale_links" -gt 0 ]; then
+  warn "$stale_links stale build symlink(s) in the repo root pinning store paths, run nix-purge"
+else
+  ok "no stale build symlinks in the repo root"
+fi
+
+echo ""
+echo "Flake input age (stale after $STALE_DAYS days):"
+if ! python3 - "$REPO/flake.lock" "$STALE_DAYS" <<'PY'
+import json, sys, time
+lock_path, stale_days = sys.argv[1], int(sys.argv[2])
+with open(lock_path) as fh:
+    lock = json.load(fh)
+nodes = lock["nodes"]
+now = time.time()
+stale = []
+for name, ref in nodes["root"]["inputs"].items():
+    key = ref if isinstance(ref, str) else ref[0]
+    last = nodes.get(key, {}).get("locked", {}).get("lastModified")
+    if not last:
+        continue
+    age = int((now - last) / 86400)
+    marker = "STALE" if age > stale_days else "ok"
+    print(f"  {marker:5s} {name:20s} {age:4d} days")
+    if age > stale_days:
+        stale.append(name)
+sys.exit(1 if stale else 0)
+PY
+then
+  warn "some inputs are older than $STALE_DAYS days, consider /upgrade"
+fi
+
+echo ""
+echo "=== Summary ==="
+echo "  $PROBLEMS problem(s), $WARNINGS warning(s)"
+[ "$PROBLEMS" -eq 0 ]

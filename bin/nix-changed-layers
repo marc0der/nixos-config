@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+#
+# Nix Changed Layers
+#
+# Prints which configuration layers need a rebuild: `system`, `home`, both, or
+# nothing. Files are attributed by looking up where flake.nix lists them, so
+# mixed directories such as profiles/ resolve correctly.
+#
+# Two different questions:
+#   (default)     what have I edited but not built?   working tree vs HEAD
+#   --unapplied   what is committed but not live?     HEAD vs running generation
+#
+# Usage:
+#   nix-changed-layers [--explain]
+#   nix-changed-layers --unapplied [--explain]
+
+set -euo pipefail
+
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+EXPLAIN=no
+UNAPPLIED=no
+for arg in "$@"; do
+  case "$arg" in
+    --explain) EXPLAIN=yes ;;
+    --unapplied) UNAPPLIED=yes ;;
+    *)
+      echo "usage: nix-changed-layers [--unapplied] [--explain]" >&2
+      exit 1
+      ;;
+  esac
+done
+
+cd "$REPO"
+
+CHANGED_FILE="$(mktemp)"
+trap 'rm -f "$CHANGED_FILE"' EXIT
+
+if [ "$UNAPPLIED" = yes ]; then
+  # newest commit touching each file, so the caller can compare against the
+  # build time of the live generation
+  git log --format='COMMIT %ct' --name-only -n 500 > "$CHANGED_FILE"
+else
+  # staged, unstaged and untracked, rename targets included
+  git status --porcelain | sed 's/^...//' | sed 's/.* -> //' > "$CHANGED_FILE"
+fi
+
+if [ ! -s "$CHANGED_FILE" ]; then
+  [ "$EXPLAIN" = yes ] && echo "nothing to inspect" >&2
+  exit 0
+fi
+
+SYSTEM_BUILT="$(stat -c %Y /nix/var/nix/profiles/system 2>/dev/null || echo 0)"
+HOME_BUILT="$(date -d "$(home-manager generations 2>/dev/null | head -1 | cut -d: -f1-2)" +%s 2>/dev/null || echo 0)"
+
+python3 - "$REPO/flake.nix" "$EXPLAIN" "$CHANGED_FILE" "$UNAPPLIED" "$SYSTEM_BUILT" "$HOME_BUILT" <<'PY'
+import re, sys
+
+flake_path, explain, changed_path = sys.argv[1], sys.argv[2] == "yes", sys.argv[3]
+unapplied = sys.argv[4] == "yes"
+built = {"system": int(sys.argv[5]), "home": int(sys.argv[6])}
+src = open(flake_path).read()
+
+
+def lists_after(anchor):
+    """Entries of every bracketed list opened at each `anchor` occurrence."""
+    entries = []
+    for match in re.finditer(re.escape(anchor), src):
+        # the anchor ends with "[", so locate it from the match start
+        start = src.index("[", match.start()) + 1
+        depth, end = 1, start
+        while depth:
+            if src[end] == "[":
+                depth += 1
+            elif src[end] == "]":
+                depth -= 1
+            end += 1
+        entries += re.findall(r"^\s*(\S+)\s*$", src[start:end - 1], re.M)
+    return entries
+
+
+system_entries = set(lists_after("commonSystemModules = [")) | set(
+    lists_after("modules = commonSystemModules ++ [")
+)
+home_entries = set(lists_after("commonHomeModules = [")) | set(
+    lists_after("modules = commonHomeModules ++ [")
+)
+
+
+def classify(path):
+    ref = "./" + path
+    if path == "flake.nix":
+        return "both"
+    if ref in system_entries:
+        return "system"
+    if ref in home_entries:
+        return "home"
+    if path.startswith("modules/system/"):
+        return "system"
+    if path.startswith(("modules/home/", "shared/")):
+        return "home"
+    if path.startswith("hosts/") and path.endswith("home.nix"):
+        return "home"
+    if path.startswith("hosts/"):
+        return "system"
+    return "none"
+
+
+layers, reasons = set(), []
+
+if unapplied:
+    # walk the log, attributing each file to a layer and keeping the newest
+    # commit time per layer; a layer is unapplied if that beats its build time
+    newest = {"system": 0, "home": 0}
+    stamp = 0
+    for line in open(changed_path):
+        line = line.rstrip("\n")
+        if line.startswith("COMMIT "):
+            stamp = int(line.split()[1])
+            continue
+        path = line.strip()
+        if not path:
+            continue
+        layer = classify(path)
+        for target in (("system", "home") if layer == "both" else (layer,)):
+            if target in newest and stamp > newest[target]:
+                newest[target] = stamp
+    for target in ("system", "home"):
+        if newest[target] > built[target]:
+            layers.add(target)
+            reasons.append((f"newest {target} commit is after the live generation", target))
+        else:
+            reasons.append((f"{target} layer is up to date with HEAD", "none"))
+else:
+    for line in open(changed_path):
+        path = line.strip()
+        if not path:
+            continue
+        layer = classify(path)
+        reasons.append((path, layer))
+        if layer == "both":
+            layers |= {"system", "home"}
+        elif layer != "none":
+            layers.add(layer)
+
+if explain:
+    for path, layer in sorted(reasons):
+        print(f"  {layer:7s} {path}", file=sys.stderr)
+
+for layer in ("system", "home"):
+    if layer in layers:
+        print(layer)
+PY

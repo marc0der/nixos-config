@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+#
+# Nix Build Check
+#
+# Builds the system and/or home configuration WITHOUT activating it, then shows
+# an nvd diff against what is currently live. Use before a switch to see what a
+# change would do while the running system is still untouched.
+#
+# Exits non-zero if any build fails, so callers can stop before switching.
+#
+# Usage:
+#   nix-build-check [system|home|both]   (default: both)
+
+set -euo pipefail
+
+WHICH="${1:-both}"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+HOST="$(hostname)"
+HM_CURRENT="${XDG_STATE_HOME:-$HOME/.local/state}/home-manager/gcroots/current-home"
+
+case "$WHICH" in
+  system | home | both) ;;
+  *)
+    echo "usage: nix-build-check [system|home|both]" >&2
+    exit 1
+    ;;
+esac
+
+# nixos-rebuild and home-manager both drop a ./result link, so build each in its
+# own directory to stop them clobbering one another
+BUILD_DIR="$(mktemp -d)"
+trap 'rm -rf "$BUILD_DIR"' EXIT
+
+check_system() {
+  local out
+  echo "=== Building system configuration for $HOST (no switch) ==="
+  mkdir -p "$BUILD_DIR/system"
+  ( cd "$BUILD_DIR/system" && nixos-rebuild build --flake "$REPO#$HOST" --impure )
+  out="$(readlink -f "$BUILD_DIR/system/result")"
+  echo ""
+  echo "=== System diff vs /run/current-system ==="
+  nvd diff /run/current-system "$out"
+}
+
+check_home() {
+  local out
+  echo "=== Building home configuration for marco@$HOST (no switch) ==="
+  mkdir -p "$BUILD_DIR/home"
+  ( cd "$BUILD_DIR/home" && home-manager build --flake "$REPO#marco@$HOST" --impure )
+  out="$(readlink -f "$BUILD_DIR/home/result")"
+  echo ""
+  echo "=== Home diff vs current generation ==="
+  if [ -L "$HM_CURRENT" ]; then
+    nvd diff "$(readlink -f "$HM_CURRENT")" "$out"
+  else
+    echo "  no current-home gcroot, skipping diff"
+  fi
+}
+
+case "$WHICH" in
+  system) check_system ;;
+  home) check_home ;;
+  both)
+    check_system
+    echo ""
+    check_home
+    ;;
+esac
+
+echo ""
+echo "=== Build check complete, nothing was activated ==="
