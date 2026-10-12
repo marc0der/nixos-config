@@ -62,6 +62,10 @@
   programs.gnupg.agent.enable = true;
   programs.zsh.enable = true;
   programs.nix-ld.enable = true;
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
   programs.fuse.userAllowOther = true;
 
   # Security: SDDM keyring, chromium SUID sandbox, passwordless rebuild/purge sudo
