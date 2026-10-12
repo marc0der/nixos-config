@@ -10,11 +10,21 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
 let
   cfg = config.local.bluetooth-le-audio;
+  leAudioInit = pkgs.writeShellApplication {
+    name = "bluetooth-le-audio-init";
+    runtimeInputs = with pkgs; [
+      bluez
+      coreutils
+      gnugrep
+    ];
+    text = builtins.readFile ./scripts/bluetooth-le-audio-init.sh;
+  };
 in
 {
   options.local.bluetooth-le-audio = {
@@ -39,6 +49,19 @@ in
           actions.update-props."bluez5.bap.preset" = "24_2_1";
         }
       ];
+    };
+
+    # Re-initialise the adapter once LE Audio support is on
+    systemd.services.bluetooth-le-audio-init = {
+      description = "Re-initialise Bluetooth adapter with LE Audio support";
+      after = [ "bluetooth.service" ];
+      partOf = [ "bluetooth.service" ];
+      wantedBy = [ "bluetooth.service" ];
+      restartIfChanged = false;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = lib.getExe leAudioInit;
+      };
     };
   };
 }
