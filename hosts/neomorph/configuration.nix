@@ -12,6 +12,9 @@
   # Brave: let Zoom links launch the desktop client without a prompt
   local.brave-policies.enable = true;
 
+  # Bluetooth: LE Audio for hearing aids
+  local.bluetooth-le-audio.enable = true;
+
   # Security
   local.services.clamav-security.enable = false;
 
