@@ -81,7 +81,13 @@ in
 
         # Claude Code deep links
         "x-scheme-handler/claude-cli" = [ "claude-code-url-handler.desktop" ];
+
+        # JetBrains Toolbox deep links
+        "x-scheme-handler/jetbrains" = [ "jetbrainsd.desktop" ];
       };
     };
+
+    # Reclaim mimeapps.list when apps overwrite it
+    xdg.configFile."mimeapps.list".force = true;
   };
 }
