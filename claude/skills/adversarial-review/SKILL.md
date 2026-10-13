@@ -59,6 +59,13 @@ Rules:
 - Order by severity (Critical, Major, Minor, Nit), then by document order within a severity.
 - Number them AR-01, AR-02, ... in that final order.
 
+Write for a reader who has not read the spec and does not know the codebase:
+
+- Use plain words and short sentences. When you use a term the spec coins, or the name of a component, say what it is the first time it appears in a defect.
+- Every `Example` must be a concrete scenario with real-looking values: two developers who both follow the spec and build different things, or a specific input that leads to a specific wrong outcome. Never restate the defect in general terms.
+- Quote the spec's own words wherever the defect turns on them.
+- No filler, no hedging, no throat-clearing.
+
 Your final message must be the report and nothing else: no preamble, no summary of what the spec does well, no closing remarks. Emit exactly this markdown:
 
 ## Adversarial review: [SPEC PATH]
@@ -66,12 +73,14 @@ Your final message must be the report and nothing else: no preamble, no summary 
 **Verdict:** <one sentence: is this spec safe to implement as written, yes or no, and why>
 **Defects:** N (C Critical, M Major, m Minor, n Nit)<, X dropped over the cap - include this clause only if you dropped any>
 
-### AR-01 | Critical | <title, at most 60 characters>
+### AR-01 | Critical | <plain-language title, at most 60 characters>
 - **Category:** <one category from the list>
 - **Location:** <heading, or line range>
-- **Defect:** <one or two sentences on what is wrong>
+- **Background:** <one or two sentences: what this part of the spec is about and what it is trying to achieve, for someone who has not read it>
+- **Defect:** <one or two sentences on what is wrong, quoting the spec text at fault>
+- **Example:** <a concrete scenario that shows the defect causing a real difference or failure>
 - **Impact:** <what breaks downstream if this ships unresolved>
-- **Resolution:** <the concrete spec edit that fixes it>
+- **Resolution:** <the concrete spec edit that fixes it: the current text and the text that replaces it>
 - **Status:** Open
 
 <repeat the block for every defect>
@@ -79,26 +88,63 @@ Your final message must be the report and nothing else: no preamble, no summary 
 If you find no defects at all, emit the heading, the verdict, `**Defects:** 0`, and nothing further.
 </reviewer-prompt>
 
-### 3. Present the register
+### 3. Present the overview
 
-Relay the reviewer's report to the user exactly as returned. Do not re-order it, re-grade it, edit its wording, or append your own opinion of the findings. It is the run's artefact and its shape must be identical from run to run.
+Do not dump the full report. Show the reviewer's **Verdict** and **Defects** lines exactly as returned, then a table with one row per defect, in the reviewer's order:
+
+| ID | Severity | Title |
+|----|----------|-------|
+| AR-01 | Critical | <reviewer's title> |
+
+Do not re-order, re-grade, or re-title the defects, and do not add your own opinion of the findings. The full detail of each defect is shown when you reach it in step 4.
 
 If the reviewer returned no defects, say so and stop. Nothing to resolve, nothing to commit.
 
 ### 4. Resolve, one defect at a time
 
-Walk the register in order, starting at AR-01. For each defect, ask exactly one AskUserQuestion, never batching two defects into one call. Head the question with the defect ID and put the defect's own wording in the question, so the user is deciding on the reviewer's claim rather than your paraphrase of it.
+Walk the register in order, starting at AR-01. Every defect gets the same two parts: a briefing printed in the chat, then exactly one AskUserQuestion call. Never batch two defects into one call.
 
-Offer these options, in this order:
+#### 4a. Briefing
 
-1. **Apply the resolution** - the reviewer's suggested edit, quoted concretely in the description so the user sees what lands in the spec. Mark it `(Recommended)` when you judge the finding sound.
-2. **<a named alternative>** - a genuinely different, concrete edit, when one exists. Describe the actual alternative, never a placeholder like "something else". Omit this option when there is no real second way to fix it.
-3. **Defer** - the finding is real but out of scope for now. The spec is not touched.
-4. **Reject** - the reviewer is wrong. The spec is not touched.
+Print this, filled from the reviewer's fields, immediately before the question:
+
+```
+### AR-nn of N · <Severity> · <title>
+<Location>
+
+**What this part of the spec does**
+<Background>
+
+**The problem**
+<Defect>
+
+**Example**
+<Example>
+
+**Why it matters**
+<Impact>
+```
+
+Use the reviewer's wording so the user decides on the reviewer's claim, not your paraphrase. You may add one short clarifying phrase where a field still assumes knowledge the user lacks, such as an undefined term or a reference to another section. Do not drop or soften anything.
+
+#### 4b. Question
+
+Every AskUserQuestion call has the same shape:
+
+- `header`: the defect ID, e.g. `AR-03`.
+- `question`: one plain sentence that names the actual decision, e.g. "How many times should the sync job retry before giving up?" Never "How do you want to resolve AR-03?"
+- `options`, in this order:
+  1. **Apply the fix**: the reviewer's resolution. The description says in one sentence what changes. Mark it `(Recommended)` when you judge the finding sound.
+  2. **<a named alternative>**: a genuinely different, concrete edit, when one exists. The label names it (e.g. "Retry forever, back off"). Omit this option when there is no real second way to fix it.
+  3. **Defer**: the problem is real but not for now. The spec is not touched.
+  4. **Reject**: the reviewer is wrong. The spec is not touched.
+- `preview` on every option, so the layout stays the same from question to question:
+  - Apply and the alternative show the spec text at the location as `Before:` and `After:` blocks, quoted exactly as they would be written.
+  - Defer and Reject show `Spec unchanged.` followed by the current text at the location.
 
 On the answer:
 
-- *Apply* or *alternative*: edit the spec immediately, before moving to the next defect. Keep the edit surgical and in the spec's existing voice, formatting, and heading structure. Set the status to `Fixed`.
+- *Apply* or *alternative*: edit the spec immediately, before moving to the next defect. Keep the edit surgical and in the spec's existing voice, formatting, and heading structure, matching the preview you showed. Set the status to `Fixed`.
 - *Defer*: set the status to `Deferred`. Do not edit the spec, and do not leave a TODO in it.
 - *Reject*: set the status to `Rejected`. Do not edit the spec.
 - *Other* (free text): treat it as the instruction, apply it, and set the status to `Fixed`.
