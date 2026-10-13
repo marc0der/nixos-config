@@ -55,11 +55,11 @@ in
     systemd.services.bluetooth-le-audio-init = {
       description = "Re-initialise Bluetooth adapter with LE Audio support";
       after = [ "bluetooth.service" ];
-      partOf = [ "bluetooth.service" ];
       wantedBy = [ "bluetooth.service" ];
       restartIfChanged = false;
       serviceConfig = {
         Type = "oneshot";
+        RemainAfterExit = true;
         ExecStart = lib.getExe leAudioInit;
       };
     };
