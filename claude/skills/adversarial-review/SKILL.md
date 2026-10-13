@@ -153,10 +153,36 @@ Do not revisit a resolved defect, and do not re-run the reviewer against your ow
 
 ### 5. Close out
 
-Print the final register: one line per defect, `AR-nn | Severity | title | Status`, in the original order. State the counts of Fixed, Deferred, and Rejected.
-
-Then commit:
+Commit first, so the report can say what was committed:
 
 - If at least one defect was Fixed, invoke the `commit` skill to commit the spec.
-- If nothing was Fixed, skip the commit and say so plainly.
-- If the spec lives inside a git submodule, commit inside that submodule, then tell the user the parent repo's submodule pointer still needs committing. Do not commit the pointer yourself unless asked.
+- If nothing was Fixed, skip the commit.
+- If the spec lives inside a git submodule, commit inside that submodule. Do not commit the parent repo's submodule pointer yourself unless asked.
+
+Then print the final report using exactly this template, every time:
+
+```
+## Adversarial review summary: <spec path>
+
+| ID | Severity | Title | Outcome | What changed in the spec |
+|----|----------|-------|---------|--------------------------|
+| AR-01 | Critical | <reviewer's title> | Fixed | <one plain line, e.g. "Retry limit set to 3 tries, 1s apart"> |
+| AR-02 | Major | <reviewer's title> | Fixed (alternative) | <one plain line> |
+| AR-03 | Minor | <reviewer's title> | Deferred | Nothing |
+| AR-04 | Nit | <reviewer's title> | Rejected | Nothing |
+
+**Totals:** N defects: F Fixed, D Deferred, R Rejected
+
+**Deferred, still to do:**
+- AR-03: <one sentence on the problem the spec still has>
+
+**Commit:** <short hash and subject, or "None: nothing was fixed">
+```
+
+Rules for the report:
+
+- One row per defect, in the original order, with the reviewer's titles.
+- `Outcome` is exactly one of `Fixed`, `Fixed (alternative)`, `Fixed (your instruction)`, `Deferred`, `Rejected`.
+- `What changed in the spec` says in plain words what the spec now says. Do not write "applied the resolution". Use `Nothing` for Deferred and Rejected.
+- Leave out the **Deferred, still to do** section when nothing was deferred. It exists because a deferral leaves no trace in the spec.
+- When the spec is in a submodule, add one line after **Commit:**: `**Parent repo:** submodule pointer still needs committing.`
