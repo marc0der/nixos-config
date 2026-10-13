@@ -1,6 +1,7 @@
 # Bluetooth LE Audio
 #
 # LE Audio (BAP, LC3, CSIP) for hearing aids and LE Audio earbuds.
+# Reconnects LE Audio devices at login that connected before WirePlumber.
 #
 # Options:
 #   local.bluetooth-le-audio.enable - Enable Bluetooth LE Audio
@@ -24,6 +25,17 @@ let
       gnugrep
     ];
     text = builtins.readFile ./scripts/bluetooth-le-audio-init.sh;
+  };
+  leAudioReconnect = pkgs.writeShellApplication {
+    name = "bluetooth-le-audio-reconnect";
+    runtimeInputs = with pkgs; [
+      bluez
+      coreutils
+      gawk
+      gnugrep
+      pipewire
+    ];
+    text = builtins.readFile ./scripts/bluetooth-le-audio-reconnect.sh;
   };
 in
 {
@@ -61,6 +73,19 @@ in
         Type = "oneshot";
         RemainAfterExit = true;
         ExecStart = lib.getExe leAudioInit;
+      };
+    };
+
+    # Reconnect LE Audio devices that connected before WirePlumber was ready
+    systemd.user.services.bluetooth-le-audio-reconnect = {
+      description = "Reconnect LE Audio devices missing an audio card";
+      after = [ "wireplumber.service" ];
+      wantedBy = [ "wireplumber.service" ];
+      restartIfChanged = false;
+      unitConfig.ConditionUser = "!@system";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = lib.getExe leAudioReconnect;
       };
     };
   };
