@@ -69,40 +69,6 @@ in
         ];
       };
 
-      slackDefraDigitalTeam = {
-        name = "Slack (DEFRA Digital Team)";
-        comment = "DEFRA Digital Team Slack";
-        genericName = "DEFRA Digital Team Slack in Brave";
-        exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Defra --app="https://app.slack.com/client/T73HZJ85R/C09C11N6DGA"'';
-        icon = "slack";
-        type = "Application";
-        startupNotify = true;
-        categories = [
-          "GNOME"
-          "GTK"
-          "Network"
-          "InstantMessaging"
-        ];
-        mimeType = [ "x-scheme-handler/slack" ];
-      };
-
-      slackDefraDigital = {
-        name = "Slack (DEFRA Digital)";
-        comment = "DEFRA Digital Slack";
-        genericName = "DEFRA Digital Slack in Brave";
-        exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Defra --app="https://app.slack.com/client/T0ESW1J2D/C0ESX6V26"'';
-        icon = "slack";
-        type = "Application";
-        startupNotify = true;
-        categories = [
-          "GNOME"
-          "GTK"
-          "Network"
-          "InstantMessaging"
-        ];
-        mimeType = [ "x-scheme-handler/slack" ];
-      };
-
       slackEqualExperts = {
         name = "Slack (Equal Experts)";
         comment = "EE Slack";
