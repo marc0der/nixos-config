@@ -56,7 +56,8 @@ if [ "$MODE" != edited ]; then
     FLAKE_REF="git+file://$REPO"
     SOURCE="the working tree"
   fi
-  HOME_PROFILE="${XDG_STATE_HOME:-$HOME/.local/state}/nix/profiles/home-manager"
+  # the gcroot moves only once activation completes; the profile moves earlier
+  HOME_LIVE="${XDG_STATE_HOME:-$HOME/.local/state}/home-manager/gcroots/current-home"
 
   # Unknowable state fails towards "needs applying": a spurious rebuild is a
   # no-op, whereas missing a real change is the bug this check exists to catch.
@@ -81,7 +82,7 @@ if [ "$MODE" != edited ]; then
   SYSTEM_ATTR="nixosConfigurations.$HOST.config.system.build.toplevel.drvPath"
   HOME_ATTR="homeConfigurations.\"$(id -un)@$HOST\".activationPackage.drvPath"
 
-  for spec in "system|$SYSTEM_ATTR|/run/current-system" "home|$HOME_ATTR|$HOME_PROFILE"; do
+  for spec in "system|$SYSTEM_ATTR|/run/current-system" "home|$HOME_ATTR|$HOME_LIVE"; do
     IFS='|' read -r layer attr live <<<"$spec"
     if layer_differs "$layer" "$attr" "$live"; then
       if [ "$EXPLAIN" = yes ]; then

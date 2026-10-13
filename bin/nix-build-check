@@ -16,7 +16,8 @@ set -euo pipefail
 WHICH="${1:-both}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 HOST="$(hostname)"
-HM_CURRENT="${XDG_STATE_HOME:-$HOME/.local/state}/nix/profiles/home-manager"
+# the gcroot moves only once activation completes; the profile moves earlier
+HM_CURRENT="${XDG_STATE_HOME:-$HOME/.local/state}/home-manager/gcroots/current-home"
 
 case "$WHICH" in
   system | home | both) ;;
