@@ -21,7 +21,7 @@ Read the spec once, only far enough to know its subject and to collect the conte
 Spawn exactly one subagent with the `Agent` tool:
 
 - `subagent_type: "general-purpose"` (a fresh context: it must not inherit this conversation)
-- `model: "fable"`
+- `model: "opus"`
 - `description: "adversarial spec review"`
 
 Give it the prompt below verbatim, substituting the bracketed values. Do not add to it, soften it, or hint at conclusions you have already drawn: uniformity across runs depends on this prompt being stable.
