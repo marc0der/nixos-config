@@ -2,11 +2,8 @@
   # Host name
   networking.hostName = "neomorph";
 
-  # Wayland desktop
+  # Wayland desktop: KDE Plasma
   local.wayland.enable = true;
-  local.programs.sway-desktop.enable = true;
-
-  # Alternative desktop: KDE Plasma (selectable at SDDM login)
   local.programs.plasma-desktop.enable = true;
 
   # Brave: let Zoom links launch the desktop client without a prompt

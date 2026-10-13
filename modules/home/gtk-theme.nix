@@ -1,8 +1,8 @@
 # GTK Theme Module
 #
 # Provides GTK theming configuration with support for dark and light variants.
-# Sets the GTK theme and icon theme. The compositor modules export `GTK_THEME`.
-# Also owns the `gtk.css` and `colors.css` files that `kde-gtk-config` writes.
+# Sets the GTK theme, icon theme and font. The compositor modules export
+# `GTK_THEME`. Disable on hosts whose desktop manages GTK itself (Plasma).
 #
 # Options:
 #   local.gtk-theme.enable - Enable GTK theming (default: true)
@@ -45,10 +45,13 @@ in
     ];
 
     gtk = {
+      enable = true;
       gtk4.theme = config.gtk.theme;
 
-      # GTK css: own the files kde-gtk-config writes, so Breeze colors cannot leak
-      gtk3.extraCss = "/* managed by home-manager */\n";
+      font = {
+        name = "Noto Sans";
+        size = 11;
+      };
 
       theme = {
         name = if cfg.variant == "dark" then "Materia-dark" else "Materia-light";
@@ -60,29 +63,5 @@ in
         package = pkgs.papirus-icon-theme;
       };
     };
-
-    # kde-gtk-config rewrites these behind our back; overwrite instead of
-    # backing up, since a leftover .backup aborts the whole activation
-    home.file.${config.gtk.gtk2.configLocation}.force = lib.mkForce true;
-
-    xdg.configFile = lib.mkMerge [
-      {
-        "gtk-3.0/colors.css".text = "/* managed by home-manager */\n";
-        "gtk-4.0/colors.css".text = "/* managed by home-manager */\n";
-      }
-      (lib.genAttrs
-        [
-          "gtk-3.0/settings.ini"
-          "gtk-3.0/colors.css"
-          "gtk-3.0/gtk.css"
-          "gtk-4.0/settings.ini"
-          "gtk-4.0/colors.css"
-          "gtk-4.0/gtk.css"
-        ]
-        (_: {
-          force = lib.mkForce true;
-        })
-      )
-    ];
   };
 }

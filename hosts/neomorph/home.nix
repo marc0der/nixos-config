@@ -27,21 +27,8 @@ in
   # Brave: personal profile lives in its own directory on this host
   local.web-app-launchers.personalProfile = "Marco";
 
-  # Desktop environment
-  local.sway-desktop.enable = true;
-  local.sway-config.enable = true;
-  local.sway-rules.enable = true;
-  local.sway-keybindings.enable = true;
-  local.sway-startup.enable = true;
-  local.kanshi.enable = true;
-
-  # PolKit agent: Sway session only (Plasma runs its own)
-  local.keyring-services.polkitSessionTarget = "sway-session.target";
-
-  # Workspace 1 default layout: Slack left, Brave right
-  wayland.windowManager.sway.config.startup = [
-    { command = "/home/marco/bin/arrange-workspace1"; }
-  ];
+  # PolKit agent: off, Plasma runs its own
+  local.keyring-services.polkitAgent = false;
 
   # Profiles
   local.profiles.music-production.enable = true;
@@ -53,11 +40,10 @@ in
   # SiriusXM VPN shell proxy (opt-in via `sxm-proxy on`)
   local.sxm-proxy.enable = true;
 
-  # GTK theme configuration
-  local.gtk-theme.variant = "dark";
+  # GTK theme: off, Plasma manages GTK settings
+  local.gtk-theme.enable = false;
 
   # XDG portal configuration
-  local.xdg-portal-sway.enable = true;
   local.xdg-portal-plasma.enable = true;
 
   # XDG MIME types configuration

@@ -2,7 +2,6 @@
 #
 # All Hyprland keybindings: launchers, window management, focus/move, workspace
 # switching, screenshot, audio/brightness, mouse binds, and the resize submap.
-# Mirrors `modules/home/sway-keybindings.nix` for the Hyprland compositor.
 #
 # Options:
 #   local.hyprland-keybindings.enable - Enable Hyprland keybindings (default: false)

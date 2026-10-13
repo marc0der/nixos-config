@@ -1,6 +1,6 @@
 # Common Wayland configuration module
 #
-# This module provides common configuration for Wayland compositors (Hyprland and Sway).
+# This module provides common configuration for Wayland compositors (Hyprland and Plasma).
 # It includes shared environment variables, XDG desktop portal base configuration,
 # and common display manager settings.
 #

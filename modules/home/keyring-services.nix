@@ -3,8 +3,8 @@
 # Bundles the three secret/auth helpers that every host needs identically:
 # gnome-keyring (pkcs11 only, so ksecretd owns the secrets service),
 # gpg-agent with a 1-year cache and pinentry-gnome3, and the GNOME PolKit
-# authentication agent as a user systemd unit tied to a configurable
-# session target.
+# authentication agent as a user systemd unit, which hosts whose desktop
+# brings its own agent can switch off.
 #
 # When gpgKeygrip is set, a login-triggered service also presets that key's
 # passphrase into gpg-agent from the desktop secret service (ksecretd on
@@ -14,14 +14,13 @@
 #
 # Options:
 #   local.keyring-services.enable - Enable keyring + gpg-agent + polkit agent
-#   local.keyring-services.polkitSessionTarget - Session target the PolKit agent
-#     binds to (default: "graphical-session.target")
+#   local.keyring-services.polkitAgent - Run the GNOME PolKit agent (default: true)
 #   local.keyring-services.gpgKeygrip - Keygrip to auto-unlock at login
 #     (default: null, disabled). Find via `gpg --list-secret-keys --with-keygrip`.
 #
 # Example usage:
 #   local.keyring-services.enable = true;
-#   local.keyring-services.polkitSessionTarget = "sway-session.target";
+#   local.keyring-services.polkitAgent = false;
 #   local.keyring-services.gpgKeygrip = "B7108ED21D2D31BBA0036C6E7D5D9DCF0DBBA5A6";
 {
   config,
@@ -37,11 +36,10 @@ in
   options.local.keyring-services = {
     enable = lib.mkEnableOption "gnome-keyring, gpg-agent, and PolKit agent";
 
-    polkitSessionTarget = lib.mkOption {
-      type = lib.types.str;
-      default = "graphical-session.target";
-      example = "sway-session.target";
-      description = "Systemd user target the PolKit agent is bound to";
+    polkitAgent = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Run the GNOME PolKit agent; disable where the desktop runs its own";
     };
 
     gpgKeygrip = lib.mkOption {
@@ -89,11 +87,11 @@ in
       };
     };
 
-    systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    systemd.user.services.polkit-gnome-authentication-agent-1 = lib.mkIf cfg.polkitAgent {
       Unit = {
         Description = "GNOME Polkit Authentication Agent";
-        PartOf = [ cfg.polkitSessionTarget ];
-        After = [ cfg.polkitSessionTarget ];
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
       };
       Service = {
         ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
@@ -101,7 +99,7 @@ in
         RestartSec = 3;
       };
       Install = {
-        WantedBy = [ cfg.polkitSessionTarget ];
+        WantedBy = [ "graphical-session.target" ];
       };
     };
   };

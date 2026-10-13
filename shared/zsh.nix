@@ -65,7 +65,6 @@
       gstl = "git stash list";
 
       hyprcfg = "nvim ~/.config/hypr/hyprland.conf";
-      swaycfg = "nvim ~/.config/sway/config";
       open = "xdg-open";
       vi = "nvim";
       vim = "nvim";

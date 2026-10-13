@@ -129,7 +129,6 @@
             ./modules/system/bluetooth-le-audio.nix
             ./modules/system/brave-policies.nix
             ./modules/system/clamav.nix
-            ./modules/system/sway.nix
             ./modules/system/plasma.nix
             ./modules/system/tailscale.nix
             ./modules/system/borg-backup.nix
@@ -147,14 +146,7 @@
           };
           modules = commonHomeModules ++ [
             ./hosts/neomorph/home.nix
-            ./modules/home/xdg-portal-sway.nix
             ./modules/home/xdg-portal-plasma.nix
-            ./modules/home/sway-desktop.nix
-            ./modules/home/sway-config.nix
-            ./modules/home/sway-rules.nix
-            ./modules/home/sway-keybindings.nix
-            ./modules/home/sway-startup.nix
-            ./modules/home/kanshi.nix
             ./modules/home/zoom.nix
             ./profiles/work.nix
           ];

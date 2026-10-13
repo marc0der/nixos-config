@@ -38,7 +38,6 @@
     httpie
     jetbrains.idea
     jq
-    kanshi
     lazygit
     libsecret
     meld
@@ -101,14 +100,6 @@
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Ice";
     size = 24;
-  };
-
-  gtk = {
-    enable = true;
-    font = {
-      name = "Noto Sans";
-      size = 11;
-    };
   };
 
   local.session-variables.enable = true;

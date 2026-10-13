@@ -202,7 +202,7 @@ Non-`.nix` assets live beside the module that consumes them (e.g. `shared/powerl
 - **[flake.nix](flake.nix)**: Main entry point defining system and home-manager configurations
 - **[configuration.nix](configuration.nix)**: Shared base system configuration
 - **[home.nix](home.nix)**: Shared base home-manager configuration
-- **[hosts/neomorph/configuration.nix](hosts/neomorph/configuration.nix)**: Neomorph system config (Sway + Work)
+- **[hosts/neomorph/configuration.nix](hosts/neomorph/configuration.nix)**: Neomorph system config (Plasma + Work)
 - **[hosts/neomorph/home.nix](hosts/neomorph/home.nix)**: Neomorph user config
 - **[hosts/xenomorph/configuration.nix](hosts/xenomorph/configuration.nix)**: Xenomorph system config (Hyprland + Gaming)
 - **[hosts/xenomorph/home.nix](hosts/xenomorph/home.nix)**: Xenomorph user config

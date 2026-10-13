@@ -32,7 +32,7 @@ proposing a hoist, check whether it is really unconditional:
 
 Host-only entries are usually correct: compositors, hardware configs and
 host profiles are supposed to differ. Do not propose collapsing Hyprland and
-Sway modules.
+Plasma modules.
 
 ## 3. Propose, then confirm
 

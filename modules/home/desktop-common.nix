@@ -1,7 +1,7 @@
 # Common Desktop Packages Module
 #
 # This module provides common desktop environment packages used by both hosts
-# regardless of their specific compositor (Hyprland/Sway). It also overrides the
+# regardless of their specific compositor (Hyprland/Plasma). It also overrides the
 # blueman autostart entry so Plasma uses bluedevil instead.
 #
 # Options:

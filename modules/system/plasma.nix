@@ -1,7 +1,6 @@
 # KDE Plasma Desktop Environment Module
 #
-# This module provides KDE Plasma 6 as a display-manager-selectable
-# session, alongside Sway/Hyprland on the same host.
+# This module provides KDE Plasma 6 as the desktop session.
 #
 # Options:
 #   local.programs.plasma-desktop.enable - Enable Plasma desktop environment
