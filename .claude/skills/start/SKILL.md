@@ -60,7 +60,7 @@ what you recommend:
 | `/doctor` | Health check plus interpretation: untracked files, fmt drift, failed units, rollback availability, store usage, stale inputs | Something feels off, or before an upgrade |
 | `/purge` | Previews then deletes old generations and collects the store, retaining the newest generation older than the active one per profile | `/nix` is filling up |
 | `/host-parity` | Reports config duplicated across xenomorph and neomorph and proposes hoisting it | Checking drift between the two hosts |
-| `/wallpaper` | Repoints the wallpaper, regenerates the pywal palette, reloads hyprpaper | Changing the desktop background |
+| `/wallpaper` | Repoints the wallpaper, regenerates the pywal palette, applies it on Hyprland or Plasma | Changing the desktop background |
 | `/commit` | Atomic conventional commits | Work is tested and ready to record |
 
 ## 4. Recommend one, then hand off

@@ -1,6 +1,6 @@
 ---
 name: wallpaper
-description: Set the desktop wallpaper on this host. Repoints ~/.wallpaper.jpg to an image in ~/Pictures/Wallpapers, regenerates the pywal palette, and reloads hyprpaper. Use when the user runs "/wallpaper <filename>" or asks to change the desktop wallpaper.
+description: Set the desktop wallpaper on this host. Repoints ~/.wallpaper.jpg to an image in ~/Pictures/Wallpapers, regenerates the pywal palette, and applies it on Hyprland or KDE Plasma. Use when the user runs "/wallpaper <filename>" or asks to change the desktop wallpaper.
 argument-hint: <filename-in-Wallpapers-or-absolute-path>
 ---
 
@@ -18,7 +18,9 @@ or an absolute path. The script:
 1. Repoints the `~/.wallpaper.jpg` symlink at the target image.
 2. Regenerates the pywal palette with `wal -i ~/.wallpaper.jpg -b "#0c0e10"`
    (the dark background flag avoids the pywal16 purple tint).
-3. Restarts the `hyprpaper` user service so it re-reads the link.
+3. Applies the wallpaper for the running desktop (`$XDG_CURRENT_DESKTOP`):
+   restarts `hyprpaper` on Hyprland, or runs `plasma-apply-wallpaperimage` on
+   KDE Plasma. Any other desktop is an error after the palette update.
 
 If the script reports an error (missing file), relay it. On success, confirm the
 wallpaper that was set. This is a runtime change only — nothing in the Nix repo

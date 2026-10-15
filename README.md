@@ -75,7 +75,7 @@ skills below applies, or when you want to know what this repo needs.
 | `/doctor` | Health check and interpretation of the findings |
 | `/host-parity` | Report and judge drift between xenomorph and neomorph |
 | `/purge` | Preview and delete old generations, keeping a rollback target |
-| `/wallpaper` | Repoint the wallpaper, regenerate the pywal palette, reload hyprpaper |
+| `/wallpaper` | Repoint the wallpaper, regenerate the pywal palette, apply it on Hyprland or Plasma |
 
 Cross-project skills live in `claude/skills/` instead and are installed to
 `~/.claude/skills` by `modules/home/static-assets.nix`.

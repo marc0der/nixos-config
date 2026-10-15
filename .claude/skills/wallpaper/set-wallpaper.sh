@@ -2,9 +2,10 @@
 # Set the desktop wallpaper on this host.
 #
 # Repoints ~/.wallpaper.jpg (the file hyprpaper and hyprlock reference) at an
-# image, regenerates the pywal palette, and restarts hyprpaper so it re-reads
-# the link. The argument is a filename in ~/Pictures/Wallpapers or an absolute
-# path.
+# image, regenerates the pywal palette, then applies the wallpaper for the
+# running desktop: restarts hyprpaper on Hyprland, or calls
+# plasma-apply-wallpaperimage on KDE Plasma. The argument is a filename in
+# ~/Pictures/Wallpapers or an absolute path.
 #
 # Usage:
 #   set-wallpaper.sh <filename-in-Wallpapers | /absolute/path>
@@ -34,6 +35,14 @@ target="$(realpath "$target")"
 
 ln -sfn "$target" "$LINK"
 wal -i "$LINK" -b "$PYWAL_BG"
-systemctl --user restart hyprpaper.service
+
+case "${XDG_CURRENT_DESKTOP:-}" in
+  *Hyprland*) systemctl --user restart hyprpaper.service ;;
+  *KDE*) plasma-apply-wallpaperimage "$target" ;;
+  *)
+    echo "error: unsupported desktop '${XDG_CURRENT_DESKTOP:-unset}', palette updated but wallpaper not applied" >&2
+    exit 1
+    ;;
+esac
 
 echo "wallpaper set: $target"
