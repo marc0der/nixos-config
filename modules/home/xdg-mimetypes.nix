@@ -7,6 +7,9 @@
 #   local.xdg-mimetypes.enable - Enable XDG MIME type configuration
 #   local.xdg-mimetypes.terminal - Terminal emulator to use (default: "ghostty.desktop")
 #   local.xdg-mimetypes.textEditor - Text editor to use (default: "nvim.desktop")
+#   local.xdg-mimetypes.pdfViewer - PDF viewer (default: "org.gnome.Evince.desktop")
+#   local.xdg-mimetypes.imageViewer - Image viewer (default: "org.gnome.eog.desktop")
+#   local.xdg-mimetypes.archiveManager - Archive manager (default: "org.gnome.FileRoller.desktop")
 #
 # Example usage:
 #   local.xdg-mimetypes.enable = true;
@@ -36,6 +39,24 @@ in
       default = "nvim.desktop";
       description = "Default text editor";
     };
+
+    pdfViewer = lib.mkOption {
+      type = lib.types.str;
+      default = "org.gnome.Evince.desktop";
+      description = "Default PDF viewer";
+    };
+
+    imageViewer = lib.mkOption {
+      type = lib.types.str;
+      default = "org.gnome.eog.desktop";
+      description = "Default image viewer";
+    };
+
+    archiveManager = lib.mkOption {
+      type = lib.types.str;
+      default = "org.gnome.FileRoller.desktop";
+      description = "Default archive manager";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -50,13 +71,13 @@ in
         "x-scheme-handler/unknown" = [ "brave-browser.desktop" ];
 
         # PDF viewer
-        "application/pdf" = [ "org.gnome.Evince.desktop" ];
+        "application/pdf" = [ cfg.pdfViewer ];
 
         # Image viewer
-        "image/jpeg" = [ "org.gnome.eog.desktop" ];
-        "image/png" = [ "org.gnome.eog.desktop" ];
-        "image/gif" = [ "org.gnome.eog.desktop" ];
-        "image/svg+xml" = [ "org.gnome.eog.desktop" ];
+        "image/jpeg" = [ cfg.imageViewer ];
+        "image/png" = [ cfg.imageViewer ];
+        "image/gif" = [ cfg.imageViewer ];
+        "image/svg+xml" = [ cfg.imageViewer ];
 
         # Text editor
         "text/plain" = [ cfg.textEditor ];
@@ -71,10 +92,10 @@ in
         "video/quicktime" = [ "mpv.desktop" ];
 
         # Archive files
-        "application/zip" = [ "org.gnome.FileRoller.desktop" ];
-        "application/x-compressed-tar" = [ "org.gnome.FileRoller.desktop" ];
-        "application/x-tar" = [ "org.gnome.FileRoller.desktop" ];
-        "application/x-7z-compressed" = [ "org.gnome.FileRoller.desktop" ];
+        "application/zip" = [ cfg.archiveManager ];
+        "application/x-compressed-tar" = [ cfg.archiveManager ];
+        "application/x-tar" = [ cfg.archiveManager ];
+        "application/x-7z-compressed" = [ cfg.archiveManager ];
 
         # Terminal
         "x-scheme-handler/terminal" = [ cfg.terminal ];

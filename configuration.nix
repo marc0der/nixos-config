@@ -68,8 +68,7 @@
   };
   programs.fuse.userAllowOther = true;
 
-  # Security: SDDM keyring, chromium SUID sandbox, passwordless rebuild/purge sudo
-  security.pam.services.sddm.enableGnomeKeyring = true;
+  # Security: chromium SUID sandbox, passwordless rebuild/purge sudo
   security.chromiumSuidSandbox.enable = true;
   security.sudo.extraRules = [
     {

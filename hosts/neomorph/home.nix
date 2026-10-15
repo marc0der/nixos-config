@@ -15,6 +15,7 @@ in
     backlogMd
     backlogZshCompletion
     google-chrome
+    kdePackages.kcalc
     pnpm
   ];
 
@@ -27,8 +28,12 @@ in
   # Brave: personal profile lives in its own directory on this host
   local.web-app-launchers.personalProfile = "Marco";
 
-  # PolKit agent: off, Plasma runs its own
-  local.keyring-services.polkitAgent = false;
+  # Keyring services: KWallet and Plasma's PolKit agent take over
+  local.keyring-services = {
+    gnomeKeyring = false;
+    pinentry = pkgs.pinentry-qt;
+    polkitAgent = false;
+  };
 
   # Profiles
   local.profiles.music-production.enable = true;
@@ -50,7 +55,10 @@ in
   local.xdg-mimetypes = {
     enable = true;
     terminal = "ghostty.desktop";
-    textEditor = "gedit.desktop";
+    textEditor = "org.kde.kate.desktop";
+    pdfViewer = "org.kde.okular.desktop";
+    imageViewer = "org.kde.gwenview.desktop";
+    archiveManager = "org.kde.ark.desktop";
   };
 
   # Shared scripts

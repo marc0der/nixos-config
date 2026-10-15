@@ -11,8 +11,6 @@
   # Pinned to original install (24.11); deliberately not bumped with channel.
   home.stateVersion = "24.11";
 
-  local.desktop-common.enable = true;
-
   home.packages = with pkgs; [
     autojump
     bat
@@ -22,18 +20,12 @@
     bun
     calibre
     chafa
-    cliphist
+    desktop-file-utils
     devcontainer
-    eog
-    evince
-    file-roller
     firefox
-    font-manager
     fzf
-    gedit
     gh
     ghostty
-    gnome-calculator
     htop
     httpie
     jetbrains.idea
@@ -42,22 +34,19 @@
     libsecret
     meld
     mpv
-    nautilus
     ncdu
     fastfetch
     nixfmt
     nodejs
     obsidian
-    pinentry-gnome3
-    polkit_gnome
+    playerctl
     proton-vpn
     (python3.withPackages (ps: [ ps.faster-whisper ]))
     pywal
     ripgrep
     speedtest-rs
     uv
-    wl-mirror
-    wlogout
+    wl-clipboard
     yamllint
     zsh-powerlevel10k
 
@@ -66,13 +55,6 @@
     llmAgents.codex
     llmAgents.copilot-cli
     llmAgents.pi
-
-    # Shared themes
-    materia-theme
-    papirus-icon-theme
-    libsForQt5.qt5ct
-    libsForQt5.qtstyleplugin-kvantum
-    qt6Packages.qt6ct
 
     # fonts
     font-awesome

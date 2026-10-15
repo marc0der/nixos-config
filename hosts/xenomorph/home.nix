@@ -12,7 +12,33 @@
     tesseract
     video2x
     vobsub2srt
+
+    # GNOME apps
+    eog
+    evince
+    file-roller
+    font-manager
+    gedit
+    gnome-calculator
+    nautilus
+    pinentry-gnome3
+    polkit_gnome
+
+    # Hyprland session tools
+    cliphist
+    wl-mirror
+    wlogout
+
+    # GTK and Qt theming tools
+    materia-theme
+    papirus-icon-theme
+    libsForQt5.qt5ct
+    libsForQt5.qtstyleplugin-kvantum
+    qt6Packages.qt6ct
   ];
+
+  # Common desktop packages
+  local.desktop-common.enable = true;
 
   # SSH configuration
   local.ssh-config.enable = true;

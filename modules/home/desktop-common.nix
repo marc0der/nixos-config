@@ -1,8 +1,8 @@
 # Common Desktop Packages Module
 #
-# This module provides common desktop environment packages used by both hosts
-# regardless of their specific compositor (Hyprland/Plasma). It also overrides the
-# blueman autostart entry so Plasma uses bluedevil instead.
+# Desktop tools for standalone compositors such as Hyprland: tray applets,
+# launcher, bar and portals. Plasma ships its own equivalents. It also overrides
+# the blueman autostart entry so Plasma uses bluedevil instead.
 #
 # Options:
 #   local.desktop-common.enable - Enable common desktop packages
@@ -28,11 +28,8 @@ with lib;
     home.packages = with pkgs; [
       blueman
       brightnessctl
-      desktop-file-utils
       networkmanagerapplet
       pavucontrol
-      playerctl
-      wl-clipboard
       rofi
       waybar
       xdg-desktop-portal

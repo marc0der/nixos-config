@@ -14,6 +14,9 @@
 #
 # Options:
 #   local.keyring-services.enable - Enable keyring + gpg-agent + polkit agent
+#   local.keyring-services.gnomeKeyring - Run gnome-keyring (default: true)
+#   local.keyring-services.pinentry - pinentry package for gpg-agent
+#     (default: pkgs.pinentry-gnome3)
 #   local.keyring-services.polkitAgent - Run the GNOME PolKit agent (default: true)
 #   local.keyring-services.gpgKeygrip - Keygrip to auto-unlock at login
 #     (default: null, disabled). Find via `gpg --list-secret-keys --with-keygrip`.
@@ -36,6 +39,19 @@ in
   options.local.keyring-services = {
     enable = lib.mkEnableOption "gnome-keyring, gpg-agent, and PolKit agent";
 
+    gnomeKeyring = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Run gnome-keyring; disable where the desktop has its own (KWallet)";
+    };
+
+    pinentry = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.pinentry-gnome3;
+      defaultText = lib.literalExpression "pkgs.pinentry-gnome3";
+      description = "pinentry package gpg-agent uses to prompt for passphrases";
+    };
+
     polkitAgent = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -51,7 +67,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.gnome-keyring = {
+    services.gnome-keyring = lib.mkIf cfg.gnomeKeyring {
       enable = true;
       components = [ "pkcs11" ];
     };
@@ -60,7 +76,7 @@ in
       enable = true;
       defaultCacheTtl = 31536000; # 1 year
       maxCacheTtl = 31536000;
-      pinentry.package = pkgs.pinentry-gnome3;
+      pinentry.package = cfg.pinentry;
       extraConfig = "allow-preset-passphrase";
     };
 

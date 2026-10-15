@@ -6,6 +6,9 @@
   local.wayland.enable = true;
   local.programs.hyprland-desktop.enable = true;
 
+  # Security: unlock gnome-keyring at SDDM login
+  security.pam.services.sddm.enableGnomeKeyring = true;
+
   # Gaming profile
   local.profiles.gaming.enable = true;
 
