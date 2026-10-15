@@ -48,6 +48,7 @@
     uv
     wl-clipboard
     yamllint
+    yq-go
     zsh-powerlevel10k
 
     # Unstable packages
