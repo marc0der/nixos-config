@@ -67,11 +67,17 @@ echo ""
 echo "Failed systemd units:"
 sys_failed="$(systemctl --failed --no-legend --plain 2>/dev/null | awk '{print $1}' || true)"
 usr_failed="$(systemctl --user --failed --no-legend --plain 2>/dev/null | awk '{print $1}' || true)"
+# DrKonqi times out on crashes it cannot hand to a session; the crash is what matters
+drkonqi_failed="$(grep -c '^drkonqi-coredump-processor@' <<<"$sys_failed" || true)"
+sys_failed="$(grep -v '^drkonqi-coredump-processor@' <<<"$sys_failed" || true)"
 if [ -z "$sys_failed" ] && [ -z "$usr_failed" ]; then
   ok "no failed units"
 else
   for u in $sys_failed; do fail "system unit $u failed (journalctl -u $u)"; done
   for u in $usr_failed; do fail "user unit $u failed (journalctl --user -u $u)"; done
+fi
+if [ "$drkonqi_failed" -gt 0 ]; then
+  warn "$drkonqi_failed crash reports DrKonqi could not hand off (coredumpctl list)"
 fi
 
 echo ""
