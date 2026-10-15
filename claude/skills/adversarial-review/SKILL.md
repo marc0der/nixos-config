@@ -132,7 +132,7 @@ Use the reviewer's wording so the user decides on the reviewer's claim, not your
 Every AskUserQuestion call has the same shape:
 
 - `header`: the defect ID, e.g. `AR-03`.
-- `question`: one plain sentence that names the actual decision, e.g. "How many times should the sync job retry before giving up?" Never "How do you want to resolve AR-03?"
+- `question`: the reviewer's severity, then one plain sentence that names the actual decision, e.g. "Major: How many times should the sync job retry before giving up?" The severity word is always the first word, exactly as the reviewer graded it (`Critical`, `Major`, `Minor` or `Nit`). Never "How do you want to resolve AR-03?"
 - `options`, in this order:
   1. **Apply the fix**: the reviewer's resolution. The description says in one sentence what changes. Mark it `(Recommended)` when you judge the finding sound.
   2. **<a named alternative>**: a genuinely different, concrete edit, when one exists. The label names it (e.g. "Retry forever, back off"). Omit this option when there is no real second way to fix it.
