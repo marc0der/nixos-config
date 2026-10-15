@@ -176,7 +176,7 @@ This is a flake-based repository using **NixOS 26.05**.
 │   ├── home/                     # Home Manager modules (opt-in via `enable` flags)
 │   └── system/                   # NixOS system modules
 ├── profiles/                     # Optional feature profiles
-├── qt/                           # qt5ct/qt6ct theme configs copied into ~/.config via home.nix
+├── qt/                           # qt5ct/qt6ct theme configs copied into ~/.config by the Hyprland module
 ├── rules/                        # Repository conventions and rules (e.g. nixos-config.md) read by humans and assistants
 ├── secrets/                      # agenix-encrypted secrets (.age) consumed by modules/system/borg-backup.nix
 ├── shared/                       # Home Manager fragments imported unconditionally on every host (no options)

@@ -1,10 +1,10 @@
 # Hyprland Window Manager Configuration Module
 #
 # Core Hyprland compositor settings: monitors, general/decoration/animation
-# rules, layouts, input/device tweaks, and pywal border colours. Keybindings
-# live in `hyprland-keybindings.nix`, autostarted programs in
-# `hyprland-startup.nix`, and idle/lock/wallpaper services in
-# `hyprland-extras.nix`.
+# rules, layouts, input/device tweaks, pywal border colours and the
+# qt5ct/qt6ct configs. Keybindings live in `hyprland-keybindings.nix`,
+# autostarted programs in `hyprland-startup.nix`, and idle/lock/wallpaper
+# services in `hyprland-extras.nix`.
 #
 # Options:
 #   local.hyprland-config.enable - Enable Hyprland configuration
@@ -138,6 +138,12 @@ with lib;
           col.inactive_border = $color3
         }
       '';
+    };
+
+    # Qt theming read via QT_QPA_PLATFORMTHEME
+    home.file = {
+      ".config/qt5ct/qt5ct.conf".source = ../../qt/qt5ct.conf;
+      ".config/qt6ct/qt6ct.conf".source = ../../qt/qt6ct.conf;
     };
   };
 }
