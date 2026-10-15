@@ -63,6 +63,6 @@
   # XDG MIME types configuration
   local.xdg-mimetypes = {
     enable = true;
-    terminal = "ghostty.desktop";
+    terminal = "com.mitchellh.ghostty.desktop";
   };
 }

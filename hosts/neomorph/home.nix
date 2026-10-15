@@ -54,7 +54,7 @@ in
   # XDG MIME types configuration
   local.xdg-mimetypes = {
     enable = true;
-    terminal = "ghostty.desktop";
+    terminal = "com.mitchellh.ghostty.desktop";
     textEditor = "org.kde.kate.desktop";
     pdfViewer = "org.kde.okular.desktop";
     imageViewer = "org.kde.gwenview.desktop";

@@ -5,7 +5,7 @@
 #
 # Options:
 #   local.xdg-mimetypes.enable - Enable XDG MIME type configuration
-#   local.xdg-mimetypes.terminal - Terminal emulator to use (default: "ghostty.desktop")
+#   local.xdg-mimetypes.terminal - Terminal emulator to use (default: "com.mitchellh.ghostty.desktop")
 #   local.xdg-mimetypes.textEditor - Text editor to use (default: "nvim.desktop")
 #   local.xdg-mimetypes.pdfViewer - PDF viewer (default: "org.gnome.Evince.desktop")
 #   local.xdg-mimetypes.imageViewer - Image viewer (default: "org.gnome.eog.desktop")
@@ -13,7 +13,7 @@
 #
 # Example usage:
 #   local.xdg-mimetypes.enable = true;
-#   local.xdg-mimetypes.terminal = "ghostty.desktop";
+#   local.xdg-mimetypes.terminal = "com.mitchellh.ghostty.desktop";
 
 {
   config,
@@ -30,7 +30,7 @@ in
 
     terminal = lib.mkOption {
       type = lib.types.str;
-      default = "ghostty.desktop";
+      default = "com.mitchellh.ghostty.desktop";
       description = "Default terminal emulator";
     };
 
