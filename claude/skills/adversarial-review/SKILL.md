@@ -104,6 +104,12 @@ If the reviewer returned no defects, say so and stop. Nothing to resolve, nothin
 
 Walk the register in order, starting at AR-01. Every defect gets the same two parts: a briefing printed in the chat, then exactly one AskUserQuestion call. Never batch two defects into one call.
 
+The loop for each defect is: print briefing (4a), ask (4b), act on the answer (4c), then go back to 4a for the next defect. The briefing for AR-02 onwards is printed after the previous defect's edit, so it comes after a tool result. That is the point where it gets skipped, so check it there every time:
+
+- An AskUserQuestion with header `AR-nn` must always come right after a text block that starts with `### AR-nn of N`, in the same message. If that text is not there, write the briefing first.
+- Never go from an Edit result straight to the next AskUserQuestion. The briefing has to come between them.
+- The overview from step 3 does not count as AR-01's briefing. Print AR-01's briefing as its own block, the same way as every later one.
+
 #### 4a. Briefing
 
 Print this, filled from the reviewer's fields, immediately before the question:
@@ -142,14 +148,14 @@ Every AskUserQuestion call has the same shape:
   - Apply and the alternative show the spec text at the location as `Before:` and `After:` blocks, quoted exactly as they would be written.
   - Defer and Reject show `Spec unchanged.` followed by the current text at the location.
 
-On the answer:
+#### 4c. Act on the answer
 
 - *Apply* or *alternative*: edit the spec immediately, before moving to the next defect. Keep the edit surgical and in the spec's existing voice, formatting, and heading structure, matching the preview you showed. Set the status to `Fixed`.
 - *Defer*: set the status to `Deferred`. Do not edit the spec, and do not leave a TODO in it.
 - *Reject*: set the status to `Rejected`. Do not edit the spec.
 - *Other* (free text): treat it as the instruction, apply it, and set the status to `Fixed`.
 
-Do not revisit a resolved defect, and do not re-run the reviewer against your own edits.
+Then return to 4a and print the next defect's briefing before anything else. Do not revisit a resolved defect, and do not re-run the reviewer against your own edits.
 
 ### 5. Close out
 
