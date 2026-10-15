@@ -1,4 +1,9 @@
-{ pkgs, backlogMd, ... }:
+{
+  config,
+  pkgs,
+  backlogMd,
+  ...
+}:
 
 let
   # Backlog.md zsh completion (lands on $fpath via profile site-functions)
@@ -63,4 +68,13 @@ in
 
   # Shared scripts
   local.home-scripts.enable = true;
+
+  # AppImage launchers: binaries live in ~/Applications
+  xdg.desktopEntries.device-check = {
+    name = "Device Check";
+    exec = "${config.home.homeDirectory}/Applications/device-check.AppImage";
+    icon = "${../../icons/device-check.png}";
+    type = "Application";
+    settings.StartupWMClass = "device-check";
+  };
 }
