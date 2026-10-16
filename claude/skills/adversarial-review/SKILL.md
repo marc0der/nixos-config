@@ -22,6 +22,7 @@ Spawn exactly one subagent with the `Agent` tool:
 
 - `subagent_type: "general-purpose"` (a fresh context: it must not inherit this conversation)
 - `model: "opus"`
+- `effort: "max"`
 - `description: "adversarial spec review"`
 
 Give it the prompt below verbatim, substituting the bracketed values. Do not add to it, soften it, or hint at conclusions you have already drawn: uniformity across runs depends on this prompt being stable.
