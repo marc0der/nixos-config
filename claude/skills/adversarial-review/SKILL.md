@@ -130,9 +130,14 @@ Print this, filled from the reviewer's fields, immediately before the question:
 
 **Why it matters**
 <Impact>
+
+**Original text**
+*<the current spec text at the location, verbatim>*
 ```
 
 Use the reviewer's wording so the user decides on the reviewer's claim, not your paraphrase. You may add one short clarifying phrase where a field still assumes knowledge the user lacks, such as an undefined term or a reference to another section. Do not drop or soften anything.
+
+The **Original text** is the exact text the fix would replace, read from the spec itself, in italics. Wrap each paragraph or list item in its own `*...*` so the italics hold across line breaks. When the defect is a gap and there is no text to replace, quote the text the fix would be inserted next to.
 
 #### 4b. Question
 
@@ -146,8 +151,8 @@ Every AskUserQuestion call has the same shape:
   3. **Defer**: the problem is real but not for now. The spec is not touched.
   4. **Reject**: the reviewer is wrong. The spec is not touched.
 - `preview` on every option, so the layout stays the same from question to question:
-  - Apply and the alternative show the spec text at the location as `Before:` and `After:` blocks, quoted exactly as they would be written.
-  - Defer and Reject show `Spec unchanged.` followed by the current text at the location.
+  - Apply and the alternative show only the proposed new text, exactly as it would be written. The original is already in the briefing, so do not repeat it.
+  - Defer and Reject show `Spec unchanged.` and nothing else.
 
 #### 4c. Act on the answer
 
