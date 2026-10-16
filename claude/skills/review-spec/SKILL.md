@@ -1,5 +1,5 @@
 ---
-name: adversarial-review
+name: review-spec
 description: Adversarially review a specification for defects, then walk the user through resolving them one by one and commit the amended spec. Use when the user wants a spec stress-tested, red-teamed, or hardened before implementation.
 allowed-tools: Read, Grep, Glob, Edit, Bash, Agent, Task, AskUserQuestion, Skill
 ---

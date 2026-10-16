@@ -30,8 +30,7 @@ in
       ".config/playwright-mcp/config.json".source = ../../claude/playwright-mcp/config.json;
       ".local/share/icons/chatgpt.png".source = ../../icons/chatgpt.png;
       ".local/share/icons/claude-desktop.png".source = ../../icons/claude-desktop.png;
-      ".claude/skills/adversarial-review/SKILL.md".source =
-        ../../claude/skills/adversarial-review/SKILL.md;
+      ".claude/skills/review-spec/SKILL.md".source = ../../claude/skills/review-spec/SKILL.md;
       ".claude/skills/commit/SKILL.md".source = ../../claude/skills/commit/SKILL.md;
       ".claude/skills/metaprompt/SKILL.md".source = ../../claude/skills/metaprompt/SKILL.md;
       ".claude/skills/grill-with-docs".source = ../../claude/skills/grill-with-docs;
