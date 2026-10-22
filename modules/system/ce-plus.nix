@@ -8,7 +8,7 @@
 #
 # Recovery (flag back to false), as marco:
 #   su - admin
-#   sudo nixos-rebuild switch --flake /home/marco/nixos --impure --no-write-lock-file
+#   sudo nixos-rebuild switch --flake path:/home/marco/nixos --impure --no-write-lock-file
 # Last resort: pick the previous generation in the systemd-boot menu.
 #
 # Options:
