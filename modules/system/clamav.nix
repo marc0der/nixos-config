@@ -2,9 +2,11 @@
 #
 # Options:
 #   local.services.clamav-security.enable - Enable ClamAV antivirus with daily scans
+#   local.services.clamav-security.onAccessPaths - Paths blocked until scanned on access (default: [])
 #
 # Example usage:
 #   local.services.clamav-security.enable = true;
+#   local.services.clamav-security.onAccessPaths = [ "/home/marco/Downloads" ];
 {
   config,
   lib,
@@ -18,6 +20,12 @@ in
 {
   options.local.services.clamav-security = {
     enable = lib.mkEnableOption "ClamAV antivirus with daily scanning";
+
+    onAccessPaths = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = "Paths scanned on access, blocking reads until clean";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -28,6 +36,12 @@ in
         enable = true;
         interval = "hourly"; # Update virus definitions every hour
         frequency = 24; # Check for updates 24 times per day
+      };
+      clamonacc.enable = cfg.onAccessPaths != [ ];
+      daemon.settings = lib.mkIf (cfg.onAccessPaths != [ ]) {
+        OnAccessIncludePath = cfg.onAccessPaths;
+        OnAccessPrevention = true;
+        OnAccessExtraScanning = true;
       };
     };
 

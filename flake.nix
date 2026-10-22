@@ -128,6 +128,7 @@
             ./hosts/neomorph/hardware-configuration.nix
             ./modules/system/bluetooth-le-audio.nix
             ./modules/system/brave-policies.nix
+            ./modules/system/ce-plus.nix
             ./modules/system/clamav.nix
             ./modules/system/plasma.nix
             ./modules/system/tailscale.nix

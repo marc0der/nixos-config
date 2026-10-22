@@ -1,7 +1,7 @@
 # NetworkManager and firewall
 #
 # Enables NetworkManager with the OpenVPN plugin plus a stateful firewall
-# allowing SSH and ICMP. The two are bundled because every host that needs
+# allowing ICMP (sshd opens its own port). The two are bundled because every host that needs
 # NetworkManager also needs the firewall configured the same way. DNS goes
 # through systemd-resolved so Tailscale MagicDNS always sees the current
 # network's DNS servers (captive portals broke when both rewrote resolv.conf).
@@ -45,7 +45,7 @@ in
 
     networking.firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 ];
+      allowedTCPPorts = [ ];
       allowedUDPPorts = [ ];
       trustedInterfaces = [ "lo" ];
       allowPing = true;

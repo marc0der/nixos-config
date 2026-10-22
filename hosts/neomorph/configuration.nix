@@ -12,8 +12,8 @@
   # Bluetooth: LE Audio for hearing aids
   local.bluetooth-le-audio.enable = true;
 
-  # Security
-  local.services.clamav-security.enable = false;
+  # Security: Cyber Essentials Plus audit posture
+  local.ce-plus.enable = false;
 
   # Tailscale VPN
   local.services.tailscale-vpn.enable = true;
