@@ -6,6 +6,7 @@
 #
 # Options:
 #   local.users-marco.enable - Create the marco user + sandbox group
+#   local.users-marco.admin  - wheel + passwordless rebuild sudo (default: true)
 #
 # Example usage:
 #   local.users-marco.enable = true;
@@ -22,6 +23,12 @@ in
 {
   options.local.users-marco = {
     enable = lib.mkEnableOption "marco user account and sandbox group";
+
+    admin = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether marco is in wheel";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -34,12 +41,36 @@ in
         "input"
         "networkmanager"
         "sandbox"
-        "wheel"
-      ];
+      ]
+      ++ lib.optional cfg.admin "wheel";
       shell = pkgs.zsh;
       packages = [ ];
     };
 
     users.groups.sandbox.gid = 1000;
+
+    # Passwordless rebuild/purge sudo
+    security.sudo.extraRules = lib.mkIf cfg.admin [
+      {
+        users = [ "marco" ];
+        commands = [
+          {
+            command = "/run/current-system/sw/bin/nixos-rebuild";
+            options = [
+              "NOPASSWD"
+              "SETENV"
+            ];
+          }
+          {
+            command = "/run/current-system/sw/bin/nix";
+            options = [ "NOPASSWD" ];
+          }
+          {
+            command = "/run/current-system/sw/bin/nix-env";
+            options = [ "NOPASSWD" ];
+          }
+        ];
+      }
+    ];
   };
 }

@@ -68,30 +68,8 @@
   };
   programs.fuse.userAllowOther = true;
 
-  # Security: chromium SUID sandbox, passwordless rebuild/purge sudo
+  # Security: chromium SUID sandbox
   security.chromiumSuidSandbox.enable = true;
-  security.sudo.extraRules = [
-    {
-      users = [ "marco" ];
-      commands = [
-        {
-          command = "/run/current-system/sw/bin/nixos-rebuild";
-          options = [
-            "NOPASSWD"
-            "SETENV"
-          ];
-        }
-        {
-          command = "/run/current-system/sw/bin/nix";
-          options = [ "NOPASSWD" ];
-        }
-        {
-          command = "/run/current-system/sw/bin/nix-env";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-    }
-  ];
 
   # Keyboard layout: gbx (UK + literal backtick)
   local.keyboard-gbx.enable = true;
