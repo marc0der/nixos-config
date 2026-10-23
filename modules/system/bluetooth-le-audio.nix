@@ -2,6 +2,8 @@
 #
 # LE Audio (BAP, LC3, CSIP) for hearing aids and LE Audio earbuds.
 # Reconnects LE Audio devices at login that connected before WirePlumber.
+# Provides `hearing-aids on|off|toggle|status` to block paired hearing aids
+# without powering off the adapter.
 #
 # Options:
 #   local.bluetooth-le-audio.enable - Enable Bluetooth LE Audio
@@ -37,6 +39,26 @@ let
     ];
     text = builtins.readFile ./scripts/bluetooth-le-audio-reconnect.sh;
   };
+  hearingAids = pkgs.writeShellApplication {
+    name = "hearing-aids";
+    runtimeInputs = with pkgs; [
+      bluez
+      coreutils
+      gawk
+      gnugrep
+      libnotify
+      systemd
+    ];
+    text = builtins.readFile ./scripts/hearing-aids.sh;
+  };
+  hearingAidsDesktop = pkgs.makeDesktopItem {
+    name = "hearing-aids-toggle";
+    desktopName = "Toggle Hearing Aids";
+    comment = "Connect or disconnect the hearing aids";
+    exec = "${lib.getExe hearingAids} toggle";
+    icon = "audio-headphones";
+    categories = [ "Utility" ];
+  };
 in
 {
   options.local.bluetooth-le-audio = {
@@ -49,6 +71,23 @@ in
       KernelExperimental = true;
     };
     hardware.bluetooth.disabledPlugins = [ "asha" ];
+
+    environment.systemPackages = [
+      hearingAids
+      hearingAidsDesktop
+    ];
+
+    # Let the active local session restart bluetooth.service for `hearing-aids on`
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.freedesktop.systemd1.manage-units" &&
+            action.lookup("unit") == "bluetooth.service" &&
+            action.lookup("verb") == "restart" &&
+            subject.local && subject.active) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
 
     services.pipewire.wireplumber.extraConfig."11-bluez-le-audio" = {
       "monitor.bluez.properties" = {
