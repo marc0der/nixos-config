@@ -13,7 +13,7 @@
   local.bluetooth-le-audio.enable = true;
 
   # Security: Cyber Essentials Plus audit posture
-  local.ce-plus.enable = false;
+  local.ce-plus.enable = true;
 
   # Tailscale VPN
   local.services.tailscale-vpn.enable = true;
