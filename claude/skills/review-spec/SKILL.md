@@ -89,7 +89,11 @@ Your final message must be the report and nothing else: no preamble, no summary 
 If you find no defects at all, emit the heading, the verdict, `**Defects:** 0`, and nothing further.
 </reviewer-prompt>
 
-### 3. Present the overview
+### 3. Save the register
+
+Write the reviewer's report, verbatim, to `review-register.md` in your scratchpad directory (or `/tmp` if there is none). This file is the source of truth for every later step: briefings are read back from it, statuses are updated in it, and the summary is built from it. Do not rely on remembering the report from earlier in the conversation.
+
+### 4. Present the overview
 
 Do not dump the full report. Show the reviewer's **Verdict** and **Defects** lines exactly as returned, then a table with one row per defect, in the reviewer's order:
 
@@ -97,73 +101,75 @@ Do not dump the full report. Show the reviewer's **Verdict** and **Defects** lin
 |----|----------|-------|
 | AR-01 | Critical | <reviewer's title> |
 
-Do not re-order, re-grade, or re-title the defects, and do not add your own opinion of the findings. The full detail of each defect is shown when you reach it in step 4.
+Do not re-order, re-grade, or re-title the defects, and do not add your own opinion of the findings. The full detail of each defect is shown when you reach it in step 5.
 
 If the reviewer returned no defects, say so and stop. Nothing to resolve, nothing to commit.
 
-### 4. Resolve, one defect at a time
+### 5. Resolve, one defect at a time
 
-Walk the register in order, starting at AR-01. Every defect gets the same two parts: a briefing printed in the chat, then exactly one AskUserQuestion call. Never batch two defects into one call.
+Walk the register in order, starting at AR-01. Every defect goes through the same four steps, and the last defect gets exactly the same treatment as the first: re-read (5a), ask with the full briefing (5b), act on the answer (5c), then back to 5a for the next defect. Never batch two defects into one call.
 
-The loop for each defect is: print briefing (4a), ask (4b), act on the answer (4c), then go back to 4a for the next defect. The briefing for AR-02 onwards is printed after the previous defect's edit, so it comes after a tool result. That is the point where it gets skipped, so check it there every time:
+#### 5a. Re-read the defect
 
-- An AskUserQuestion with header `AR-nn` must always come right after a text block that starts with `### AR-nn of N`, in the same message. If that text is not there, write the briefing first.
-- Never go from an Edit result straight to the next AskUserQuestion. The briefing has to come between them.
-- The overview from step 3 does not count as AR-01's briefing. Print AR-01's briefing as its own block, the same way as every later one.
+Before every question, read that defect's block (from `### AR-nn` up to the next `### AR-`) from `review-register.md`, and read the spec at its **Location**. Do this for every defect, including the first one, even if you think you remember it. The briefing is built only from what this read returns.
 
-#### 4a. Briefing
+#### 5b. Ask, with the briefing inside the question
 
-Print this, filled from the reviewer's fields, immediately before the question:
+The user sees the AskUserQuestion dialog, not the text printed before it. So the briefing goes in the `question` field itself, and the question must make sense to someone who has seen nothing else.
+
+`question` is exactly this, filled from the reviewer's fields:
 
 ```
-### AR-nn of N · <Severity> · <title>
+AR-nn of N · <Severity> · <title>
 <Location>
 
-**What this part of the spec does**
+WHAT THIS PART OF THE SPEC DOES
 <Background>
 
-**The problem**
+THE PROBLEM
 <Defect>
 
-**Example**
+EXAMPLE
 <Example>
 
-**Why it matters**
+WHY IT MATTERS
 <Impact>
 
-**Original text**
-*<the current spec text at the location, verbatim>*
+ORIGINAL TEXT
+"<the current spec text at the location, verbatim>"
+
+<Severity>: <one plain sentence naming the actual decision>
 ```
 
-Use the reviewer's wording so the user decides on the reviewer's claim, not your paraphrase. You may add one short clarifying phrase where a field still assumes knowledge the user lacks, such as an undefined term or a reference to another section. Do not drop or soften anything.
+- The dialog does not render markdown. Write plain text only: no `#`, `**`, `*` or backticks. The caps labels are the headings, each followed by prose in full sentences, never bullets or fragments.
+- Use the reviewer's wording so the user decides on the reviewer's claim, not your paraphrase. You may add one short clarifying phrase where a field still assumes knowledge the user lacks, such as an undefined term or a reference to another section. Do not drop, shorten, or soften any section, however far into the register you are.
+- **Original text** is the exact text the fix would replace, read from the spec itself. When the defect is a gap and there is no text to replace, quote the text the fix would be inserted next to.
+- The final line starts with the severity word exactly as the reviewer graded it (`Critical`, `Major`, `Minor` or `Nit`), then names the decision, e.g. "Major: How many times should the sync job retry before giving up?" Never "How do you want to resolve AR-03?"
 
-The **Original text** is the exact text the fix would replace, read from the spec itself, in italics. Wrap each paragraph or list item in its own `*...*` so the italics hold across line breaks. When the defect is a gap and there is no text to replace, quote the text the fix would be inserted next to.
-
-#### 4b. Question
-
-Every AskUserQuestion call has the same shape:
+The rest of the call:
 
 - `header`: the defect ID, e.g. `AR-03`.
-- `question`: the reviewer's severity, then one plain sentence that names the actual decision, e.g. "Major: How many times should the sync job retry before giving up?" The severity word is always the first word, exactly as the reviewer graded it (`Critical`, `Major`, `Minor` or `Nit`). Never "How do you want to resolve AR-03?"
 - `options`, in this order:
   1. **Apply the fix**: the reviewer's resolution. The description says in one sentence what changes. Mark it `(Recommended)` when you judge the finding sound.
   2. **<a named alternative>**: a genuinely different, concrete edit, when one exists. The label names it (e.g. "Retry forever, back off"). Omit this option when there is no real second way to fix it.
   3. **Defer**: the problem is real but not for now. The spec is not touched.
   4. **Reject**: the reviewer is wrong. The spec is not touched.
 - `preview` on every option, so the layout stays the same from question to question:
-  - Apply and the alternative show only the proposed new text, exactly as it would be written. The original is already in the briefing, so do not repeat it.
+  - Apply and the alternative show only the proposed new text, exactly as it would be written. The original is already in the question, so do not repeat it.
   - Defer and Reject show `Spec unchanged.` and nothing else.
 
-#### 4c. Act on the answer
+#### 5c. Act on the answer
 
-- *Apply* or *alternative*: edit the spec immediately, before moving to the next defect. Keep the edit surgical and in the spec's existing voice, formatting, and heading structure, matching the preview you showed. Set the status to `Fixed`.
-- *Defer*: set the status to `Deferred`. Do not edit the spec, and do not leave a TODO in it.
-- *Reject*: set the status to `Rejected`. Do not edit the spec.
-- *Other* (free text): treat it as the instruction, apply it, and set the status to `Fixed`.
+- *Apply* or *alternative*: edit the spec immediately, before moving to the next defect. Keep the edit surgical and in the spec's existing voice, formatting, and heading structure, matching the preview you showed. Status `Fixed`.
+- *Defer*: status `Deferred`. Do not edit the spec, and do not leave a TODO in it.
+- *Reject*: status `Rejected`. Do not edit the spec.
+- *Other* (free text): treat it as the instruction and apply it. Status `Fixed`.
 
-Then return to 4a and print the next defect's briefing before anything else. Do not revisit a resolved defect, and do not re-run the reviewer against your own edits.
+Record the status, and for a fix one plain line on what the spec now says, in the defect's `**Status:**` line in `review-register.md`.
 
-### 5. Close out
+Then return to 5a for the next defect. Do not revisit a resolved defect, and do not re-run the reviewer against your own edits.
+
+### 6. Close out
 
 Commit first, so the report can say what was committed:
 
@@ -171,7 +177,7 @@ Commit first, so the report can say what was committed:
 - If nothing was Fixed, skip the commit.
 - If the spec lives inside a git submodule, commit inside that submodule. Do not commit the parent repo's submodule pointer yourself unless asked.
 
-Then print the final report using exactly this template, every time:
+Then read `review-register.md` and print the final report from it, using exactly this template, every time:
 
 ```
 ## Adversarial review summary: <spec path>
