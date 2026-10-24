@@ -72,6 +72,10 @@ in
       components = [ "pkcs11" ];
     };
 
+    # gnome-keyring: no restart on switch
+    systemd.user.services.gnome-keyring.Unit.X-RestartIfChanged =
+      lib.mkIf config.services.gnome-keyring.enable false;
+
     services.gpg-agent = {
       enable = true;
       defaultCacheTtl = 31536000; # 1 year
@@ -88,9 +92,13 @@ in
         # Retry the keyring a few times, then give up rather than loop forever
         StartLimitIntervalSec = 300;
         StartLimitBurst = 5;
+        X-RestartIfChanged = false;
       };
       Service = {
         Type = "oneshot";
+        RemainAfterExit = true;
+        # Give up on an unanswered unlock prompt
+        TimeoutStartSec = 30;
         Environment = [
           "PATH=${pkgs.gnupg}/libexec:${pkgs.gnupg}/bin:${pkgs.libsecret}/bin:/run/current-system/sw/bin"
         ];
