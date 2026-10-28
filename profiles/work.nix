@@ -21,54 +21,6 @@ in
 
   config = lib.mkIf cfg.enable {
     xdg.desktopEntries = {
-      slackSiriusXM = {
-        name = "Slack (SiriusXM)";
-        comment = "SiriusXM Slack";
-        genericName = "SiriusXM Slack in Brave";
-        exec = ''${config.home.homeDirectory}/bin/brave-sxm --app="https://app.slack.com/client/ENZ8SEUTX"'';
-        icon = "slack";
-        type = "Application";
-        startupNotify = true;
-        categories = [
-          "GNOME"
-          "GTK"
-          "Network"
-          "InstantMessaging"
-        ];
-        mimeType = [ "x-scheme-handler/slack" ];
-      };
-
-      googleMeetSiriusXM = {
-        name = "Google Meet (SiriusXM)";
-        comment = "SiriusXM Google Meet";
-        genericName = "SiriusXM Google Meet in Brave";
-        exec = ''${config.home.homeDirectory}/bin/brave-sxm --app="https://meet.google.com"'';
-        icon = "google-meet";
-        type = "Application";
-        startupNotify = true;
-        categories = [
-          "GNOME"
-          "GTK"
-          "Network"
-          "VideoConference"
-        ];
-      };
-
-      braveSiriusXM = {
-        name = "Brave (SiriusXM)";
-        comment = "SiriusXM Brave profile (proxied via its in-profile extension)";
-        genericName = "SiriusXM Browser";
-        exec = "${config.home.homeDirectory}/bin/brave-sxm";
-        icon = "brave-browser";
-        type = "Application";
-        startupNotify = true;
-        categories = [
-          "GTK"
-          "Network"
-          "WebBrowser"
-        ];
-      };
-
       slackEqualExperts = {
         name = "Slack (Equal Experts)";
         comment = "EE Slack";

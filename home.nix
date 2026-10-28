@@ -55,7 +55,6 @@
     llmAgents.claude-code
     llmAgents.codex
     llmAgents.copilot-cli
-    llmAgents.pi
 
     # fonts
     font-awesome

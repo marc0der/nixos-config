@@ -47,9 +47,6 @@ in
   # Zoom: native client with KIO URL wrapper
   local.zoom.enable = true;
 
-  # SiriusXM VPN shell proxy (opt-in via `sxm-proxy on`)
-  local.sxm-proxy.enable = true;
-
   # GTK theme: off, Plasma manages GTK settings
   local.gtk-theme.enable = false;
 

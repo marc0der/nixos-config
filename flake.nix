@@ -66,7 +66,6 @@
         ./modules/home/google-drive-bisync.nix
         ./modules/home/desktop-entries.nix
         ./modules/home/claude-mcp.nix
-        ./modules/home/sxm-proxy.nix
         ./profiles/music-production.nix
       ];
 
@@ -133,7 +132,6 @@
             ./modules/system/plasma.nix
             ./modules/system/tailscale.nix
             ./modules/system/borg-backup.nix
-            ./modules/system/virtualisation-libvirt.nix
             inputs.agenix.nixosModules.default
           ];
         };

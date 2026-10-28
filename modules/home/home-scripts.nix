@@ -1,6 +1,6 @@
 # Home Scripts Module
 #
-# Installs shared utility shell scripts (brave-sxm, etc.) from
+# Installs shared utility shell scripts from
 # `modules/home/scripts/` into ~/bin with the executable bit set. Currently enabled only on hosts that need them
 # (see `hosts/*/home.nix`).
 #
@@ -28,10 +28,6 @@ in
 
   config = mkIf cfg.enable {
     home.file = {
-      "bin/brave-sxm" = {
-        source = ./scripts/brave-sxm.sh;
-        executable = true;
-      };
     };
   };
 }
