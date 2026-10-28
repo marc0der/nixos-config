@@ -12,9 +12,6 @@
   # Bluetooth: LE Audio for hearing aids
   local.bluetooth-le-audio.enable = true;
 
-  # Security: Cyber Essentials Plus audit posture
-  local.ce-plus.enable = true;
-
   # Tailscale VPN
   local.services.tailscale-vpn.enable = true;
 
