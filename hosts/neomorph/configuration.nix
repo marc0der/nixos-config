@@ -18,7 +18,4 @@
   # Borg backup to NAS: offset 90min from xenomorph's 00/3:00 schedule
   local.services.borg-backup.enable = true;
   local.services.borg-backup.startAt = "*-*-* 01/3:30:00";
-
-  # Power management: Never suspend when plugged in
-  services.logind.settings.Login.HandleLidSwitchExternalPower = "ignore";
 }

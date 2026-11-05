@@ -17,7 +17,4 @@
 
   # Borg backup to NAS
   local.services.borg-backup.enable = true;
-
-  # Power management: Suspend even when plugged in
-  services.logind.settings.Login.HandleLidSwitchExternalPower = "suspend";
 }

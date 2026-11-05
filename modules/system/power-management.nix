@@ -1,9 +1,10 @@
 # Power management with battery charge threshold
 #
 # Enables power-profiles-daemon, configures logind to suspend on lid close
-# (except when docked) and ignore the power key, and installs a oneshot
-# systemd service that caps the battery charge controller at 80% to slow
-# battery wear on the always-plugged-in machine.
+# on battery only (never when docked or on external power), ignores the
+# power key, and installs a oneshot systemd service that caps the battery
+# charge controller at 80% to slow battery wear on the always-plugged-in
+# machine.
 #
 # Options:
 #   local.power-management.enable - Enable power-profiles-daemon + battery cap
@@ -33,6 +34,7 @@ in
         Login = {
           HandleLidSwitch = "suspend";
           HandleLidSwitchDocked = "ignore";
+          HandleLidSwitchExternalPower = "ignore";
           IdleAction = "ignore";
           HandlePowerKey = "ignore";
         };
