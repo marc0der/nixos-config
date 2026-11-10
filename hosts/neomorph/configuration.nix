@@ -2,6 +2,9 @@
   # Host name
   networking.hostName = "neomorph";
 
+  # Time zone: detect automatically while travelling
+  local.locale-en-gb.autoTimeZone = true;
+
   # Wayland desktop: KDE Plasma
   local.wayland.enable = true;
   local.programs.plasma-desktop.enable = true;
