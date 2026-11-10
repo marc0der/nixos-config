@@ -2,6 +2,7 @@
   config,
   pkgs,
   backlogMd,
+  llmAgents,
   ...
 }:
 
@@ -21,6 +22,7 @@ in
     backlogZshCompletion
     google-chrome
     kdePackages.kcalc
+    llmAgents.pi
     pnpm
   ];
 
