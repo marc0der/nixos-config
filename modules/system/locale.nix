@@ -6,9 +6,12 @@
 #
 # Options:
 #   local.locale-en-gb.enable - Enable en_GB locale + Europe/London + uk console
+#   local.locale-en-gb.autoTimeZone - Detect time zone via geoclue instead of
+#     pinning Europe/London; also changeable from Plasma (default: false)
 #
 # Example usage:
 #   local.locale-en-gb.enable = true;
+#   local.locale-en-gb.autoTimeZone = true;
 {
   config,
   lib,
@@ -21,10 +24,12 @@ in
 {
   options.local.locale-en-gb = {
     enable = lib.mkEnableOption "en_GB locale, Europe/London time zone, uk console";
+    autoTimeZone = lib.mkEnableOption "automatic time zone detection";
   };
 
   config = lib.mkIf cfg.enable {
-    time.timeZone = "Europe/London";
+    time.timeZone = if cfg.autoTimeZone then null else "Europe/London";
+    services.automatic-timezoned.enable = cfg.autoTimeZone;
 
     i18n.defaultLocale = "en_GB.UTF-8";
     i18n.extraLocaleSettings = {
