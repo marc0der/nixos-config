@@ -2,12 +2,11 @@
 #
 # Registers XDG desktop entries that launch specific web apps as standalone
 # Brave windows (Ozone Wayland) with their own icons: Groove Trainer, Todoist,
-# ChatGPT, Claude, Discord. Bundled here so adding/removing an entry is a
+# ChatGPT, Discord. Bundled here so adding/removing an entry is a
 # one-place change and home.nix stays focused on top-level configuration.
 #
 # Discord tracks the personal profile, which lives in a different directory per
-# machine. Claude stays pinned to Brave's Default profile: personal on
-# xenomorph, Equal Experts on neomorph.
+# machine.
 #
 # Options:
 #   local.web-app-launchers.enable - Install the Brave web-app .desktop entries
@@ -77,20 +76,6 @@ in
         ];
         comment = "ChatGPT";
         icon = "chatgpt";
-      };
-
-      claude = {
-        name = "Claude";
-        exec = ''brave --new-window --enable-features=UseOzonePlatform --ozone-platform=wayland --profile-directory=Default --app="https://claude.ai/" %U'';
-        terminal = false;
-        type = "Application";
-        categories = [
-          "Network"
-          "WebBrowser"
-          "Utility"
-        ];
-        comment = "Claude";
-        icon = "claude-desktop";
       };
 
       discord = {
