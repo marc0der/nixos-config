@@ -103,6 +103,9 @@ in
         # Claude Code deep links
         "x-scheme-handler/claude-cli" = [ "claude-code-url-handler.desktop" ];
 
+        # Claude Desktop deep links
+        "x-scheme-handler/claude" = [ "com.anthropic.Claude.desktop" ];
+
         # JetBrains Toolbox deep links
         "x-scheme-handler/jetbrains" = [ "jetbrainsd.desktop" ];
       };

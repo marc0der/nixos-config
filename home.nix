@@ -53,6 +53,7 @@
 
     # Unstable packages
     llmAgents.claude-code
+    llmAgents.claude-desktop
     llmAgents.codex
     llmAgents.copilot-cli
 
