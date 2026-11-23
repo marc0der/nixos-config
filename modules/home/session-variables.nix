@@ -56,6 +56,9 @@ in
       # Nix configuration
       NIXPKGS_ALLOW_UNFREE = "1";
 
+      # uv: use its own Python builds, not the Nix store one
+      UV_PYTHON_PREFERENCE = "only-managed";
+
       # XDG directories
       XDG_SCREENSHOTS_DIR = "$HOME/Pictures/Screenshots";
     }
