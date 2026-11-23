@@ -4,6 +4,7 @@
   # Host-specific packages
   home.packages = with pkgs; [
     ansible
+    calibre
     discord
     doctl
     ffmpeg

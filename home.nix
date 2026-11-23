@@ -18,7 +18,6 @@
     borgbackup
     brave
     bun
-    calibre
     chafa
     desktop-file-utils
     devcontainer
