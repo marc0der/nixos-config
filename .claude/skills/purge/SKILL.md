@@ -40,18 +40,24 @@ free less than the user expects. Say so before they run it.
 `nix-doctor` also reports `/nix` usage and any stale `result` symlinks in the
 repo root, which are a common accidental pin.
 
-## 3. Confirm, then run
+## 3. Run
 
-Ask before deleting. Deletion is irreversible and `nix store gc` needs root, so
-per CLAUDE.md hand the user the command rather than running it:
+Run the purge yourself. Never hand the user the command to run. Like the
+rebuild wrappers, `nix-purge` is fine to run without asking:
 
+```bash
+nix-purge "${ARGUMENTS:-7}"
 ```
-! nix-purge <keep-days>
-```
+
+Stop and ask first only if the dry run shows a profile with no rollback target.
 
 Without `--dry-run` it requires passwordless sudo for `nix` and `nix-env`; the
 script fails fast with a clear message if that is missing rather than blocking on
 a password prompt.
+
+In Claude Desktop, sudo is blocked whenever `grep NoNewPrivs /proc/self/status`
+reads 1. Check that before running. If it is 1, tell the user the purge is
+blocked in this session rather than handing them the command.
 
 ## 4. Report
 
