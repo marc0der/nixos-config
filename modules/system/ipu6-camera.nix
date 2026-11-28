@@ -109,7 +109,7 @@ in
     };
 
     # LIBCAMERA_<IPA>_TUNING_FILE overrides the per-sensor tuning lookup
-    systemd.services.v4l2-relayd-ipu6.environment.LIBCAMERA_SIMPLE_TUNING_FILE = "${tuningFile}";
+    systemd.services.v4l2-relayd-ipu6.environment.LIBCAMERA_SOFTISP_TUNING_FILE = "${tuningFile}";
 
     # Pin the loopback node number; exit 17 (EEXIST) means it already exists
     systemd.services.v4l2-relayd-ipu6.preStart = lib.mkForce ''
